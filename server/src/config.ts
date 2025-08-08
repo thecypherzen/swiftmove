@@ -21,4 +21,6 @@ export default {
   OP_ENV: process.env.NODE_ENV || "dev",
   SERVER_PORT: process.env.SERVER_PORT,
   SERVER_HOST: process.env.SERVER_HOST,
+  DB_URI: process.env.DB_URI as string,
+  DB_NAME: process.env.DB_NAME as string,
 };

@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 const app = express();
-const port = parseInt(config.SERVER_PORT as string) || 8083;
+const port = parseInt(config.SERVER_PORT as string);
 
 app.use(
   cors({
