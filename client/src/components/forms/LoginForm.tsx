@@ -11,6 +11,13 @@ import type { LoginFormPropsType } from "./types";
 import AppFormField from "./AppFormField";
 import PasswordToggle from "./ShowPasswordToggle";
 
+/**
+ * @component
+ * @name LoginForm
+ * @param @type {React.props}
+ * @description Login form component
+ * @returns {React.ReactElement}
+ */
 const LoginForm: React.FC<LoginFormPropsType> = ({
   disabled,
   setFormCredentials,
@@ -35,10 +42,7 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
     <Form {...loginForm}>
       <form
         onSubmit={loginForm.handleSubmit(formOnSubmit)}
-        className={cn(
-          "space-y-7 shadow-lg shadow-neutral-300 p-4 md:p-6 xl:px-10 rounded-md border-[.1px] border-neutral-300 w-full",
-          className
-        )}
+        className={cn("space-y-7 w-full", className)}
       >
         <div>
           <AppFormField<LoginFormType>
@@ -49,11 +53,13 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
             label="Email"
             autocomplete="current-email"
             disabled={disabled}
+            id="email"
           />
         </div>
         <div>
           <>
             <AppFormField<LoginFormType>
+              id="password"
               name="password"
               placeholder="Enter your password"
               inputType={showPassword ? "text" : "password"}
@@ -93,51 +99,5 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
     </Form>
   );
 };
-
-///**
-// * @func LoginFormField form field component
-// */
-//const LoginFormField = <T extends FieldValues>({
-//  inputClassName,
-//  control,
-//  description,
-//  inputType,
-//  label,
-//  name,
-//  placeholder,
-//  autocomplete,
-//  disabled,
-//}: FormFieldPropsType<T>) => {
-//  return (
-//    <FormField
-//      name={name}
-//      control={control}
-//      render={({ field }) => (
-//        <FormItem>
-//          <FormLabel className="text-neutral-800 font-medium mb-1">
-//            {" "}
-//            {label}{" "}
-//          </FormLabel>
-//          <FormControl>
-//            <Input
-//              placeholder={placeholder}
-//              {...field}
-//              type={inputType}
-//              className={cn(
-//                "py-6 [&::placeholder]:text-sm [&::placeholder]:text-muted",
-//                inputClassName
-//              )}
-//              autoComplete={autocomplete}
-//              disabled={disabled}
-//              aria-disabled={disabled}
-//            />
-//          </FormControl>
-//          {description && <FormDescription>{description}</FormDescription>}
-//          <FormMessage />
-//        </FormItem>
-//      )}
-//    />
-//  );
-//};
 
 export default LoginForm;

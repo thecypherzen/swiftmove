@@ -30,6 +30,7 @@ const AppFormField = <T extends FieldValues>({
   disabled,
   withElement = false,
   Element,
+  id,
 }: FormFieldPropsType<T>) => {
   return (
     <FormField
@@ -37,17 +38,18 @@ const AppFormField = <T extends FieldValues>({
       control={control}
       render={({ field }) => (
         <FormItem>
-          <FormLabel className="text-neutral-800 font-medium mb-1">
+          <FormLabel className="text-foreground font-medium mb-1" htmlFor={id}>
             {label}
           </FormLabel>
           <FormControl>
             <div className={withElement ? "relative" : ""}>
               <Input
+                id={id}
                 placeholder={placeholder}
                 {...field}
                 type={inputType}
                 className={cn(
-                  "py-6 [&::placeholder]:text-sm [&::placeholder]:text-neutral-300",
+                  "py-6 [&::placeholder]:text-sm [&::placeholder]:text-muted-foreground/30",
                   inputClassName
                 )}
                 autoComplete={autocomplete}

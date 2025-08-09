@@ -15,6 +15,7 @@ export type LoginFormPropsType = {
 
 export type FormInputPropsType = {
   placeholder?: string;
+  id: string;
   inputType: string;
   description?: string;
   label?: string;
