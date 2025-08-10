@@ -13,7 +13,7 @@ export type SignupFormValuesType = {
 export type LoginFormPropsType = {
   disabled: boolean;
   setFormCredentials: React.Dispatch<
-    React.SetStateAction<LoginFormValuesType | null>
+    React.SetStateAction<LoginFormSubmitType | null>
   >;
   className?: string;
 };
@@ -21,9 +21,19 @@ export type LoginFormPropsType = {
 export type SignupFormPropsType = {
   disabled: boolean;
   setFormCredentials: React.Dispatch<
-    React.SetStateAction<LoginFormValuesType | null>
+    React.SetStateAction<SignupFormSubmitType | null>
   >;
   className?: string;
+};
+
+export type LoginFormSubmitType = LoginFormValuesType & {
+  accountType: string;
+  cacheData: boolean;
+};
+
+export type SignupFormSubmitType = SignupFormValuesType & {
+  accountType: string;
+  acceptTerms: boolean;
 };
 
 export type FormInputPropsType = {
@@ -41,12 +51,6 @@ export type FormInputPropsType = {
   withElement?: boolean;
   Element?: React.ReactNode;
   reverseLabel?: boolean;
-};
-
-export type RegPgImgSecPropsType = {
-  id?: string;
-  className?: string;
-  imgUrl?: string;
 };
 
 export type FormFieldPropsType<T extends FieldValues> = FormInputPropsType & {

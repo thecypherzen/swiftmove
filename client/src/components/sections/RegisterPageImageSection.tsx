@@ -1,5 +1,5 @@
 import { ChartNoAxesCombined, Locate, TruckElectric } from "lucide-react";
-import type { RegPgImgSecPropsType } from "../forms/types";
+import type { RegPgImgSecPropsType } from "@/shared/types";
 import { cn } from "@/lib/utils";
 
 /**

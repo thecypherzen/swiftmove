@@ -1,11 +1,14 @@
 import LoginForm from "@/components/forms/LoginForm";
-import type { LoginFormValuesType } from "@/components/forms/types";
+import type { LoginFormSubmitType } from "@/components/forms/types";
 import AuthImageSection from "@/components/sections/RegisterPageImageSection";
 import AppLogo from "@/components/utils/Logo";
 import { useState } from "react";
 
 const LoginPage = () => {
-  const [_, setState] = useState<LoginFormValuesType | null>(null);
+  const [credentials, setCredentials] = useState<LoginFormSubmitType | null>(
+    null
+  );
+  console.log("login page credentials", credentials);
   return (
     <main className="flex h-screen">
       {/* Left side */}
@@ -43,7 +46,7 @@ const LoginPage = () => {
           </div>
           <div className="overflow-y-auto px-4">
             {/* Form */}
-            <LoginForm disabled={false} setFormCredentials={setState} />
+            <LoginForm disabled={false} setFormCredentials={setCredentials} />
           </div>
         </div>
         {/* Heading */}

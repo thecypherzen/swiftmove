@@ -43,12 +43,15 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
     },
   });
 
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [cacheData, setCacheData] = useState<boolean>(false);
+  const [accountType, setAccountType] = useState<string>("user");
+
   // form action
   const formOnSubmit = (values: LoginFormType) => {
-    setFormCredentials({ ...values });
+    setFormCredentials({ ...values, accountType, cacheData });
   };
 
-  const [showPassword, setShowPassword] = useState<boolean>(false);
   return (
     <Form {...loginForm}>
       <form
@@ -85,13 +88,18 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
             />
           </>
         </div>
-        {/* Login As */}
+        {/* Account Type */}
         <div className="space-y-1">
           <Label htmlFor="account-type" className="label mb-2">
             {" "}
             Account Type{" "}
           </Label>
-          <Select defaultValue={"user"} name="accountType">
+          <Select
+            defaultValue={"user"}
+            name="accountType"
+            value={accountType}
+            onValueChange={setAccountType}
+          >
             <SelectTrigger className="w-full h-6 py-6">
               <SelectValue placeholder="Sign In As" />
             </SelectTrigger>
@@ -104,13 +112,18 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
             </SelectContent>
           </Select>
         </div>
+
         {/* Remember Me, Forgot Password */}
         <div className="flex justify-between">
           <div className="flex items-center gap-2">
-            <Checkbox id="remember-me" />
-            <Label htmlFor="remember-me" className="">
-              Remember Me
-            </Label>
+            <Checkbox
+              id="remember-me"
+              name="cacheData"
+              disabled={disabled}
+              checked={cacheData}
+              onCheckedChange={() => setCacheData(!cacheData)}
+            />
+            <Label htmlFor="remember-me">Remember Me</Label>
           </div>
           <Button
             id="recover-password"

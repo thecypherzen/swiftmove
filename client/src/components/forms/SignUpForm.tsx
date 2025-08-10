@@ -20,6 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "../ui/label";
+import { Checkbox } from "../ui/checkbox";
 
 /**
  * @component
@@ -42,14 +43,15 @@ const SignupForm: React.FC<SignupFormPropsType> = ({
     },
   });
 
-  // form action
-  const formOnSubmit = (values: SignupFormType) => {
-    setFormCredentials({ ...values });
-  };
-
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [accountType, setAccountType] = useState<string>("user");
-  console.log("accountType", accountType);
+  const [acceptTerms, setAcceptTerms] = useState<boolean>(false);
+
+  // form action
+  const formOnSubmit = (values: SignupFormType) => {
+    setFormCredentials({ ...values, accountType, acceptTerms });
+  };
+
   return (
     <Form {...loginForm}>
       <form
@@ -115,6 +117,33 @@ const SignupForm: React.FC<SignupFormPropsType> = ({
               in immediately{" "}
             </p>
           )}
+        </div>
+        {/* Remember Me, Forgot Password */}
+        <div className="flex items-center gap-2">
+          <Checkbox
+            id="accept-terms"
+            name="acceptTerms"
+            disabled={disabled}
+            checked={acceptTerms}
+            onCheckedChange={() => setAcceptTerms(!acceptTerms)}
+            required={true}
+          />
+          <Label htmlFor="accept-terms">
+            Accept our&nbsp;
+            <Link
+              to="#"
+              className="text-primary-600 font-medium hover:underline cursor-pointer"
+            >
+              Privacy policy&nbsp;
+            </Link>
+            and&nbsp;
+            <Link
+              to="#"
+              className="text-primary-600 font-medium hover:underline cursor-pointer"
+            >
+              Terms
+            </Link>
+          </Label>
         </div>
         {/* Submit Button and Extras secton */}
         <div className="flex flex-col items-center mt-5 @md:flex-row @md:justify-between @md:mt-10 gap-5">

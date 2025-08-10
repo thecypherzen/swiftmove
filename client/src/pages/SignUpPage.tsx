@@ -1,11 +1,14 @@
 import SignupForm from "@/components/forms/SignUpForm";
-import type { LoginFormValuesType } from "@/components/forms/types";
+import type { SignupFormSubmitType } from "@/components/forms/types";
 import AuthImageSection from "@/components/sections/RegisterPageImageSection";
 import AppLogo from "@/components/utils/Logo";
 import { useState } from "react";
 
 const SignUpPage = () => {
-  const [_, setState] = useState<LoginFormValuesType | null>(null);
+  const [credentials, setCredentials] = useState<SignupFormSubmitType | null>(
+    null
+  );
+  console.log("signup page credentials", credentials);
   return (
     <main className="flex h-screen">
       {/* Right side */}
@@ -45,7 +48,7 @@ const SignUpPage = () => {
           </div>
           <div className="overflow-y-auto px-4">
             {/* Form */}
-            <SignupForm disabled={false} setFormCredentials={setState} />
+            <SignupForm disabled={false} setFormCredentials={setCredentials} />
           </div>
         </div>
         {/* Heading */}
