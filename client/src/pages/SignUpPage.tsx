@@ -7,7 +7,7 @@ import { useState } from "react";
 const SignUpPage = () => {
   const [_, setState] = useState<LoginFormValuesType | null>(null);
   return (
-    <main className="flex h-screen over-flow-y-scroll">
+    <main className="flex h-screen">
       {/* Right side */}
       <AuthImageSection
         id="image-section"
@@ -17,16 +17,16 @@ const SignUpPage = () => {
       {/* Right side Form */}
       <section
         id="form-section"
-        className="p-3 w-full lg:w-1/2 lg:p-0 flex flex-col justify-center items-center h-full overflow-y-auto"
+        className="p-3 w-full lg:w-1/2 lg:p-0 flex flex-col justify-center items-center h-full overflow-hidden"
       >
         <div
           id="signup-form-wrapper"
-          className="shadow-lg shadow-neutral-300 p-4 md:p-6 xl:px-10 rounded-md border-[.1px] border-neutral-300 w-full max-w-[400px] md:w-3/5 md:max-w-[480px] lg:w-full space-y-4 @container"
+          className="shadow-lg shadow-neutral-300 p-4 md:p-6 xl:px-10 rounded-md border-[.1px] border-neutral-300 w-full max-w-[400px] md:w-3/5 md:max-w-[480px] lg:w-full min-h-[50vh] max-h-[90vh] flex flex-col gap-5 @container"
         >
           {/* heading */}
           <div
             id="signup-form-heading"
-            className="p-2 flex flex-col gap-3 justify-center items-center text-center"
+            className="h-[150px] p-2 flex flex-col gap-3 justify-center items-center text-center"
           >
             <AppLogo
               className="size-15 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl p-2 flex-col justify-center"
@@ -43,8 +43,10 @@ const SignUpPage = () => {
               </p>
             </div>
           </div>
-          {/* Form */}
-          <SignupForm disabled={false} setFormCredentials={setState} />
+          <div className="overflow-y-auto px-4">
+            {/* Form */}
+            <SignupForm disabled={false} setFormCredentials={setState} />
+          </div>
         </div>
         {/* Heading */}
       </section>
