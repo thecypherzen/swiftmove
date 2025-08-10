@@ -3,11 +3,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Form } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { LoginFormSchema, type LoginFormType } from "./schemas";
+import { SignupFormSchema, type SignupFormType } from "./schemas";
 import { cn } from "@/lib/utils.js";
 import { Link } from "react-router-dom";
 import Loader from "@/components/utils/Loader";
-import type { LoginFormPropsType } from "./types";
+import type { SignupFormPropsType } from "./types";
 import AppFormField from "./AppFormField";
 import PasswordToggle from "./ShowPasswordToggle";
 import {
@@ -20,7 +20,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "../ui/label";
-import { Checkbox } from "../ui/checkbox";
 
 /**
  * @component
@@ -29,14 +28,14 @@ import { Checkbox } from "../ui/checkbox";
  * @description Login form component
  * @returns {React.ReactElement}
  */
-const LoginForm: React.FC<LoginFormPropsType> = ({
+const SignupForm: React.FC<SignupFormPropsType> = ({
   disabled,
   setFormCredentials,
   className,
 }) => {
   // Form Definition
-  const loginForm = useForm<LoginFormType>({
-    resolver: zodResolver(LoginFormSchema),
+  const loginForm = useForm<SignupFormType>({
+    resolver: zodResolver(SignupFormSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -44,11 +43,13 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
   });
 
   // form action
-  const formOnSubmit = (values: LoginFormType) => {
+  const formOnSubmit = (values: SignupFormType) => {
     setFormCredentials({ ...values });
   };
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [accountType, setAccountType] = useState<string>("user");
+  console.log("accountType", accountType);
   return (
     <Form {...loginForm}>
       <form
@@ -56,7 +57,7 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
         className={cn("space-y-7 w-full", className)}
       >
         <div>
-          <AppFormField<LoginFormType>
+          <AppFormField<SignupFormType>
             name="email"
             control={loginForm.control}
             placeholder="Enter your email"
@@ -69,7 +70,7 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
         </div>
         <div>
           <>
-            <AppFormField<LoginFormType>
+            <AppFormField<SignupFormType>
               id="password"
               name="password"
               placeholder="Enter your password"
@@ -85,13 +86,18 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
             />
           </>
         </div>
-        {/* Login As */}
-        <div className="space-y-1">
+        {/* Account Type Select */}
+        <div className="space-y-1 space-y-3">
           <Label htmlFor="account-type" className="label mb-2">
             {" "}
             Account Type{" "}
           </Label>
-          <Select defaultValue={"user"} name="accountType">
+          <Select
+            defaultValue={"user"}
+            name="accountType"
+            value={accountType}
+            onValueChange={setAccountType}
+          >
             <SelectTrigger className="w-full h-6 py-6">
               <SelectValue placeholder="Sign In As" />
             </SelectTrigger>
@@ -103,28 +109,12 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
               </SelectGroup>
             </SelectContent>
           </Select>
-        </div>
-        {/* Remember Me, Forgot Password */}
-        <div className="flex justify-between">
-          <div className="flex items-center gap-2">
-            <Checkbox id="remember-me" />
-            <Label htmlFor="remember-me" className="">
-              Remember Me
-            </Label>
-          </div>
-          <Button
-            id="recover-password"
-            variant="link"
-            className="px-0 text-normal"
-            asChild
-          >
-            <Link
-              className="text-primary-600 hover:underline"
-              to="/password/recovery"
-            >
-              Forgot Password
-            </Link>
-          </Button>
+          {accountType === "admin" && (
+            <p className="text-xs font-medium italic text-warning px-2">
+              Admin accounts require approval and so you won't be able to sign
+              in immediately{" "}
+            </p>
+          )}
         </div>
         {/* Submit Button and Extras secton */}
         <div className="flex flex-col items-center mt-5 @md:flex-row @md:justify-between @md:mt-10 gap-5">
@@ -139,12 +129,12 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
                 className="text-neutral-300 fill-neutral-100"
               />
             )}
-            Sign In
+            Sign Up
           </Button>
           <p className="text-muted-600 text-sm text-center @md:text-right">
-            Don't have an account?&nbsp;&nbsp;
+            Already have an account?&nbsp;&nbsp;
             <span className="font-semibold text-primary hover:underline hover:underline-offset-4 hover:decoration-2 hover:cursor-pointer">
-              <Link to="/register">Sign up</Link>
+              <Link to="/">Login</Link>
             </span>
           </p>
         </div>
@@ -153,4 +143,4 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
   );
 };
 
-export default LoginForm;
+export default SignupForm;

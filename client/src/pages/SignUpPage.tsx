@@ -1,27 +1,31 @@
-import LoginForm from "@/components/forms/LoginForm";
+import SignupForm from "@/components/forms/SignUpForm";
 import type { LoginFormValuesType } from "@/components/forms/types";
 import AuthImageSection from "@/components/sections/RegisterPageImageSection";
 import AppLogo from "@/components/utils/Logo";
 import { useState } from "react";
 
-const LoginPage = () => {
+const SignUpPage = () => {
   const [_, setState] = useState<LoginFormValuesType | null>(null);
   return (
     <main className="flex h-screen over-flow-y-scroll">
-      {/* Left side */}
-      <AuthImageSection id="image-section" className="lg:self-start" />
+      {/* Right side */}
+      <AuthImageSection
+        id="image-section"
+        className="order-last"
+        imgUrl="https://images.unsplash.com/photo-1612115958726-9af4b6bd28d1?q=80&w=1472&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&h=800"
+      />
       {/* Right side Form */}
       <section
         id="form-section"
         className="p-3 w-full lg:w-1/2 lg:p-0 flex flex-col justify-center items-center h-full overflow-y-auto"
       >
         <div
-          id="login-form-wrapper"
+          id="signup-form-wrapper"
           className="shadow-lg shadow-neutral-300 p-4 md:p-6 xl:px-10 rounded-md border-[.1px] border-neutral-300 w-full max-w-[400px] md:w-3/5 md:max-w-[480px] lg:w-full space-y-4 @container"
         >
           {/* heading */}
           <div
-            id="login-form-heading"
+            id="signup-form-heading"
             className="p-2 flex flex-col gap-3 justify-center items-center text-center"
           >
             <AppLogo
@@ -30,19 +34,17 @@ const LoginPage = () => {
               type="logo"
             />
             <div
-              id="form-heading-text"
+              id="signup-form-heading-text"
               className="flex flex-col items-center justify-center"
             >
-              <h2 className="text-2xl font-bold text-foreground">
-                Welcome Back
-              </h2>
+              <h2 className="text-2xl font-bold text-foreground">Welcome</h2>
               <p className="text-muted-foreground mt-2">
-                Sign in to your SwiftMove account
+                A Few Steps to Creating Your SwiftMove Account
               </p>
             </div>
           </div>
           {/* Form */}
-          <LoginForm disabled={false} setFormCredentials={setState} />
+          <SignupForm disabled={false} setFormCredentials={setState} />
         </div>
         {/* Heading */}
       </section>
@@ -50,4 +52,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignUpPage;
