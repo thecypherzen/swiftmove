@@ -48,7 +48,7 @@ const LoginPage = () => {
       >
         <div
           id="login-form-wrapper"
-          className="shadow-lg shadow-neutral-300 p-4 md:p-6 xl:px-10 rounded-md border-[.1px] border-neutral-300 w-full max-w-[400px] md:w-3/5 md:max-w-[480px] lg:w-full space-y-4"
+          className="shadow-lg shadow-neutral-300 p-4 md:p-6 xl:px-10 rounded-md border-[.1px] border-neutral-300 w-full max-w-[400px] md:w-3/5 md:max-w-[480px] lg:w-full space-y-4 @container"
         >
           {/* heading */}
           <div

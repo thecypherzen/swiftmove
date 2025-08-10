@@ -20,10 +20,14 @@ export type FormInputPropsType = {
   description?: string;
   label?: string;
   inputClassName?: string;
+  inputWClassName?: string;
+  fcClassName?: string;
+  fwClassName?: string;
   autocomplete?: string;
   disabled: boolean;
   withElement?: boolean;
   Element?: React.ReactNode;
+  reverseLabel?: boolean;
 };
 
 export type FormFieldPropsType<T extends FieldValues> = FormInputPropsType & {

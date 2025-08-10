@@ -19,7 +19,10 @@ import type { FieldValues } from "react-hook-form";
  * @returns {React.ReactElement} A react hook form field
  */
 const AppFormField = <T extends FieldValues>({
+  fcClassName,
+  fwClassName,
   inputClassName,
+  inputWClassName,
   control,
   description,
   inputType,
@@ -31,18 +34,26 @@ const AppFormField = <T extends FieldValues>({
   withElement = false,
   Element,
   id,
+  reverseLabel,
 }: FormFieldPropsType<T>) => {
   return (
     <FormField
       name={name}
       control={control}
       render={({ field }) => (
-        <FormItem>
-          <FormLabel className="text-foreground font-medium mb-1" htmlFor={id}>
-            {label}
-          </FormLabel>
-          <FormControl>
-            <div className={withElement ? "relative" : ""}>
+        <FormItem
+          className={cn(
+            "text-foreground font-medium mb-1",
+            fwClassName && fwClassName
+          )}
+        >
+          {!reverseLabel && (
+            <FormLabel htmlFor={id} className="text-muted-foreground">
+              {label}
+            </FormLabel>
+          )}
+          <FormControl className={cn(fcClassName && fcClassName)}>
+            <div className={cn(withElement ? "relative" : "", inputWClassName)}>
               <Input
                 id={id}
                 placeholder={placeholder}
@@ -56,9 +67,14 @@ const AppFormField = <T extends FieldValues>({
                 disabled={disabled}
                 aria-disabled={disabled}
               />
-              {withElement && Element && Element}
+              {withElement && Element !== undefined && Element}
             </div>
           </FormControl>
+          {reverseLabel && (
+            <FormLabel htmlFor={id} className="text-muted-foreground">
+              {label}
+            </FormLabel>
+          )}
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />
         </FormItem>

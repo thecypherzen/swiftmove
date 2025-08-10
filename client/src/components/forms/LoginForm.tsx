@@ -10,6 +10,17 @@ import Loader from "@/components/utils/Loader";
 import type { LoginFormPropsType } from "./types";
 import AppFormField from "./AppFormField";
 import PasswordToggle from "./ShowPasswordToggle";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "../ui/label";
+import { Checkbox } from "../ui/checkbox";
 
 /**
  * @component
@@ -74,10 +85,46 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
             />
           </>
         </div>
-        <div className="flex flex-col items-center mt-5 md:flex-row md:justify-between md:mt-10 gap-5">
+        {/* Login As */}
+        <div className="space-y-1">
+          <Label htmlFor="account-type" className="label mb-2">
+            {" "}
+            Account Type{" "}
+          </Label>
+          <Select defaultValue={"user"}>
+            <SelectTrigger className="w-full h-6 py-6">
+              <SelectValue placeholder="Sign In As" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Select Account Type</SelectLabel>
+                <SelectItem value="admin">Admin</SelectItem>
+                <SelectItem value="user">User</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        {/* Remember Me, Forgot Password */}
+        <div className="flex justify-between">
+          <div className="flex items-center gap-2">
+            <Checkbox id="remember-me" />
+            <Label htmlFor="remember-me" className="">
+              Remember Me
+            </Label>
+          </div>
+          <Button
+            id="recover-password"
+            variant="link"
+            className="px-0 text-normal"
+            asChild
+          >
+            <Link to="/password/recovery">Forgot Password</Link>
+          </Button>
+        </div>
+        <div className="flex flex-col items-center mt-5 @md:flex-row @md:justify-between @md:mt-10 gap-5">
           <Button
             type="submit"
-            className="bg-primary hover:bg-primary-600 disabled:bg-primary-600 py-5 cursor-pointer w-full md:w-1/3 lg:w-1/4 flex gap-3"
+            className="bg-primary hover:bg-primary-600 disabled:bg-primary-600 py-5 cursor-pointer w-full @md:w-1/3 @lg:w-1/4 flex gap-3"
             disabled={disabled}
           >
             {disabled && (
@@ -86,9 +133,9 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
                 className="text-neutral-300 fill-neutral-100"
               />
             )}
-            Login
+            Sign In
           </Button>
-          <p className="text-muted-600 text-sm text-center md:text-right">
+          <p className="text-muted-600 text-sm text-center @md:text-right">
             Don't have an account?&nbsp;&nbsp;
             <span className="font-semibold text-primary hover:underline hover:underline-offset-4 hover:decoration-2 hover:cursor-pointer">
               <Link to="/signup">Sign up</Link>
