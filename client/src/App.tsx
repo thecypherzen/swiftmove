@@ -1,7 +1,12 @@
 import Routes from "./Routes";
+import { ThemeProvider } from "./hooks/UseTheme";
 
 function App() {
-  return <Routes />;
+  return (
+    <ThemeProvider>
+      <Routes />
+    </ThemeProvider>
+  );
 }
 
 export default App;

@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import React from "react";
 
 type LoaderPropsType = {
@@ -31,7 +32,11 @@ const Loader: React.FC<LoaderPropsType> = ({
   return (
     <div
       role="status"
-      className={`flex flex-col text-neutral-300 fill-primary justify-center items-${justify[align]} ${className}`}
+      className={cn(
+        "flex flex-col text-neutral-300 fill-primary justify-center",
+        `items-${justify[align]}`,
+        className
+      )}
     >
       <svg
         aria-hidden="true"
