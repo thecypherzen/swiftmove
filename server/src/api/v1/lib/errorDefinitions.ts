@@ -41,6 +41,11 @@ export const errors: ServerErrorsType = {
       desc: "Successful",
       statusCode: 200,
     },
+    "0": {
+      errno: "0",
+      desc: "Successful",
+      statusCode: 200,
+    },
     "01": {
       errno: "01",
       desc: "Created",

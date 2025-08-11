@@ -56,19 +56,19 @@ export class BaseController {
         type: "validation",
         data: validationErrors,
       });
-      console.log("VALIDATION ERRORS", validationErrors);
+      console.log("VALIDATION ERROR RESPONSE");
       res.status(status).json(payload);
       return null;
     }
     const data = matchedData(req);
-    if (!data.keys.length) {
+    if (!Object.keys(data).length) {
       this.json(res, {
         type: "validation",
         errno: "32",
       });
       return null;
     }
-    return matchedData(req);
+    return data;
   }
 
   /**

@@ -9,7 +9,19 @@ class AuthController extends BaseController {
   create = async (req: Request, res: Response) => {
     const data = this.getValidatedData(req, res);
     if (!data) return;
-    console.log("sent data:", data);
+    console.log("sent data:", data, Object.keys(data));
+    this.json(res, {
+      type: "success",
+      errno: "01",
+      data: [
+        {
+          id: `${Date.now()}`,
+          role: data?.role ?? "user",
+          email: data?.email ?? "testUser@email.co",
+          termsAccepted: data?.termsAccepted,
+        },
+      ],
+    });
   };
 
   /**
@@ -24,13 +36,6 @@ class AuthController extends BaseController {
     this.json(res, {
       type: "success",
       errno: "01",
-      data: [
-        {
-          id: `${Date.now()}`,
-          role: data?.role ?? "user",
-          email: data?.email ?? "testUser@email.co",
-        },
-      ],
     });
   };
 }
