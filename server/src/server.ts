@@ -2,13 +2,14 @@ import express, { NextFunction, Request, Response } from "express";
 import config from "./config.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import apis from "./api/index.js";
 
 const app = express();
 const port = parseInt(config.SERVER_PORT as string);
 
 app.use(
   cors({
-    origin: ["http://localhost:5002", "http://0.0.0.0:5002"],
+    origin: ["http://localhost:8085", "http://0.0.0.0:8085"],
     credentials: true,
   })
 );
@@ -33,6 +34,9 @@ app.use(["/status", "/health"], (_: Request, res: Response): void => {
     status: "OK",
   });
 });
+
+// route api/v1 requests
+app.use("/api/v1", apis.v1);
 
 // handle 404
 app.use("/*", (_: Request, res: Response): void => {
