@@ -16,7 +16,7 @@ const PasswordToggle: React.FC<{
       type="button"
       variant="ghost"
       size="sm"
-      className="absolute cursor-pointer right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+      className="absolute cursor-pointer right-0 top-0 h-full px-3 py-2 !bg-transparent"
       onClick={() => setShow(!show)}
     >
       {show ? (

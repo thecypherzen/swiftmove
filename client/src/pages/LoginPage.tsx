@@ -2,15 +2,43 @@ import LoginForm from "@/components/forms/LoginForm";
 import type { LoginFormSubmitType } from "@/components/forms/types";
 import AuthImageSection from "@/components/sections/RegisterPageImageSection";
 import AppLogo from "@/components/utils/Logo";
-import { useState } from "react";
+import Notice from "@/components/utils/Notice";
+import ThemeToggle from "@/components/utils/ThemeToggle";
+import { useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useAuth } from "@/hooks/UseAuth";
+import { LoginMutationFn } from "@/lib/RequestLibrary";
+import type { UserType } from "@/shared/types";
 
 const LoginPage = () => {
   const [credentials, setCredentials] = useState<LoginFormSubmitType | null>(
     null
   );
-  console.log("login page credentials", credentials);
+  const { cache, user } = useAuth();
+  const loginMutation = useMutation({
+    mutationFn: LoginMutationFn,
+    onSuccess: (data) => {
+      cache(data as UserType);
+      toast.success("Login successful!", {
+        description: "Welcome to SwiftMove",
+      });
+    },
+    onError: (err) => {
+      toast.error(err?.name, {
+        description: err.message,
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (credentials) {
+      loginMutation.mutate(credentials);
+    }
+  }, [credentials]);
   return (
-    <main className="flex h-screen">
+    <main className="flex h-screen relative">
+      <ThemeToggle className="absolute top-5 right-5" />
       {/* Left side */}
       <AuthImageSection id="image-section" className="lg:self-start" />
       {/* Right side Form */}
@@ -18,9 +46,10 @@ const LoginPage = () => {
         id="form-section"
         className="p-3 w-full lg:w-1/2 lg:p-0 flex flex-col justify-center items-center h-full"
       >
+        <Notice position="top-center" />
         <div
           id="login-form-wrapper"
-          className="shadow-lg shadow-neutral-300 p-4 md:p-6 xl:px-10 rounded-md border-[.1px] border-neutral-300 w-full max-w-[400px] md:w-3/5 md:max-w-[480px] lg:w-full min-h-[50vh] max-h-[90vh] flex flex-col gap-5 @container"
+          className="shadow-lg shadow-neutral-300 dark:shadow-neutral-950 p-4 md:p-6 xl:px-10 rounded-md border-[.1px] border-neutral-300 dark:border-secondary w-full max-w-[400px] md:w-3/5 md:max-w-[480px] lg:w-full min-h-[50vh] max-h-[90vh] flex flex-col gap-5 @container"
         >
           {/* heading */}
           <div
@@ -37,7 +66,7 @@ const LoginPage = () => {
               className="flex flex-col items-center justify-center"
             >
               <h2 className="text-2xl font-bold text-foreground">
-                Welcome Back
+                Welcome{user && " Back"}
               </h2>
               <p className="text-muted-foreground mt-2">
                 Sign in to your SwiftMove account

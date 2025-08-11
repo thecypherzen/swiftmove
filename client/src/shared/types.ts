@@ -10,4 +10,24 @@ export type UserType = {
   firstName?: string;
   lastName?: string;
   role?: "user" | "admin";
+  [key: string]: any;
+};
+
+export type APIErrorCause = {
+  name: string;
+  message: string;
+  stack?: string;
+  errno?: number;
+};
+
+export type APIResponseType = {
+  success: boolean;
+  data:
+    | {
+        name: string;
+        message: string;
+        errno: number;
+        cause?: APIErrorCause;
+      }
+    | UserType;
 };

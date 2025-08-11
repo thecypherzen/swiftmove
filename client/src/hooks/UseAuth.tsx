@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const login = (userData: UserType) => {
+  const cache = (userData: UserType) => {
     console.log("logging user in");
     setUser(userData);
     cookies.set(cacheKey, JSON.stringify(userData), { expires: 7 });
@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       value={{
         user,
         isAuthenticated: !!user,
-        login,
+        cache,
         logout,
       }}
     >
@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 type AuthContextType = {
   user: UserType | null;
   isAuthenticated: boolean;
-  login: (user: UserType) => void;
+  cache: (user: UserType) => void;
   logout: () => void;
 };
 

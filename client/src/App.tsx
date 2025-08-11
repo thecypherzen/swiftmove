@@ -1,11 +1,18 @@
 import Routes from "./Routes";
 import { ThemeProvider } from "./hooks/UseTheme";
+import { AuthProvider } from "./hooks/UseAuth";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/lib/RequestLibrary";
 
 function App() {
   return (
-    <ThemeProvider>
-      <Routes />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProvider>
+          <Routes />
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

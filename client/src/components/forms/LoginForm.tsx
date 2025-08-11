@@ -45,11 +45,11 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [cacheData, setCacheData] = useState<boolean>(false);
-  const [accountType, setAccountType] = useState<string>("user");
+  const [role, setRole] = useState<string>("user");
 
   // form action
   const formOnSubmit = (values: LoginFormType) => {
-    setFormCredentials({ ...values, accountType, cacheData });
+    setFormCredentials({ ...values, role, cacheData });
   };
 
   return (
@@ -90,17 +90,16 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
         </div>
         {/* Account Type */}
         <div className="space-y-1">
-          <Label htmlFor="account-type" className="label mb-2">
-            {" "}
-            Account Type{" "}
+          <Label htmlFor="role" className="label mb-2">
+            Login As&nbsp;
           </Label>
           <Select
             defaultValue={"user"}
-            name="accountType"
-            value={accountType}
-            onValueChange={setAccountType}
+            name="role"
+            value={role}
+            onValueChange={setRole}
           >
-            <SelectTrigger className="w-full h-6 py-6">
+            <SelectTrigger id="role" className="w-full h-6 py-6">
               <SelectValue placeholder="Sign In As" />
             </SelectTrigger>
             <SelectContent>

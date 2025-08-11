@@ -27,12 +27,12 @@ export type SignupFormPropsType = {
 };
 
 export type LoginFormSubmitType = LoginFormValuesType & {
-  accountType: string;
+  role: string;
   cacheData: boolean;
 };
 
 export type SignupFormSubmitType = SignupFormValuesType & {
-  accountType: string;
+  role: string;
   acceptTerms: boolean;
 };
 

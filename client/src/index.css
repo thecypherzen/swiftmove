@@ -65,7 +65,7 @@
   --font-sans: "Inter", sans-serif;
   --radius: 0.625rem;
   --background: oklch(100% 0.00011 271.152);
-  --foreground: #020817;
+  --foreground: hsl(223, 84%, 5%);
   --card: hsl(0 0% 100%);
   --card-foreground: hsl(222.2 84% 4.9%);
   --popover: hsl(0 0% 100%);

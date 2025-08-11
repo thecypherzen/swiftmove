@@ -44,12 +44,12 @@ const SignupForm: React.FC<SignupFormPropsType> = ({
   });
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [accountType, setAccountType] = useState<string>("user");
+  const [role, setRole] = useState<string>("user");
   const [acceptTerms, setAcceptTerms] = useState<boolean>(false);
 
   // form action
   const formOnSubmit = (values: SignupFormType) => {
-    setFormCredentials({ ...values, accountType, acceptTerms });
+    setFormCredentials({ ...values, role, acceptTerms });
   };
 
   return (
@@ -90,17 +90,16 @@ const SignupForm: React.FC<SignupFormPropsType> = ({
         </div>
         {/* Account Type Select */}
         <div className="space-y-1 space-y-3">
-          <Label htmlFor="account-type" className="label mb-2">
-            {" "}
-            Account Type{" "}
+          <Label htmlFor="role" className="label mb-2">
+            Choose Account Type&nbsp;
           </Label>
           <Select
             defaultValue={"user"}
             name="accountType"
-            value={accountType}
-            onValueChange={setAccountType}
+            value={role}
+            onValueChange={setRole}
           >
-            <SelectTrigger className="w-full h-6 py-6">
+            <SelectTrigger id="role" className="w-full h-6 py-6">
               <SelectValue placeholder="Sign In As" />
             </SelectTrigger>
             <SelectContent>
@@ -111,7 +110,7 @@ const SignupForm: React.FC<SignupFormPropsType> = ({
               </SelectGroup>
             </SelectContent>
           </Select>
-          {accountType === "admin" && (
+          {role === "admin" && (
             <p className="text-xs font-medium italic text-warning px-2">
               Admin accounts require approval and so you won't be able to sign
               in immediately{" "}
