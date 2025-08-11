@@ -14,7 +14,17 @@ export const errors: ServerErrorsType = {
   validation: {
     default: {
       errno: "31",
-      desc: "Error",
+      desc: "Invalid Data",
+      statusCode: 400,
+    },
+    "31": {
+      errno: "31",
+      desc: "Invalid Data",
+      statusCode: 400,
+    },
+    "32": {
+      errno: "32",
+      desc: "No data sent",
       statusCode: 400,
     },
   },
