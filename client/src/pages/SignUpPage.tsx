@@ -2,15 +2,64 @@ import SignupForm from "@/components/forms/SignUpForm";
 import type { SignupFormSubmitType } from "@/components/forms/types";
 import AuthImageSection from "@/components/sections/RegisterPageImageSection";
 import AppLogo from "@/components/utils/Logo";
-import { useState } from "react";
+import Notice from "@/components/utils/Notice";
+import ThemeToggle from "@/components/utils/ThemeToggle";
+import { useAuth } from "@/hooks/UseAuth";
+import { SignupMutationFn } from "@/lib/RequestLibrary";
+import { useMutation } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 const SignUpPage = () => {
+  const navigate = useNavigate();
   const [credentials, setCredentials] = useState<SignupFormSubmitType | null>(
     null
   );
-  console.log("signup page credentials", credentials);
+  const { mutate, isPending, isSuccess, isError, error } = useMutation({
+    mutationFn: SignupMutationFn,
+  });
+  const submittedRef = useRef(false);
+  const toastIdRef = useRef<undefined | string | number>(undefined);
+  const { logout } = useAuth();
+
+  useEffect(() => {
+    if (isPending) {
+      toastIdRef.current = toast.loading("Processing...");
+    }
+    if (isSuccess) {
+      toast.success("Account created!", {
+        id: toastIdRef.current,
+        description: "Login now to proceed",
+      });
+      setTimeout(() => {
+        logout();
+        navigate("/");
+      }, 1000);
+    }
+
+    if (isError) {
+      toast.error(error?.name, {
+        description: error.message,
+        id: toastIdRef.current,
+      });
+      submittedRef.current = false;
+    }
+  }, [isSuccess, isError, isPending]);
+
+  useEffect(() => {
+    if (submittedRef.current) {
+      return;
+    }
+    if (credentials) {
+      mutate(credentials);
+      submittedRef.current = true;
+    }
+  }, [credentials]);
+
   return (
-    <main className="flex h-screen">
+    <main className="flex h-screen relative">
+      <ThemeToggle className="absolute top-5 right-5" />
       {/* Right side */}
       <AuthImageSection
         id="image-section"
@@ -22,6 +71,7 @@ const SignUpPage = () => {
         id="form-section"
         className="p-3 w-full lg:w-1/2 lg:p-0 flex flex-col justify-center items-center h-full overflow-hidden"
       >
+        <Notice position="top-center" />
         <div
           id="signup-form-wrapper"
           className="shadow-lg shadow-neutral-300 dark:shadow-neutral-950 p-4 md:p-6 xl:px-10 rounded-md border-[.1px] border-neutral-300 dark:border-secondary w-full max-w-[400px] md:w-3/5 md:max-w-[480px] lg:w-full min-h-[50vh] max-h-[90vh] flex flex-col gap-5 @container"
@@ -48,7 +98,10 @@ const SignUpPage = () => {
           </div>
           <div className="overflow-y-auto px-4">
             {/* Form */}
-            <SignupForm disabled={false} setFormCredentials={setCredentials} />
+            <SignupForm
+              disabled={isPending}
+              setFormCredentials={setCredentials}
+            />
           </div>
         </div>
         {/* Heading */}

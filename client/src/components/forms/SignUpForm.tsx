@@ -49,7 +49,7 @@ const SignupForm: React.FC<SignupFormPropsType> = ({
 
   // form action
   const formOnSubmit = (values: SignupFormType) => {
-    setFormCredentials({ ...values, role, acceptTerms });
+    setFormCredentials({ ...values, role, termsAccepted: acceptTerms });
   };
 
   return (

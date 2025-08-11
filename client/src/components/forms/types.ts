@@ -33,7 +33,7 @@ export type LoginFormSubmitType = LoginFormValuesType & {
 
 export type SignupFormSubmitType = SignupFormValuesType & {
   role: string;
-  acceptTerms: boolean;
+  termsAccepted: boolean;
 };
 
 export type FormInputPropsType = {

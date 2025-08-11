@@ -46,6 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isAuthenticated: !!user,
         cache,
         logout,
+        cacheKey,
       }}
     >
       {children}
@@ -57,6 +58,7 @@ type AuthContextType = {
   user: UserType | null;
   isAuthenticated: boolean;
   cache: (user: UserType) => void;
+  cacheKey: string;
   logout: () => void;
 };
 

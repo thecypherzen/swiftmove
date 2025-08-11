@@ -1,4 +1,7 @@
-import type { LoginFormSubmitType } from "@/components/forms/types";
+import type {
+  LoginFormSubmitType,
+  SignupFormSubmitType,
+} from "@/components/forms/types";
 import type { APIResponseType } from "@/shared/types";
 import { QueryClient } from "@tanstack/react-query";
 //import { type QueryKey, type QueryFunction } from "@tanstack/react-query";
@@ -28,7 +31,6 @@ export const apiRequest = async ({
   url,
   ...rest
 }: APIRequestType): Promise<APIResponseType> => {
-  console.log("rest:", rest);
   try {
     const res = await api({
       method,
@@ -39,13 +41,34 @@ export const apiRequest = async ({
     console.log(`[${method} REQUEST]: ${url}\nRESPONSE:\n\t`, res);
     return { success: true, data: res?.data };
   } catch (err: any) {
-    console.log(err?.code === "ERR_NETWORK");
-    const name = err?.code === "ERR_NETWORK" ? "Network Error" : "Error";
-    const message =
-      err?.message === "Network Error" && err?.code === "ERR_NETWORK"
-        ? "Failed to connect. Try again later."
-        : err?.message;
-    const errno = err?.errno ?? err?.code === "ERR_NETWORK" ? 1 : -1;
+    let name, errno, message;
+    console.error(`[${method} REQUEST]: ${url}\nRESPONSE:\n\t`, err);
+    switch (err.code) {
+      case "ERR_NETWORK":
+        name = "Network Error";
+        errno = 1;
+        switch (err.status) {
+          case undefined:
+            name = "Request denied";
+            message = "You're not allowed. Report this error";
+            errno = -1;
+            break;
+          default:
+            message = "Failed to connect. Try again later";
+            break;
+        }
+        break;
+      case "ECONNABORTED":
+        name = "Error";
+        message = "Server took too long to respond. Try again later";
+        errno = 2;
+        break;
+      default:
+        name = "Error";
+        message = "Couldn't complete request. Try again later";
+        errno = 1;
+        break;
+    }
     return {
       success: false,
       data: { name, message, errno, cause: err.cause },
@@ -53,6 +76,10 @@ export const apiRequest = async ({
   }
 };
 
+/**
+ * QueryClient
+ * @typedef {typeof QueryClient} QueryClientType
+ */
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -74,6 +101,11 @@ export const queryClient = new QueryClient({
   },
 });
 
+/**
+ * @function LoginMutationFn - Login handler using Tanstack Query
+ * @param data
+ * @returns {object}
+ */
 export const LoginMutationFn = async (data: LoginFormSubmitType) => {
   const res = await apiRequest({
     method: "POST",
@@ -83,6 +115,25 @@ export const LoginMutationFn = async (data: LoginFormSubmitType) => {
   if (!res.success) {
     throw res.data;
   }
+  return res.data;
+};
+
+/**
+ * @function SignupMutationFn - Signup handler using Tanstack Query
+ * @param data
+ * @returns {object}
+ */
+export const SignupMutationFn = async (data: SignupFormSubmitType) => {
+  const res = await apiRequest({
+    method: "POST",
+    url: "/auth/register",
+    data,
+  });
+  if (!res.success) {
+    console.error(res.data);
+    throw res.data;
+  }
+  console.log(res.data);
   return res.data;
 };
 
