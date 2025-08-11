@@ -1,45 +1,50 @@
 export const errors: ServerErrorsType = {
   auth: {
     default: {
-      errno: 2,
+      errno: "20",
       desc: "Unauthorised",
       statusCode: 401,
     },
-    "2": {
-      errno: 2,
+    "20": {
+      errno: "20",
       desc: "",
       statusCode: 401,
     },
   },
   validation: {
     default: {
-      errno: 31,
+      errno: "31",
       desc: "Error",
       statusCode: 400,
     },
   },
   server: {
     default: {
-      errno: 51,
+      errno: "51",
       desc: "Internal Server Error",
       statusCode: 500,
     },
   },
   success: {
     default: {
-      errno: 0,
-      desc: "Operation successful",
+      errno: "0",
+      desc: "Successful",
       statusCode: 200,
+    },
+    "01": {
+      errno: "01",
+      desc: "Created",
+      statusCode: 201,
     },
   },
 };
 
 class ServerError extends Error {
-  errno: number;
+  errno: string;
 
   constructor(
     message: string,
-    errno: number = -1,
+    errno: string = "10",
     cause: ServerErrorCauseType
   ) {
     super(message, { cause });
@@ -50,7 +55,7 @@ class ServerError extends Error {
 export type ServerErrorCauseType = {
   name: string;
   message: string;
-  errno?: number;
+  errno?: string;
   stack?: string;
 };
 
@@ -58,7 +63,7 @@ export default errors;
 export type ServerErrorCodeType = "auth" | "server" | "success" | "validation";
 export type ServerErrorType = ServerError;
 export type ErrorNumberType = {
-  errno: number;
+  errno: string;
   desc: string;
   statusCode: number;
 };

@@ -5,11 +5,11 @@ class AuthController extends BaseController {
   constructor() {
     super();
   }
-  async login(req: Request, res: Response) {
+  login = async (req: Request, res: Response) => {
     const data = req.body;
-    res.status(201).json({
-      errno: 0,
-      status: "success",
+    this.json(res, {
+      type: "success",
+      errno: "01",
       data: [
         {
           id: `${Date.now()}`,
@@ -18,7 +18,7 @@ class AuthController extends BaseController {
         },
       ],
     });
-  }
+  };
 }
 
 export default AuthController;

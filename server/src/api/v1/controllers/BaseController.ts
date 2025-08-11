@@ -14,27 +14,36 @@ export class BaseController {
       throw new Error(`Cannot instantiate ${this.#name} directly`);
     }
   }
-
-  json(res: Response, options: ServerResOptionsType): void {
+  #getPayload(
+    res: Response,
+    options: ServerResOptionsType
+  ): { status: number; payload: ServerResPayloadType } {
     const type = options.type;
     const key = options?.errno ?? "default";
     const errno = Errors[type][key].errno;
     const data = options?.data ?? [];
     const statusCode = Errors[type][key].statusCode;
     const status = options.type === "success" ? "success" : "error";
-    const resData: ServerResPayloadType = {
+    const desc = Errors[type][key].desc;
+    const payload: ServerResPayloadType = {
       status,
       errno,
-      data,
+      payload: data,
+      desc,
     };
-    res.status(statusCode).json(resData);
+    return { payload, status: statusCode };
+  }
+
+  public json(res: Response, options: ServerResOptionsType): void {
+    const { status, payload } = this.#getPayload(res, options);
+    res.status(status).json(payload);
     return;
   }
 }
 
 export type ServerResOptionsType = {
   type: ServerErrorCodeType;
-  errno?: number;
+  errno?: string;
   data?: ServerResDataType;
 };
 
@@ -44,6 +53,7 @@ export type ServerResDataType = Array<
 
 export type ServerResPayloadType = {
   status: "success" | "error";
-  errno: number;
-  data: ServerResDataType;
+  errno: string;
+  desc: string;
+  payload: ServerResDataType;
 };
