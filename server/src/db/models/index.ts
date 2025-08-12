@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
 import { UserSchema } from "../schemas/index.js";
 
-const User = mongoose.model("User", UserSchema);
+export const User = mongoose.model("User", UserSchema);
+
+export type UserModelType = mongoose.Model<typeof User>;

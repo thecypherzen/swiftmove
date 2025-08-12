@@ -32,7 +32,7 @@ authRouter.post(
       .withMessage("invalid string"),
   ],
 
-  authController.create
+  authController.createUser
 );
 // handle 404
 authRouter.use("/*", (_: Request, res: Response): void => {

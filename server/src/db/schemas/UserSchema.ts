@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
-const { v4: uuidv4 } = require("uuid");
+import * as uuid from "uuid";
+
+const { v4: uuidv4 } = uuid;
 
 const UserSchema = new mongoose.Schema({
   _id: {
@@ -24,9 +26,17 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  acceptTerms: {
+  termsAccepted: {
     type: Boolean,
     required: true,
+  },
+  avatar: {
+    type: String,
+    required: false,
+  },
+  phoneNumber: {
+    type: String,
+    required: false,
   },
 });
 

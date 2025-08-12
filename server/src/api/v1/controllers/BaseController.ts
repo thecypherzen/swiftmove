@@ -34,7 +34,7 @@ export class BaseController {
     const data = options?.data ?? [];
     const statusCode = Errors[type][key].statusCode;
     const status = options.type === "success" ? "success" : "error";
-    const desc = Errors[type][key].desc;
+    const desc = options?.desc ?? Errors[type][key].desc;
     const payload: ServerResPayloadType = {
       status,
       errno,
@@ -89,6 +89,7 @@ export type ServerResOptionsType = {
   type: ServerErrorCodeType;
   errno?: string;
   data?: ServerResDataType;
+  desc?: string;
 };
 
 export type ServerResDataType = Array<
