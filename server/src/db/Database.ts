@@ -1,7 +1,4 @@
 import mongoose, { Document, Model } from "mongoose";
-/**
- * Defines and exposes the Database class
- */
 import { MongoClient, ServerApiVersion } from "mongodb";
 import config from "../config.js";
 const { DB_URI, DB_NAME } = config;
@@ -15,21 +12,34 @@ import {
 const Models = {
   User: User,
 };
+
 /**
- * Define the db class as a singleton
+ * Defines and exposes the Database class. Implements the singleton
+ * pattern ensuring only one db connection is maintained and
+ * used throughout the app, thereby properly utilising system
+ * resources
+ * @class
+ * @name Database
+ * @private @property {DBClientType} client - The database client
+ * Currently only Mongoose client is supported but can later be
+ * updated to support another client.
+ * @private @property {string} db_name - The class name
  */
 class Database {
-  #client: typeof mongoose | null = null;
+  #client: DBClientType | null = null;
   #db_name = DB_NAME;
 
   /**
-   * @method init Initialise database
-   * Also tests connection
+   * @constructor Class constructor
    */
   constructor() {
     this.init();
   }
 
+  /**
+   * Initialises the database.
+   * @method init
+   */
   async init() {
     if (!this.#client) {
       this.#client = mongoose;
@@ -39,6 +49,11 @@ class Database {
       });
       this.#client.connection.on("error", (err) => {
         console.log("DB connection failed.\nCAUSE\n\t", err);
+        throw new DBError({
+          message: "DB client failed to connect",
+          errno: "52",
+          cause: err,
+        });
       });
     }
   }
@@ -60,8 +75,9 @@ class Database {
   }
 
   /**
-   * Gets the db client
-   * @returns {Database.client}
+   * Gets the active db client. If none, initialises it
+   * before returning.
+   * @returns {NonNullable<DBClientType>}
    */
   get client() {
     if (!this.#client) {
@@ -70,10 +86,19 @@ class Database {
     return this.#client;
   }
 
+  /**
+   * @function create - Creates a new instance of a model
+   * @param {DBModelName} - Model name: basically a string
+   * @param { Record<string, any>} data - An object representing the
+   * data with which to populate the item in db
+   * @returns {Promise<Object | DBError>} - A promise that resolves to
+   *   created instance's data on success
+   *   or DBError on failure
+   */
   async create(model: DBModelNameType, data: Record<string, any>) {
     const Model = Models[model];
     if (!Model) {
-      throw new DBError({ message: "Unnown Model Reference", errno: "53" });
+      throw new DBError({ message: "Unknown Model Reference", errno: "53" });
     }
     if (!this.#client) {
       this.init();
@@ -82,18 +107,42 @@ class Database {
       const newInstance = await Model.create(data);
       return newInstance;
     } catch (err: any) {
-      const cause: ServerErrorCauseType = {
-        name: err?.name ?? "Unknown Error",
-        message: err.message ?? "",
-      };
-      if (err.errno) {
-        cause.errno = err.errno;
-      }
       console.error(err);
       throw new DBError({
-        message: "Model creation failed",
-        errno: "52",
-        cause,
+        message: `${model} creation failed`,
+        errno: "53",
+        cause: DBError.constructErrorCause(err),
+      });
+    }
+  }
+
+  /**
+   * Checks if a record exists in the database based on given filters.
+   * @public @method exists
+   * @param {DBModelNameType} model - the name of db model to search
+   * @param {Object} filters - fields to filter against.
+   * For now, it expects the filters to match Mongodb search object, which
+   * can include conditions, projections and options.
+   * @returns {Promise<boolean>} Promise that resolves to boolean
+   *    if record exists or not.
+   */
+  async exists(model: DBModelNameType, filters: Record<string, any>) {
+    const Model = Models[model];
+    if (!Model) {
+      throw new DBError({ message: "Unknown Model Reference", errno: "53" });
+    }
+    if (!this.#client) {
+      this.init();
+    }
+    try {
+      const data = await Model.findOne(filters);
+      return !data;
+    } catch (err: any) {
+      console.error(err);
+      throw new DBError({
+        message: `Query on ${model} failed`,
+        errno: "53",
+        cause: DBError.constructErrorCause(err),
       });
     }
   }
@@ -103,6 +152,9 @@ class Database {
  * @class
  * @name DBError
  * @description Defined a Database Error
+ * @property {string} message - Error message
+ * @optional @property {string} errno - Error's unique error number
+ * @optional @property {ServerErrorCauseType} cause - Error'
  */
 export class DBError extends ServerError {
   #name: string;
@@ -130,5 +182,8 @@ export type ModelsTypeMap = {
 };
 
 type DBModelNameType = keyof typeof Models;
+type DBClientType = typeof mongoose | null;
+
 const db = new Database();
+
 export default db;
