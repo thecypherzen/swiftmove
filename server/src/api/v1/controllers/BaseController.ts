@@ -31,18 +31,26 @@ export class BaseController {
     const type = options.type;
     const key = options?.errno ?? "default";
     const errno = Errors[type][key].errno;
+    const isError = options?.type !== "success";
     const data = options?.data ?? [];
     const statusCode = Errors[type][key].statusCode;
-    const status = options.type === "success" ? "success" : "error";
-    const desc = options?.desc ?? Errors[type][key].desc;
-    const payload: ServerResPayloadType = {
-      status,
-      errno,
-      payload: data,
-      desc,
-      count: data.length,
-    };
-    return { payload, status: statusCode };
+    const status = isError ? "error" : "success";
+    const desc = isError
+      ? Errors[type][key].desc
+      : (options?.desc ?? Errors[type][key].desc);
+    const tmp: Record<string, any> = { status, errno, desc };
+    if (isError) {
+      if (config.OP_ENV === "dev" && options.data) {
+        tmp.payload = options.data;
+        tmp.count = options.data.length;
+      }
+    } else {
+      if (options.data !== undefined) {
+        tmp.payload = options.data;
+        tmp.count = options.data.length;
+      }
+    }
+    return { payload: tmp as ServerResPayloadType, status: statusCode };
   }
   /**
    *
@@ -101,5 +109,5 @@ export type ServerResPayloadType = {
   errno: string;
   desc: string;
   count: number;
-  payload: ServerResDataType;
+  payload?: ServerResDataType;
 };
