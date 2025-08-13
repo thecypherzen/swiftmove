@@ -2,7 +2,7 @@ import type {
   LoginFormSubmitType,
   SignupFormSubmitType,
 } from "@/components/forms/types";
-import type { APIResponseType } from "@/shared/types";
+import type { APIErrorType, APIResponseType, UserType } from "@/shared/types";
 import { QueryClient } from "@tanstack/react-query";
 //import { type QueryKey, type QueryFunction } from "@tanstack/react-query";
 import axios from "axios";
@@ -63,25 +63,14 @@ export const apiRequest = async ({
         message = "Server took too long to respond. Try again later";
         errno = 2;
         break;
-      case "ERR_BAD_REQUEST":
-        name = "Error";
-        message = "Already exists";
-        errno = -1;
-        switch (err.status) {
-          case 409:
-            switch (err.response.data.errno) {
-              case "32":
-                message = "Email already taken";
-                errno = 32;
-                break;
-            }
-            break;
-        }
-        break;
       default:
         name = "Error";
-        message = "Couldn't complete request. Try again later";
-        errno = 1;
+        message = err.desc;
+        try {
+          errno = parseInt(err.response.data.errno);
+        } catch (_) {
+          errno = parseInt(err.response.data.errno.slice(1));
+        }
         break;
     }
     return {
@@ -121,16 +110,18 @@ export const queryClient = new QueryClient({
  * @param data
  * @returns {object}
  */
-export const LoginMutationFn = async (data: LoginFormSubmitType) => {
+export const LoginMutationFn = async (
+  data: LoginFormSubmitType
+): Promise<UserType> => {
   const res = await apiRequest({
     method: "POST",
     url: "/auth/login",
     data,
   });
   if (!res.success) {
-    throw res.data;
+    throw res.data as APIErrorType;
   }
-  return res.data;
+  return res.data as UserType;
 };
 
 /**
