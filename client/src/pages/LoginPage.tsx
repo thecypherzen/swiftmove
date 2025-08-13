@@ -4,38 +4,98 @@ import AuthImageSection from "@/components/sections/RegisterPageImageSection";
 import AppLogo from "@/components/utils/Logo";
 import Notice from "@/components/utils/Notice";
 import ThemeToggle from "@/components/utils/ThemeToggle";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/UseAuth";
 import { LoginMutationFn } from "@/lib/RequestLibrary";
-import type { UserType } from "@/shared/types";
+import type { APIErrorType, UserType } from "@/shared/types";
+import { useNavigate } from "react-router";
 
 const LoginPage = () => {
   const [credentials, setCredentials] = useState<LoginFormSubmitType | null>(
     null
   );
   const { cache, user } = useAuth();
-  const loginMutation = useMutation({
+  const navigate = useNavigate();
+  const [attemptsLeft, setAttemptsLeft] = useState<number>(3);
+  const [showAttempts, setShowAttempts] = useState<boolean>(false);
+  const submittedRef = useRef(false);
+  const toastIdRef = useRef<undefined | string | number>(undefined);
+  const { mutate, isError, error, isSuccess, data, isPending } = useMutation<
+    UserType,
+    APIErrorType,
+    LoginFormSubmitType
+  >({
     mutationFn: LoginMutationFn,
-    onSuccess: (data) => {
-      cache(data as UserType);
-      toast.success("Login successful!", {
-        description: "Welcome to SwiftMove",
-      });
-    },
     onError: (err) => {
       toast.error(err?.name, {
         description: err.message,
       });
     },
   });
-
   useEffect(() => {
+    if (isPending) {
+      toastIdRef.current = toast.loading("Hold on while we log you in...");
+    }
+    if (isSuccess) {
+      toast.success("Login successful!", {
+        id: toastIdRef.current,
+        description: "Taking you to you to your dashboard",
+      });
+      setTimeout(() => {
+        cache(data);
+        navigate("/dashboard");
+      }, 1200);
+    }
+
+    if (isError) {
+      let description: string,
+        title: string = error.name;
+      switch (error.errno) {
+        case 34:
+          description = `Account ${credentials?.email ?? ""} doesn't exist`;
+          break;
+        case 21:
+          description = "Invalid account type";
+          title = "Denied";
+          break;
+        case 22:
+          title = "Denied";
+          description = "Wrong password";
+          if (!attemptsLeft) {
+            navigate("/password/reset", { replace: true });
+            return;
+          }
+          setAttemptsLeft(() => attemptsLeft - 1);
+          if (!showAttempts) {
+            setShowAttempts(true);
+          }
+          break;
+        case 50:
+          title = "Login failed due to an error on our part";
+          description = "Report this or try again later.";
+          break;
+        default:
+          description = error.message;
+          break;
+      }
+      toast.error(title, { description, id: toastIdRef.current });
+      submittedRef.current = false;
+    }
+  }, [isSuccess, isError, isPending]);
+
+  useEffect(() => {}, [attemptsLeft]);
+  useEffect(() => {
+    if (submittedRef.current) {
+      return;
+    }
     if (credentials) {
-      loginMutation.mutate(credentials);
+      mutate(credentials);
+      submittedRef.current = true;
     }
   }, [credentials]);
+
   return (
     <main className="flex h-screen relative">
       <ThemeToggle className="absolute top-5 right-5" />
@@ -71,6 +131,11 @@ const LoginPage = () => {
               <p className="text-muted-foreground mt-2">
                 Sign in to your SwiftMove account
               </p>
+              {showAttempts && (
+                <p className="text-desructive-700 dark:text-destructive-600 text-sm">
+                  {attemptsLeft}
+                </p>
+              )}
             </div>
           </div>
           <div className="overflow-y-auto px-4">
