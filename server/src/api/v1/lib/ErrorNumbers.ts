@@ -4,15 +4,27 @@ export const errors: ServerErrorsType = {
   auth: {
     default: {
       errno: "20",
-      desc: "Unauthorised",
+      desc: "Denied",
       meaning: "Authentication not passed",
       statusCode: 401,
     },
     "20": {
       errno: "20",
-      desc: "",
+      desc: "Denied",
       statusCode: 401,
       meaning: "Authentication not passed",
+    },
+    "21": {
+      errno: "21",
+      desc: "Forbidden",
+      statusCode: 403,
+      meaning: "User account type doen't match expectation",
+    },
+    "22": {
+      errno: "22",
+      desc: "Forbidden",
+      statusCode: 403,
+      meaning: "Passwords don't match",
     },
   },
   validation: {
@@ -35,12 +47,19 @@ export const errors: ServerErrorsType = {
       meaning: "Data expected but none sent in request",
     },
     "33": {
-      errno: "32",
+      errno: "33",
       desc: "Rejected",
       statusCode: 409,
       meaning: "Resource already exists",
     },
+    "34": {
+      errno: "34",
+      desc: "Failed",
+      statusCode: 404,
+      meaning: "Requested resource not found",
+    },
   },
+
   server: {
     default: {
       errno: "50",

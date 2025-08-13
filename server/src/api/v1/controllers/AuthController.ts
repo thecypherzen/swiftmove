@@ -37,7 +37,7 @@ class AuthController extends BaseController {
         });
       }
       // proceed to create user
-      const newUser = await db.create(this.#Model, {
+      const _ = await db.create(this.#Model, {
         ...data,
         password: result,
       });
@@ -62,12 +62,48 @@ class AuthController extends BaseController {
    * @returns {void} - Doesn't return anything
    */
   login = async (req: Request, res: Response) => {
-    const data = req.body;
-    this.sendJSON(res, {
-      type: "success",
-      errno: "01",
-    });
+    // validate sent data
+    const data = this.getValidatedData(req, res);
+    if (!data) return; // response already sent in getValidatedData
+    // validate user exists by email
+    try {
+      const user = await db.getOne(this.#Model, { email: data.email });
+      if (!user) {
+        return this.sendJSON(res, { errno: "34", type: "validation" });
+      }
+      // validate account types match
+      if (user.role !== data.role) {
+        return this.sendJSON(res, { errno: "21", type: "auth" });
+      }
+      // validate password matches
+      const { success, result } = await passwords.hash(data.password);
+      if (!success) {
+        throw new ServerError({
+          message: "Password hashing failed",
+          errno: "55",
+          cause: ServerError.constructErrorCause(result as ServerError),
+        });
+      }
+      if (result !== user.password) {
+        return this.sendJSON(res, { errno: "22", type: "auth" });
+      }
+      // create token
+
+      this.sendJSON(res, {
+        type: "success",
+        errno: "01",
+      });
+    } catch (err: any) {
+      return this.sendJSON(res, {
+        type: "server",
+        data: [{ error: JSON.stringify(err, ServerError.SerialiseFn, 2) }],
+      });
+    }
   };
+
+  //async createNewSession (): Promise<void> => {
+
+  //}
 }
 
 export default AuthController;

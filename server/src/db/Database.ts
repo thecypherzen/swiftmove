@@ -147,6 +147,37 @@ class Database {
       });
     }
   }
+  /**
+   * Retrives a record from the database based on given filters.
+   * @public @method get
+   * @param {DBModelNameType} model - the name of db model to search
+   * @param {Object} filters - fields to filter against.
+   * For now, it expects the filters to match Mongodb search object, which
+   * can include conditions, projections and options.
+   * @returns {Promise<Model | null>} Promise that resolves to the document
+   * if found or null otherwise.
+   * @throws {DBError} - Error thrown if an error occured during db access
+   */
+  async getOne(model: DBModelNameType, filters: Record<string, any>) {
+    const Model = Models[model];
+    if (!Model) {
+      throw new DBError({ message: "Unknown Model Reference", errno: "53" });
+    }
+    if (!this.#client) {
+      this.init();
+    }
+    try {
+      const data = await Model.findOne(filters);
+      return data;
+    } catch (err: any) {
+      console.error(err);
+      throw new DBError({
+        message: `Query on ${model} failed`,
+        errno: "53",
+        cause: DBError.constructErrorCause(err),
+      });
+    }
+  }
 }
 
 /**
