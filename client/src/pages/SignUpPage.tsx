@@ -34,7 +34,7 @@ const SignUpPage = () => {
       });
       setTimeout(() => {
         logout();
-        navigate("/");
+        navigate("/", { replace: true });
       }, 1000);
     }
 
