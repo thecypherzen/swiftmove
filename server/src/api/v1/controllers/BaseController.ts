@@ -1,9 +1,6 @@
 import { type Response, type Request } from "express";
-import {
-  ServerErrorCauseType,
-  ServerErrorCodeType,
-} from "../lib/errorDefinitions.js";
-import Errors from "../lib/errorDefinitions.js";
+import { ServerErrorCauseType } from "../lib/ServerError.js";
+import Errors, { type ServerErrorCodeType } from "../lib/ErrorNumbers.js";
 import config from "../../../config.js";
 import { matchedData, validationResult } from "express-validator";
 

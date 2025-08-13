@@ -1,8 +1,10 @@
 import { BaseController } from "./BaseController.js";
 import { type Request, type Response } from "express";
-import db from "../../../db/Database.js";
+import db, { DBModelNameType } from "../../../db/Database.js";
+import { ServerError } from "../lib/ServerError.js";
 
 class AuthController extends BaseController {
+  #Model: DBModelNameType = "User";
   constructor() {
     super();
   }

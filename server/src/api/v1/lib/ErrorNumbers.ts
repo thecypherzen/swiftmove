@@ -1,5 +1,4 @@
 import { stringify } from "querystring";
-import { isArray } from "util";
 
 export const errors: ServerErrorsType = {
   auth: {
@@ -35,6 +34,12 @@ export const errors: ServerErrorsType = {
       statusCode: 400,
       meaning: "Data expected but none sent in request",
     },
+    "33": {
+      errno: "32",
+      desc: "Reques rejected",
+      statusCode: 409,
+      meaning: "Resource already exists",
+    },
   },
   server: {
     default: {
@@ -67,6 +72,12 @@ export const errors: ServerErrorsType = {
       statusCode: 500,
       meaning: "Database query failed",
     },
+    "55": {
+      errno: "53",
+      desc: "Inernal Server Error",
+      statusCode: 5,
+      meaning: "",
+    },
   },
   success: {
     default: {
@@ -90,85 +101,9 @@ export const errors: ServerErrorsType = {
   },
 };
 
-export class ServerError extends Error {
-  errno: string = "50";
-  #name: string;
-
-  constructor({ message, errno = "50", cause }: ServerErrorPropsType) {
-    super(message, { cause });
-    this.errno = errno;
-    this.#name = "ServerError";
-  }
-  /**
-   * Creates a server error cause from an error object.
-   * Expects to be called only when the object is a native or
-   * derrived type of the Error object.
-   * @param {Object} err Some native or derrived Error object
-   * @returns {ServerErrorCauseType} The cause of the error
-   * @throws {ServerError} - If type of object passed is not a native or
-   * derrived Error object.
-   */
-  static constructErrorCause<T extends ServerError>(
-    err: T
-  ): ServerErrorCauseType {
-    if (!(err instanceof Error)) {
-      throw new ServerError({
-        message: `Native or derrived Error expected but got ${typeof err}`,
-      });
-    }
-    const c: Record<string, any> = {
-      name: err?.name ?? "Error",
-      message: err.message,
-      stack: err.stack,
-    };
-    if (err.errno) {
-      c.errno = err.errno;
-    }
-    return c as ServerErrorCauseType;
-  }
-
-  get name() {
-    return this.#name;
-  }
-  /**
-   * Replace function for Object Serialisation
-   * @function #SerialiseFn
-   * @param {string} key current key of object in iteration
-   * @param {value} value current value of object in iteration
-   * @returns
-   */
-  #SerialiseFn(key: string, value: any) {
-    if (value instanceof ServerError) {
-      const obj: Record<string, any> = {};
-      const indexedError: { [key: string]: any } = value;
-      Object.getOwnPropertyNames(value).forEach((prop) => {
-        obj[prop] = indexedError[prop];
-      });
-      obj.stack = value.stack;
-      obj.cause = value.cause;
-      return obj;
-    }
-    return value;
-  }
-  stringify(): string {
-    return JSON.stringify(this, this.#SerialiseFn, 2);
-  }
-}
-
-export type ServerErrorCauseType = {
-  name: string;
-  message: string;
-  errno?: string;
-  stack?: string;
-};
-export type ServerErrorPropsType = {
-  message: string;
-  errno?: string;
-  cause?: ServerErrorCauseType;
-};
 export default errors;
 export type ServerErrorCodeType = "auth" | "server" | "success" | "validation";
-export type ServerErrorType = ServerError;
+
 export type ErrorNumberType = {
   errno: string;
   desc: string;

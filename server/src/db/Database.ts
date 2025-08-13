@@ -7,7 +7,7 @@ import {
   ServerError,
   ServerErrorCauseType,
   ServerErrorPropsType,
-} from "../api/v1/lib/errorDefinitions.js";
+} from "../api/v1/lib/ServerError.js";
 
 const Models = {
   User: User,
@@ -125,6 +125,7 @@ class Database {
    * can include conditions, projections and options.
    * @returns {Promise<boolean>} Promise that resolves to boolean
    *    if record exists or not.
+   * @throws {DBError} - Error thrown if an error occured during db access
    */
   async exists(model: DBModelNameType, filters: Record<string, any>) {
     const Model = Models[model];
@@ -181,7 +182,7 @@ export type ModelsTypeMap = {
   User: UserModelType;
 };
 
-type DBModelNameType = keyof typeof Models;
+export type DBModelNameType = keyof typeof Models;
 type DBClientType = typeof mongoose | null;
 
 const db = new Database();
