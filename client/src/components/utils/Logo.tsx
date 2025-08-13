@@ -5,6 +5,7 @@ const AppLogo: React.FC<LogoPropsType> = ({
   className,
   variant = "primary",
   type = "default",
+  link = false,
 }) => {
   const Logo = (
     <img
@@ -31,7 +32,13 @@ const AppLogo: React.FC<LogoPropsType> = ({
     />
   );
   return (
-    <div className={cn("flex items-center gap-2 cursor-pointer", className)}>
+    <div
+      className={cn(
+        "flex items-center gap-2",
+        link && "cursor-pointer",
+        className
+      )}
+    >
       {type === "logo" ? (
         <span>{Logo} </span>
       ) : type === "text" ? (
@@ -50,5 +57,6 @@ type LogoPropsType = {
   variant?: "light" | "dark" | "black" | "white";
   type?: "logo" | "text" | "default";
   className?: string;
+  link?: boolean;
 };
 export default AppLogo;
