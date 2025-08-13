@@ -63,6 +63,21 @@ export const apiRequest = async ({
         message = "Server took too long to respond. Try again later";
         errno = 2;
         break;
+      case "ERR_BAD_REQUEST":
+        name = "Error";
+        message = "Already exists";
+        errno = -1;
+        switch (err.status) {
+          case 409:
+            switch (err.response.data.errno) {
+              case "32":
+                message = "Email already taken";
+                errno = 32;
+                break;
+            }
+            break;
+        }
+        break;
       default:
         name = "Error";
         message = "Couldn't complete request. Try again later";
