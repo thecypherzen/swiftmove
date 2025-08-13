@@ -3,9 +3,18 @@ import { type Request, type Response } from "express";
 import db, { DBModelNameType } from "../../../db/Database.js";
 import { ServerError } from "../lib/ServerError.js";
 import passwords from "../lib/passwords.js";
+import {
+  generateToken,
+  decomposeToken,
+  TokenPayloadType,
+} from "../lib/TokensLibrary.js";
+import { UserType } from "../lib/types.js";
+import config from "../../../config.js";
+import { UserSchemaObjectType } from "../../../db/schemas/UserSchema.js";
 
 class AuthController extends BaseController {
   #Model: DBModelNameType = "User";
+  #CookieExpTime: number = config.TOKEN_EXP ?? 60 * 60 * 1000;
   constructor() {
     super();
   }
@@ -87,12 +96,13 @@ class AuthController extends BaseController {
       if (result !== user.password) {
         return this.sendJSON(res, { errno: "22", type: "auth" });
       }
-      // create token
-
-      this.sendJSON(res, {
-        type: "success",
-        errno: "01",
-      });
+      // validate user not loggedIn
+      // Start new session for user
+      const { email, id, role } =
+        user.toObject() as unknown as UserSchemaObjectType;
+      const isSet = this.createNewSession(res, { id, email, role });
+      if (!isSet) return;
+      this.sendJSON(res, { type: "success" });
     } catch (err: any) {
       return this.sendJSON(res, {
         type: "server",
@@ -101,9 +111,38 @@ class AuthController extends BaseController {
     }
   };
 
-  //async createNewSession (): Promise<void> => {
+  createNewSession = async (
+    res: Response,
+    payload: TokenPayloadType
+  ): Promise<boolean> => {
+    console.log("SETTING SESSION FOR", payload);
+    try {
+      const token = await this.getNewToken(payload);
+      res.cookie(config.SESSION_COOKIE_KEY as string, token, {
+        httpOnly: true,
+        maxAge: this.#CookieExpTime,
+      });
+      console.log("\tSUCCESS");
+      return true;
+    } catch (err: any) {
+      console.log("\tFAILED");
+      this.sendJSON(res, {
+        type: "server",
+        data: [{ error: JSON.stringify(err, ServerError.SerialiseFn, 2) }],
+      });
+      return false;
+    }
+  };
 
-  //}
+  getNewToken = async ({
+    email,
+    id,
+    role,
+  }: TokenPayloadType): Promise<string> => {
+    const t = generateToken({ email, id, role }, "access");
+    console.log("GENERATED TOKEN:", t);
+    return t;
+  };
 }
 
 export default AuthController;

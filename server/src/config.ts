@@ -27,4 +27,6 @@ export default {
     process.env.TOKEN_SECRET || crypto.randomBytes(24).toString("hex"),
   REFRESH_SECRET:
     process.env.REFRESH_SECRET || crypto.randomBytes(24).toString("hex"),
+  TOKEN_EXP: 60 * 60 * 1000,
+  SESSION_COOKIE_KEY: process.env.TOKEN_COOKIE_ID,
 };

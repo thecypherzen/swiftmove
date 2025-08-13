@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import * as uuid from "uuid";
+import { UserRoleType } from "../../api/v1/lib/types.js";
 
 const { v4: uuidv4 } = uuid;
 
@@ -67,4 +68,19 @@ UserSchema.set("toObject", {
   },
 });
 
+export type UserSchemaType = {
+  _id: string;
+  firstName?: string;
+  lastname?: string;
+  email: string;
+  password: string;
+  termsAccepted: boolean;
+  avatar?: string;
+  phoneNumber?: string;
+  role: UserRoleType;
+};
+
+export type UserSchemaObjectType = Omit<UserSchemaType, "_id" | "password"> & {
+  id: string;
+};
 export { UserSchema };

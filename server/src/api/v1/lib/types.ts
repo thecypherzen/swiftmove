@@ -2,12 +2,18 @@ import type { ServerErrorCodeType } from "./ErrorNumbers.js";
 import type { ServerErrorType } from "./ServerError.js";
 
 export type UserRoleType = "admin" | "user";
-type UserDataType = {
+
+export type UserType = {
+  id: string;
+  firstName?: string;
+  lastname?: string;
   email: string;
-  role: UserRoleType;
   password: string;
   termsAccepted: boolean;
-  id: string;
+  avatar?: string;
+  phoneNumber?: string;
+  role: UserRoleType;
+  [key: string]: any;
 };
 
 export { ServerErrorType, ServerErrorCodeType };
