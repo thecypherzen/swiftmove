@@ -19,15 +19,13 @@ export type APIErrorCause = {
   stack?: string;
   errno?: number;
 };
-
+export type APIErrorType = {
+  name: string;
+  message: string;
+  errno: number;
+  cause?: APIErrorCause;
+};
 export type APIResponseType = {
   success: boolean;
-  data:
-    | {
-        name: string;
-        message: string;
-        errno: number;
-        cause?: APIErrorCause;
-      }
-    | UserType;
+  data: APIErrorType | UserType;
 };
