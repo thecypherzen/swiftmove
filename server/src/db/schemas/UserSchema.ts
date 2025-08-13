@@ -38,6 +38,11 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  role: {
+    type: String,
+    enum: ["admin", "user"],
+    default: "user", // You can also set a default value
+  },
 });
 
 // Virtual for id
