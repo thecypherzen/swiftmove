@@ -79,7 +79,7 @@ const SignUpPage = () => {
           {/* heading */}
           <div
             id="signup-form-heading"
-            className="h-[150px] p-2 flex flex-col gap-3 justify-center items-center text-center"
+            className="p-2 flex flex-col gap-2 justify-center items-center text-center"
           >
             <AppLogo
               className="size-15 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl p-2 flex-col justify-center"
@@ -90,7 +90,7 @@ const SignUpPage = () => {
               id="signup-form-heading-text"
               className="flex flex-col items-center justify-center"
             >
-              <h2 className="text-2xl font-bold text-foreground">Welcome</h2>
+              <h2 className="text-3xl font-bold text-foreground">Sign Up</h2>
               <p className="text-muted-foreground mt-2">
                 A Few Steps to Creating Your SwiftMove Account
               </p>
