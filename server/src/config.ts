@@ -2,7 +2,7 @@
  * Define constants and default server values
  * Uses doetnev to load environment variables from .env
  */
-
+import crypto from "crypto";
 import { config } from "dotenv";
 
 // instantiate config
@@ -23,4 +23,8 @@ export default {
   SERVER_HOST: process.env.SERVER_HOST,
   DB_URI: process.env.DB_URI as string,
   DB_NAME: process.env.DB_NAME as string,
+  TOKEN_SECRET:
+    process.env.TOKEN_SECRET || crypto.randomBytes(24).toString("hex"),
+  REFRESH_SECRET:
+    process.env.REFRESH_SECRET || crypto.randomBytes(24).toString("hex"),
 };

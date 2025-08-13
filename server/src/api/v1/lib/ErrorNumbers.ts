@@ -92,10 +92,10 @@ export const errors: ServerErrorsType = {
       meaning: "Database query failed",
     },
     "55": {
-      errno: "53",
+      errno: "55",
       desc: "Internal Server Error",
-      statusCode: 5,
-      meaning: "Password hashing or verification failure",
+      statusCode: 500,
+      meaning: "JWT signing or verification failure",
     },
   },
   success: {
