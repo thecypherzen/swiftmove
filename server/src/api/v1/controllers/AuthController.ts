@@ -2,6 +2,7 @@ import { BaseController } from "./BaseController.js";
 import { type Request, type Response } from "express";
 import db, { DBModelNameType } from "../../../db/Database.js";
 import { ServerError } from "../lib/ServerError.js";
+import passwords from "../lib/passwords.js";
 
 class AuthController extends BaseController {
   #Model: DBModelNameType = "User";
@@ -18,25 +19,37 @@ class AuthController extends BaseController {
    */
   createUser = async (req: Request, res: Response) => {
     const data = this.getValidatedData(req, res);
-    if (!data) return;
+    if (!data) return; // response already sent by getValidatedData
     try {
-      const newUser = await db.create("User", data);
-      console.log("[AUTHCONTROLER] CREATED USER", newUser);
-      // send created data
-      this.json(res, {
-        type: "success",
-        errno: "01",
-        data: [
-          {
-            id: `${Date.now()}`,
-            role: data?.role ?? "user",
-            email: data?.email ?? "testUser@email.co",
-            termsAccepted: data?.termsAccepted,
-          },
-        ],
+      // verify user doesn't exist
+      const alreadyExists = await db.exists(this.#Model, { email: data.email });
+      if (alreadyExists) {
+        this.sendJSON(res, { errno: "33", type: "validation" });
+        return;
+      }
+      // hash user password
+      const { success, result } = await passwords.hash(data.password);
+      if (!success) {
+        throw new ServerError({
+          message: "Password hashing failed",
+          errno: "55",
+          cause: ServerError.constructErrorCause(result as ServerError),
+        });
+      }
+      // proceed to create user
+      const newUser = await db.create(this.#Model, {
+        ...data,
+        password: result,
       });
-    } catch (err) {
-      res.json({ error: "error" });
+      // send created data
+      this.sendJSON(res, {
+        type: "success",
+      });
+    } catch (err: any) {
+      this.sendJSON(res, {
+        type: "server",
+        data: [{ error: JSON.stringify(err, ServerError.SerialiseFn, 2) }],
+      });
       return;
     }
   };
@@ -50,7 +63,7 @@ class AuthController extends BaseController {
    */
   login = async (req: Request, res: Response) => {
     const data = req.body;
-    this.json(res, {
+    this.sendJSON(res, {
       type: "success",
       errno: "01",
     });

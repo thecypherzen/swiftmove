@@ -36,7 +36,7 @@ export const errors: ServerErrorsType = {
     },
     "33": {
       errno: "32",
-      desc: "Reques rejected",
+      desc: "Rejected",
       statusCode: 409,
       meaning: "Resource already exists",
     },
@@ -74,9 +74,9 @@ export const errors: ServerErrorsType = {
     },
     "55": {
       errno: "53",
-      desc: "Inernal Server Error",
+      desc: "Internal Server Error",
       statusCode: 5,
-      meaning: "",
+      meaning: "Password hashing or verification failure",
     },
   },
   success: {

@@ -29,7 +29,6 @@ export class BaseController {
     const key = options?.errno ?? "default";
     const errno = Errors[type][key].errno;
     const isError = options?.type !== "success";
-    const data = options?.data ?? [];
     const statusCode = Errors[type][key].statusCode;
     const status = isError ? "error" : "success";
     const desc = isError
@@ -67,7 +66,7 @@ export class BaseController {
     }
     const data = matchedData(req);
     if (!Object.keys(data).length) {
-      this.json(res, {
+      this.sendJSON(res, {
         type: "validation",
         errno: "32",
       });
@@ -83,7 +82,7 @@ export class BaseController {
    * @param {ServerResOptionsType} options - options received
    * @returns {void}
    */
-  public json(res: Response, options: ServerResOptionsType): void {
+  public sendJSON(res: Response, options: ServerResOptionsType): void {
     const { status, payload } = this.getPayload(res, options);
     res.status(status).json(payload);
     return;
@@ -97,9 +96,7 @@ export type ServerResOptionsType = {
   desc?: string;
 };
 
-export type ServerResDataType = Array<
-  ServerErrorCauseType | Record<string, any>
->;
+export type ServerResDataType = Array<{ error: string } | Record<string, any>>;
 
 export type ServerResPayloadType = {
   status: "success" | "error";

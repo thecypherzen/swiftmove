@@ -137,7 +137,7 @@ class Database {
     }
     try {
       const data = await Model.findOne(filters);
-      return !data;
+      return !!data;
     } catch (err: any) {
       console.error(err);
       throw new DBError({

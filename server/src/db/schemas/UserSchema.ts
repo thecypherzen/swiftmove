@@ -49,7 +49,7 @@ UserSchema.virtual("id").get(function () {
 UserSchema.set("toJSON", {
   virtuals: true,
   transform: (_, ret) => {
-    const { _id, __v, ...rest } = ret;
+    const { _id, __v, password, ...rest } = ret;
     return { ...rest, id: _id };
   },
 });
@@ -57,7 +57,7 @@ UserSchema.set("toJSON", {
 UserSchema.set("toObject", {
   virtuals: true,
   transform: (_, ret) => {
-    const { _id, __v, ...rest } = ret;
+    const { _id, __v, password, ...rest } = ret;
     return { ...rest, id: _id };
   },
 });
