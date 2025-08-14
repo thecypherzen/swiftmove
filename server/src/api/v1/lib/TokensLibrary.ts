@@ -6,8 +6,10 @@ import { ServerError } from "./ServerError.js";
 // generate tokens
 export const generateToken = (
   payload: TokenPayloadType,
-  type: "access" | "refresh" = "access",
-  options: object = {}
+  type: TokenType = "access",
+  options: object = {
+    expiresIn: type == "access" ? "20m" : "1h",
+  }
 ): string => {
   const secret =
     type === "access" ? config.TOKEN_SECRET : config.REFRESH_SECRET;
@@ -17,17 +19,13 @@ export const generateToken = (
       errno: "55",
     });
   }
-  return jwt.sign(payload, secret, {
-    ...options,
-    audience: `auth-${type}.${payload.id}`,
-    subject: `auth-${payload.id}`,
-  });
+  return jwt.sign(payload, secret, options);
 };
 
 // extract payload from token
 export const decomposeToken = (
   token: string,
-  type: "access" | "refresh" = "access",
+  type: TokenType = "access",
   options: object = {}
 ): DTokenResType => {
   try {
@@ -60,7 +58,7 @@ export type TokenPayloadType = {
   iat?: number;
   exp?: number;
 };
-
+export type TokenType = "access" | "refresh";
 export type DTokenResType = {
   payload: TokenPayloadType | null;
 };
