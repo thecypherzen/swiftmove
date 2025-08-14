@@ -3,6 +3,7 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import ProtectedRoute from "./hooks/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
+import PasswordResetPage from "./pages/PasswordResetPage";
 
 const AppRoutes = () => {
   return (
@@ -10,6 +11,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<SignUpPage />} />
+        <Route path="/password-reset" element={<PasswordResetPage />} />
         <Route
           path="/dashboard"
           element={
