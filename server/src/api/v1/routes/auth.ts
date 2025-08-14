@@ -5,7 +5,28 @@ import { body } from "express-validator";
 const authController = new AuthController();
 const authRouter = express.Router();
 
-authRouter.post(["/login", "/signin"], authController.login);
+authRouter.post(
+  ["/login", "/signin"],
+  [
+    body().notEmpty().withMessage("data required"),
+    body("email")
+      .notEmpty()
+      .withMessage("required")
+      .isEmail()
+      .withMessage("invalid email"),
+    body("role")
+      .notEmpty()
+      .withMessage("required")
+      .isIn(["admin", "user"])
+      .withMessage("invalid user role"),
+    body(["password"])
+      .notEmpty()
+      .withMessage("required")
+      .isString()
+      .withMessage("invalid string"),
+  ],
+  authController.login
+);
 authRouter.post(
   ["/", "/signup", "/register"],
   [

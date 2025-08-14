@@ -1,5 +1,4 @@
 import { type Response, type Request } from "express";
-import { ServerErrorCauseType } from "../lib/ServerError.js";
 import Errors, { type ServerErrorCodeType } from "../lib/ErrorNumbers.js";
 import config from "../../../config.js";
 import { matchedData, validationResult } from "express-validator";
@@ -49,8 +48,15 @@ export class BaseController {
     return { payload: tmp as ServerResPayloadType, status: statusCode };
   }
   /**
-   *
-   * @param req
+   * Extracts validated data from request object as per
+   * validator middleware. Expects the middleware to have been mounted
+   * @method getValidatedData
+   * @param {Express.Request} req - the request object
+   * @param {Express.Response} res - the response object
+   * @returns {Object | null} - validated data object on success
+   * or null otherwise, either due to validation failure or empty data set
+   * In either case, the appropriate response is sent to client and the
+   * calling function has to only return
    */
   getValidatedData(req: Request, res: Response) {
     const validation = validationResult(req);
@@ -60,7 +66,6 @@ export class BaseController {
         type: "validation",
         data: validationErrors,
       });
-      console.log("VALIDATION ERROR RESPONSE");
       res.status(status).json(payload);
       return null;
     }
@@ -89,6 +94,9 @@ export class BaseController {
   }
 }
 
+/**
+ * Types
+ */
 export type ServerResOptionsType = {
   type: ServerErrorCodeType;
   errno?: string;

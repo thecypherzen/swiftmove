@@ -2,19 +2,22 @@ import { BaseController } from "./BaseController.js";
 import { type Request, type Response } from "express";
 import db, { DBModelNameType } from "../../../db/Database.js";
 import { ServerError } from "../lib/ServerError.js";
-import passwords from "../lib/passwords.js";
+import passwords from "../lib/PasswordLibrary.js";
 import {
   generateToken,
   decomposeToken,
-  TokenPayloadType,
+  type TokenPayloadType,
 } from "../lib/TokensLibrary.js";
-import { UserType } from "../lib/types.js";
+import type { UserType } from "../lib/types.js";
 import config from "../../../config.js";
 import { UserSchemaObjectType } from "../../../db/schemas/UserSchema.js";
 
 class AuthController extends BaseController {
   #Model: DBModelNameType = "User";
   #CookieExpTime: number = config.TOKEN_EXP ?? 60 * 60 * 1000;
+  #CookieName: string = config.SESSION_COOKIE_NAME;
+  #GenerateToken = generateToken;
+  #DecomposeToken = decomposeToken;
   constructor() {
     super();
   }
@@ -85,7 +88,10 @@ class AuthController extends BaseController {
         return this.sendJSON(res, { errno: "21", type: "auth" });
       }
       // validate password matches
-      const { success, result } = await passwords.hash(data.password);
+      const { success, result } = await passwords.verify(
+        user.password,
+        data.password
+      );
       if (!success) {
         throw new ServerError({
           message: "Password hashing failed",
@@ -93,14 +99,14 @@ class AuthController extends BaseController {
           cause: ServerError.constructErrorCause(result as ServerError),
         });
       }
-      if (result !== user.password) {
+      if (!result) {
         return this.sendJSON(res, { errno: "22", type: "auth" });
       }
       // validate user not loggedIn
       // Start new session for user
       const { email, id, role } =
         user.toObject() as unknown as UserSchemaObjectType;
-      const isSet = this.createNewSession(res, { id, email, role });
+      const isSet = await this.createNewSession(res, { id, email, role });
       if (!isSet) return;
       this.sendJSON(res, { type: "success" });
     } catch (err: any) {
@@ -110,22 +116,26 @@ class AuthController extends BaseController {
       });
     }
   };
-
+  /**
+   * Creates a token for given user and starts a new session them
+   * @method createNewSession
+   * @param {Express.Response} res - The response to set the headers
+   * @param {TokenPayloadType} payload - The data to be saved in token
+   * @returns { Promise<boolean>} - true if session was set successfully
+   * false otherwise. In such case, also sends response to client.
+   */
   createNewSession = async (
     res: Response,
     payload: TokenPayloadType
   ): Promise<boolean> => {
-    console.log("SETTING SESSION FOR", payload);
     try {
       const token = await this.getNewToken(payload);
-      res.cookie(config.SESSION_COOKIE_KEY as string, token, {
+      res.cookie(this.#CookieName as string, token, {
         httpOnly: true,
         maxAge: this.#CookieExpTime,
       });
-      console.log("\tSUCCESS");
       return true;
     } catch (err: any) {
-      console.log("\tFAILED");
       this.sendJSON(res, {
         type: "server",
         data: [{ error: JSON.stringify(err, ServerError.SerialiseFn, 2) }],
@@ -134,14 +144,18 @@ class AuthController extends BaseController {
     }
   };
 
+  /**
+   * Creates a new JWT given a paload.
+   * @method getNewToken
+   * @param {TokenPayloadType} payload - The payload to encode into jwt
+   * @returns {Promise<string>} - A promise that resolves into the token
+   */
   getNewToken = async ({
     email,
     id,
     role,
   }: TokenPayloadType): Promise<string> => {
-    const t = generateToken({ email, id, role }, "access");
-    console.log("GENERATED TOKEN:", t);
-    return t;
+    return this.#GenerateToken({ email, id, role }, "access");
   };
 }
 
