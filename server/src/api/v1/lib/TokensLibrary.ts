@@ -7,9 +7,7 @@ import { ServerError } from "./ServerError.js";
 export const generateToken = (
   payload: TokenPayloadType,
   type: TokenType = "access",
-  options: object = {
-    expiresIn: type == "access" ? "20m" : "1h",
-  }
+  options: object = {}
 ): string => {
   const secret =
     type === "access" ? config.TOKEN_SECRET : config.REFRESH_SECRET;
