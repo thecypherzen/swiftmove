@@ -26,19 +26,11 @@ const LoginPage = () => {
     UserType,
     APIErrorType,
     LoginFormSubmitType
-  >({
-    mutationFn: LoginMutationFn,
-    onError: (err) => {
-      toast.error(err?.name, {
-        description: err.message,
-      });
-    },
-  });
+  >({ mutationFn: LoginMutationFn });
   useEffect(() => {
     if (isPending) {
       toastIdRef.current = toast.loading("Hold on while we log you in...");
-    }
-    if (isSuccess) {
+    } else if (isSuccess) {
       toast.success("Login successful!", {
         id: toastIdRef.current,
         description: "Taking you to you to your dashboard",
@@ -47,14 +39,16 @@ const LoginPage = () => {
         cache(data);
         navigate("/dashboard");
       }, 1200);
-    }
-
-    if (isError) {
+    } else if (isError) {
       let description: string,
         title: string = error.name;
       switch (error.errno) {
+        case 32:
+          description = "An error occured.";
+          break;
         case 34:
           description = `Account ${credentials?.email ?? ""} doesn't exist`;
+          console.log("description:", description);
           break;
         case 21:
           description = "Invalid account type";
@@ -63,10 +57,6 @@ const LoginPage = () => {
         case 22:
           title = "Denied";
           description = "Wrong password";
-          if (!attemptsLeft) {
-            navigate("/password/reset", { replace: true });
-            return;
-          }
           setAttemptsLeft(() => attemptsLeft - 1);
           if (!showAttempts) {
             setShowAttempts(true);
@@ -78,6 +68,7 @@ const LoginPage = () => {
           break;
         default:
           description = error.message;
+          console.log("default description:", description);
           break;
       }
       toast.error(title, { description, id: toastIdRef.current });
@@ -85,7 +76,14 @@ const LoginPage = () => {
     }
   }, [isSuccess, isError, isPending]);
 
-  useEffect(() => {}, [attemptsLeft]);
+  useEffect(() => {
+    if (!attemptsLeft) {
+      setTimeout(() => {
+        navigate("/password-reset", { replace: true });
+      }, 1000);
+      return;
+    }
+  }, [attemptsLeft]);
   useEffect(() => {
     if (submittedRef.current) {
       return;
@@ -133,14 +131,18 @@ const LoginPage = () => {
               </p>
               {showAttempts && (
                 <p className="text-desructive-700 dark:text-destructive-600 text-sm">
-                  {attemptsLeft}
+                  <span className="font-bold">{attemptsLeft}</span>&nbsp;
+                  {`attempt${attemptsLeft !== 1 ? "s" : ""}`}&nbsp;left
                 </p>
               )}
             </div>
           </div>
           <div className="overflow-y-auto px-4">
             {/* Form */}
-            <LoginForm disabled={false} setFormCredentials={setCredentials} />
+            <LoginForm
+              disabled={isPending || !attemptsLeft}
+              setFormCredentials={setCredentials}
+            />
           </div>
         </div>
         {/* Heading */}
