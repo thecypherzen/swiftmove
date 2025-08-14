@@ -26,6 +26,18 @@ export const errors: ServerErrorsType = {
       statusCode: 403,
       meaning: "Passwords don't match",
     },
+    "23": {
+      errno: "23",
+      desc: "Denied",
+      statusCode: 401,
+      meaning: "User not logged in but login is required",
+    },
+    "24": {
+      errno: "24",
+      desc: "Denied",
+      statusCode: 403,
+      meaning: "User already logged in",
+    },
   },
   validation: {
     default: {

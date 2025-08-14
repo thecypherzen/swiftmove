@@ -22,8 +22,8 @@ app.use(cookieParser());
 app.use((req: Request, _: Response, next: NextFunction) => {
   req.body.timestamp = new Date();
   req.body.auth = {
-    strictMode: true,
-    usingCredentials: false,
+    requireLogin: false,
+    allowCredentials: false,
     isLoggedIn: false,
   };
   next();

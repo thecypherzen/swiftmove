@@ -1,5 +1,5 @@
 import { BaseController } from "./BaseController.js";
-import { type Request, type Response } from "express";
+import { NextFunction, type Request, type Response } from "express";
 import db, { DBModelNameType } from "../../../db/Database.js";
 import { ServerError } from "../lib/ServerError.js";
 import passwords from "../lib/PasswordLibrary.js";
@@ -7,6 +7,7 @@ import {
   generateToken,
   decomposeToken,
   type TokenPayloadType,
+  TokenType,
 } from "../lib/TokensLibrary.js";
 import type { UserType } from "../lib/types.js";
 import config from "../../../config.js";
@@ -14,13 +15,69 @@ import { UserSchemaObjectType } from "../../../db/schemas/UserSchema.js";
 
 class AuthController extends BaseController {
   #Model: DBModelNameType = "User";
-  #CookieExpTime: number = config.TOKEN_EXP ?? 60 * 60 * 1000;
-  #CookieName: string = config.SESSION_COOKIE_NAME;
+  #ATokenExpTime: number = config.ACCESS_TOKEN_EXP ?? 20 * 60 * 1000;
+  #RTokenExpTime: number = config.REFRESH_TOKEN_EXP ?? 60 * 60 * 1000;
+  #ACookieName: string = config.ACCESS_COOKIE_NAME;
+  #RCookieName: string = config.REFRESH_COOKIE_NAME;
   #GenerateToken = generateToken;
   #DecomposeToken = decomposeToken;
   constructor() {
     super();
   }
+
+  #Middlewares = {
+    requireLogin: (req: Request, _: Response, next: NextFunction) => {
+      this.#requireLogin(req);
+      next();
+    },
+    /**
+     *
+     * @param req
+     * @param res
+     * @param next
+     * @returns
+     */
+    validateIsLoggedIn: async (
+      req: Request,
+      res: Response,
+      next: NextFunction
+    ) => {
+      const sessionId: string | undefined = req.cookies[this.#ACookieName];
+      // no session exists
+      if (!sessionId) {
+        this.#setLoginStatus(req, false);
+        // refresh token exists - means user had logged in before
+        // so we deny usage of credentials
+        if (req.cookies[this.#RCookieName]) {
+          this.#setAllowCredentials(req, false);
+        }
+        // send error resonse if login is required
+        if (req.body.auth.requireLogin) {
+          this.sendJSON(res, {
+            type: "auth",
+            errno: "23",
+          });
+          return;
+        }
+      }
+      // confirm user is logged in
+      this.#setLoginStatus(req, true);
+      next();
+    },
+  };
+
+  #requireLogin = (req: Request) => {
+    req.body.auth.requireLogin = true;
+  };
+
+  #setAllowCredentials = (req: Request, value: boolean = false) => {
+    req.body.auth.allowCredentials = value;
+  };
+
+  #setLoginStatus = (req: Request, status: boolean = false) => {
+    req.body.auth.isLoggedIn = status;
+  };
+
   /**
    * Create a new User
    * Gracefully handles validation errors.
@@ -67,6 +124,60 @@ class AuthController extends BaseController {
   };
 
   /**
+   * Creates a token for given user and starts a new session them
+   * @method createNewSession
+   * @param {Express.Response} res - The response to set the headers
+   * @param {TokenPayloadType} payload - The data to be saved in token
+   * @returns { Promise<boolean>} - true if session was set successfully
+   * false otherwise. In such case, also sends response to client.
+   */
+  createNewSession = async (
+    res: Response,
+    payload: TokenPayloadType
+  ): Promise<boolean> => {
+    try {
+      const aToken = await this.getNewToken(payload);
+      const rToken = await this.getNewToken(payload, "refresh");
+      // set access cookie
+      res.cookie(this.#ACookieName as string, aToken, {
+        httpOnly: true,
+        maxAge: this.#ATokenExpTime,
+      });
+      // set refresh cookie
+      res.cookie(this.#RCookieName as string, rToken, {
+        httpOnly: true,
+        maxAge: this.#RTokenExpTime,
+      });
+      return true;
+    } catch (err: any) {
+      this.sendJSON(res, {
+        type: "server",
+        data: [{ error: JSON.stringify(err, ServerError.SerialiseFn, 2) }],
+      });
+      return false;
+    }
+  };
+
+  /**
+   * Creates a new JWT given a paload.
+   * @method getNewToken
+   * @param {TokenPayloadType} payload - The payload to encode into jwt
+   * @returns {Promise<string>} - A promise that resolves into the token
+   */
+  getNewToken = async (
+    { email, id, role }: TokenPayloadType,
+    type: TokenType = "access"
+  ): Promise<string> => {
+    return this.#GenerateToken({ email, id, role }, type, {
+      expiresIn: type == "access" ? this.#ATokenExpTime : this.#RTokenExpTime,
+    });
+  };
+
+  isLoggedIn = (req: Request) => {
+    return req.body.auth.isLoggedIn;
+  };
+
+  /**
    * Login a user
    * @method login
    * @param {Express.Request} req - Incoming request
@@ -74,6 +185,11 @@ class AuthController extends BaseController {
    * @returns {void} - Doesn't return anything
    */
   login = async (req: Request, res: Response) => {
+    // handle already logged in status
+    if (this.isLoggedIn(req)) {
+      this.sendJSON(res, { type: "auth", errno: "24" });
+      return;
+    }
     // validate sent data
     const data = this.getValidatedData(req, res);
     if (!data) return; // response already sent in getValidatedData
@@ -116,47 +232,9 @@ class AuthController extends BaseController {
       });
     }
   };
-  /**
-   * Creates a token for given user and starts a new session them
-   * @method createNewSession
-   * @param {Express.Response} res - The response to set the headers
-   * @param {TokenPayloadType} payload - The data to be saved in token
-   * @returns { Promise<boolean>} - true if session was set successfully
-   * false otherwise. In such case, also sends response to client.
-   */
-  createNewSession = async (
-    res: Response,
-    payload: TokenPayloadType
-  ): Promise<boolean> => {
-    try {
-      const token = await this.getNewToken(payload);
-      res.cookie(this.#CookieName as string, token, {
-        httpOnly: true,
-        maxAge: this.#CookieExpTime,
-      });
-      return true;
-    } catch (err: any) {
-      this.sendJSON(res, {
-        type: "server",
-        data: [{ error: JSON.stringify(err, ServerError.SerialiseFn, 2) }],
-      });
-      return false;
-    }
-  };
-
-  /**
-   * Creates a new JWT given a paload.
-   * @method getNewToken
-   * @param {TokenPayloadType} payload - The payload to encode into jwt
-   * @returns {Promise<string>} - A promise that resolves into the token
-   */
-  getNewToken = async ({
-    email,
-    id,
-    role,
-  }: TokenPayloadType): Promise<string> => {
-    return this.#GenerateToken({ email, id, role }, "access");
-  };
+  get Middlewares() {
+    return this.#Middlewares;
+  }
 }
 
 export default AuthController;
