@@ -15,8 +15,8 @@ import { UserSchemaObjectType } from "../../../db/schemas/UserSchema.js";
 
 class AuthController extends BaseController {
   #Model: DBModelNameType = "User";
-  #ATokenExpTime: number = config.ACCESS_TOKEN_EXP ?? 20 * 60 * 1000;
-  #RTokenExpTime: number = config.REFRESH_TOKEN_EXP ?? 60 * 60 * 1000;
+  #ATokenExpTimeSecs: number = config.ACCESS_TOKEN_EXP_SECS;
+  #RTokenExpTimeSecs: number = config.REFRESH_TOKEN_EXP_SECS;
   #ACookieName: string = config.ACCESS_COOKIE_NAME;
   #RCookieName: string = config.REFRESH_COOKIE_NAME;
   #GenerateToken = generateToken;
@@ -27,7 +27,11 @@ class AuthController extends BaseController {
 
   #Middlewares = {
     requireLogin: (req: Request, _: Response, next: NextFunction) => {
-      this.#requireLogin(req);
+      this.#setLoginRequired(req, true);
+      next();
+    },
+    unRequireLogin: (req: Request, _: Response, next: NextFunction) => {
+      this.#setLoginRequired(req, false);
       next();
     },
     /**
@@ -37,7 +41,7 @@ class AuthController extends BaseController {
      * @param next
      * @returns
      */
-    validateIsLoggedIn: async (
+    validateLoginStatus: async (
       req: Request,
       res: Response,
       next: NextFunction
@@ -64,10 +68,40 @@ class AuthController extends BaseController {
       this.#setLoginStatus(req, true);
       next();
     },
+
+    validateSession: async (
+      req: Request,
+      res: Response,
+      next: NextFunction
+    ) => {
+      const aToken: string = req.cookies[this.#ACookieName];
+      if (aToken) {
+        const { success, data } = await this.decomposeToken(aToken, "access");
+        if (!success) {
+          this.sendJSON(res, {
+            type: "server",
+            errno: "50",
+          });
+          return;
+        }
+        if (!data) {
+          this.sendJSON(res, { type: "auth", errno: "25" });
+          return;
+        }
+        req.body.auth.payload = data;
+        next();
+      } else {
+        if (!req.body.auth.allowCredentials) {
+          this.sendJSON(res, { type: "auth", errno: "20" });
+          return;
+        }
+        next();
+      }
+    },
   };
 
-  #requireLogin = (req: Request) => {
-    req.body.auth.requireLogin = true;
+  #setLoginRequired = (req: Request, value: boolean = true) => {
+    req.body.auth.requireLogin = value;
   };
 
   #setAllowCredentials = (req: Request, value: boolean = false) => {
@@ -141,12 +175,12 @@ class AuthController extends BaseController {
       // set access cookie
       res.cookie(this.#ACookieName as string, aToken, {
         httpOnly: true,
-        maxAge: this.#ATokenExpTime,
+        maxAge: this.#ATokenExpTimeSecs * 1000,
       });
       // set refresh cookie
       res.cookie(this.#RCookieName as string, rToken, {
         httpOnly: true,
-        maxAge: this.#RTokenExpTime,
+        maxAge: this.#RTokenExpTimeSecs * 1000,
       });
       return true;
     } catch (err: any) {
@@ -159,18 +193,44 @@ class AuthController extends BaseController {
   };
 
   /**
+   * Verifies a jwt payload, extracting its payload.
+   * @method decomposeToken
+   * @param {string} token - The jwt to verify
+   * @param {TokenType} type - Role of jwt being verified.
+   * @returns {Promise<DcTokenResType>} - A promise that resolves into
+   * an object with all the info we need
+   */
+  decomposeToken = async (
+    token: string,
+    type: TokenType = "access"
+  ): Promise<DcTokenResType> => {
+    try {
+      const { payload } = this.#DecomposeToken(token, type);
+      return { success: true, data: payload };
+    } catch (err: any) {
+      return { success: false, data: err };
+    }
+  };
+
+  /**
    * Creates a new JWT given a paload.
    * @method getNewToken
    * @param {TokenPayloadType} payload - The payload to encode into jwt
    * @returns {Promise<string>} - A promise that resolves into the token
    */
   getNewToken = async (
-    { email, id, role }: TokenPayloadType,
+    payload: TokenPayloadType,
     type: TokenType = "access"
   ): Promise<string> => {
-    return this.#GenerateToken({ email, id, role }, type, {
-      expiresIn: type == "access" ? this.#ATokenExpTime : this.#RTokenExpTime,
-    });
+    const iat = Math.floor(Date.now() / 1000);
+    const times = {
+      iat,
+      exp:
+        iat + type == "access"
+          ? this.#ATokenExpTimeSecs
+          : this.#RTokenExpTimeSecs,
+    } as Record<string, any>;
+    return this.#GenerateToken({ ...times, ...payload }, type);
   };
 
   isLoggedIn = (req: Request) => {
@@ -190,6 +250,7 @@ class AuthController extends BaseController {
       this.sendJSON(res, { type: "auth", errno: "24" });
       return;
     }
+
     // validate sent data
     const data = this.getValidatedData(req, res);
     if (!data) return; // response already sent in getValidatedData
@@ -237,4 +298,8 @@ class AuthController extends BaseController {
   }
 }
 
+export type DcTokenResType = {
+  success: boolean;
+  data: TokenPayloadType | null;
+};
 export default AuthController;

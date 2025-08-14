@@ -5,14 +5,14 @@ export const errors: ServerErrorsType = {
     default: {
       errno: "20",
       desc: "Denied",
-      meaning: "Authentication not passed",
+      meaning: "Authentication failed for some reason",
       statusCode: 401,
     },
     "20": {
       errno: "20",
       desc: "Denied",
       statusCode: 401,
-      meaning: "Authentication not passed",
+      meaning: "Authentication failed for some reason",
     },
     "21": {
       errno: "21",
@@ -37,6 +37,12 @@ export const errors: ServerErrorsType = {
       desc: "Denied",
       statusCode: 403,
       meaning: "User already logged in",
+    },
+    "25": {
+      errno: "25",
+      desc: "Denied",
+      statusCode: 403,
+      meaning: "Expired access token",
     },
   },
   validation: {

@@ -17,7 +17,7 @@ if (!conf) {
 /**
  * Exports
  */
-const HourTimeStamp = 60 * 60 * 1000;
+const HourInSecs = 60 * 60;
 
 export default {
   OP_ENV: process.env.NODE_ENV || "dev",
@@ -29,8 +29,8 @@ export default {
     process.env.TOKEN_SECRET || crypto.randomBytes(24).toString("hex"),
   REFRESH_SECRET:
     process.env.REFRESH_SECRET || crypto.randomBytes(24).toString("hex"),
-  ACCESS_TOKEN_EXP: HourTimeStamp,
-  REFRESH_TOKEN_EXP: HourTimeStamp * 24,
+  ACCESS_TOKEN_EXP_SECS: HourInSecs,
+  REFRESH_TOKEN_EXP_SECS: HourInSecs * 24,
   ACCESS_COOKIE_NAME: process.env.ACCESS_COOKIE_NAME ?? "aCOOKIE",
   REFRESH_COOKIE_NAME: process.env.REFRESH_COOKIE_NAME ?? "rCOOKIE",
 };
