@@ -2,7 +2,13 @@ import type {
   LoginFormSubmitType,
   SignupFormSubmitType,
 } from "@/components/forms/types";
-import type { APIErrorType, APIResponseType, UserType } from "@/shared/types";
+import type {
+  APIErrorType,
+  APIRequestType,
+  APIResponseType,
+  APISuccessType,
+  UserType,
+} from "@/shared/types";
 import { QueryClient } from "@tanstack/react-query";
 //import { type QueryKey, type QueryFunction } from "@tanstack/react-query";
 import axios from "axios";
@@ -12,14 +18,6 @@ const api = axios.create({
   withCredentials: true,
   timeout: 5000,
 });
-
-//export class APIError extends Error {
-//  errno: number;
-//  constructor(message: string, errno: number, cause?: APIErrorCause) {
-//    super(message, { cause });
-//    this.errno = errno;
-//  }
-//}
 
 /**
  * Make Api Requests
@@ -39,7 +37,7 @@ export const apiRequest = async ({
       ...rest?.extras,
     });
     console.log(`[${method} REQUEST]: ${url}\nRESPONSE:\n\t`, res);
-    return { success: true, data: res?.data };
+    return { success: true, data: res?.data.payload };
   } catch (err: any) {
     let name, errno, message;
     console.error(`[${method} REQUEST]: ${url}\nRESPONSE:\n\t`, err);
@@ -71,6 +69,7 @@ export const apiRequest = async ({
         } catch (_) {
           errno = parseInt(err.response.data.errno.slice(1));
         }
+        console.log("errno", errno);
         break;
     }
     return {
@@ -121,7 +120,7 @@ export const LoginMutationFn = async (
   if (!res.success) {
     throw res.data as APIErrorType;
   }
-  return res.data as UserType;
+  return (res.data as APISuccessType)[0] as UserType;
 };
 
 /**
@@ -143,15 +142,4 @@ export const SignupMutationFn = async (data: SignupFormSubmitType) => {
   return res.data;
 };
 
-export type APIRequestType = {
-  method: "POST" | "GET" | "PUT" | "DELETE";
-  url: string;
-  data?: Record<string, any>;
-  extras?: {
-    headers?: Record<string, any>;
-    params?: Record<string, any>;
-    [key: string]: any;
-  };
-};
-
-//export type APIErrorType = APIError;
+//export type
