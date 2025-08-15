@@ -37,7 +37,7 @@ const LoginPage = () => {
       });
       setTimeout(() => {
         cache(data);
-        navigate("/dashboard");
+        navigate("/dashboard", { replace: true });
       }, 1200);
     } else if (isError) {
       let description: string,
@@ -49,6 +49,18 @@ const LoginPage = () => {
         case 34:
           description = `Account ${credentials?.email ?? ""} doesn't exist`;
           console.log("description:", description);
+          break;
+        case 26:
+          description = "Sign in method not allowed.";
+          break;
+        case 25:
+          description = "Session expired. Login again.";
+          break;
+        case 24:
+          description = "You're already logged in";
+          setTimeout(() => {
+            navigate("/dashboard", { replace: true });
+          }, 1000);
           break;
         case 21:
           description = "Invalid account type";
