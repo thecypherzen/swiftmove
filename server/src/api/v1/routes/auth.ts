@@ -3,10 +3,15 @@ import AuthController from "../controllers/AuthController.js";
 import { body } from "express-validator";
 
 const authController = new AuthController();
+const { allowCredentials, validateLoginStatus, validateSession } =
+  authController.Middlewares;
 const authRouter = express.Router();
 
 authRouter.post(
   ["/login", "/signin"],
+  allowCredentials,
+  validateLoginStatus,
+  validateSession,
   [
     body().notEmpty().withMessage("data required"),
     body("email")

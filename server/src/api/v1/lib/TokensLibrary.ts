@@ -38,6 +38,7 @@ export const decomposeToken = (
     const payload = jwt.verify(token, secret, options) as TokenPayloadType;
     return { payload };
   } catch (err: any) {
+    console.log(err);
     if (err instanceof jwt.TokenExpiredError) {
       return { payload: null };
     }

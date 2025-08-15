@@ -42,7 +42,13 @@ export const errors: ServerErrorsType = {
       errno: "25",
       desc: "Denied",
       statusCode: 403,
-      meaning: "Expired access token",
+      meaning: "Session expired",
+    },
+    "26": {
+      errno: "26",
+      desc: "Not Allowed",
+      statusCode: 405,
+      meaning: "Not allowed. Tokens expected but credentials sent",
     },
   },
   validation: {

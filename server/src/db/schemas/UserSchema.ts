@@ -78,6 +78,7 @@ export type UserSchemaType = {
   avatar?: string;
   phoneNumber?: string;
   role: UserRoleType;
+  [key: string]: any;
 };
 
 export type UserSchemaObjectType = Omit<UserSchemaType, "_id" | "password"> & {
