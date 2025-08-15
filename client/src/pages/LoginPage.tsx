@@ -16,7 +16,7 @@ const LoginPage = () => {
   const [credentials, setCredentials] = useState<LoginFormSubmitType | null>(
     null
   );
-  const { cache, user } = useAuth();
+  const { cache, user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [attemptsLeft, setAttemptsLeft] = useState<number>(3);
   const [showAttempts, setShowAttempts] = useState<boolean>(false);
@@ -27,6 +27,13 @@ const LoginPage = () => {
     APIErrorType,
     LoginFormSubmitType
   >({ mutationFn: LoginMutationFn });
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [isAuthenticated]);
+
   useEffect(() => {
     if (isPending) {
       toastIdRef.current = toast.loading("Hold on while we log you in...");

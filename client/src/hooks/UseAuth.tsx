@@ -15,6 +15,7 @@ const cacheKey = "sm-user";
  */
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserType | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
     // Check for stored user data on app startup
@@ -22,12 +23,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (storedUser) {
       try {
         setUser(JSON.parse(storedUser));
+        setIsAuthenticated(true);
       } catch (error) {
         cookies.remove(cacheKey);
+        setIsAuthenticated(false);
       }
+    } else {
+      setIsAuthenticated(false);
     }
   }, []);
 
+  useEffect(() => {}, [isAuthenticated]);
   const cache = (userData: UserType) => {
     console.log("logging user in");
     setUser(userData);
@@ -38,12 +44,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     cookies.remove(cacheKey);
   };
-
   return (
     <AuthContext.Provider
       value={{
         user,
-        isAuthenticated: !!user,
+        isAuthenticated,
         cache,
         logout,
         cacheKey,

@@ -1,6 +1,7 @@
 import { Navigate } from "react-router";
 import { useAuth } from "./UseAuth";
 import type React from "react";
+import { useEffect } from "react";
 
 /**
  * @component
@@ -12,6 +13,10 @@ import type React from "react";
  */
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
+
+  useEffect(() => {
+    console.log("protected route: isAuthenticated", isAuthenticated);
+  }, [isAuthenticated]);
 
   if (!isAuthenticated) {
     return <Navigate to="/" replace />;
