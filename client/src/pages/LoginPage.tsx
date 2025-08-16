@@ -16,7 +16,7 @@ const LoginPage = () => {
   const [credentials, setCredentials] = useState<LoginFormSubmitType | null>(
     null
   );
-  const { cache, user, isAuthenticated } = useAuth();
+  const { cache, user } = useAuth();
   const navigate = useNavigate();
   const [attemptsLeft, setAttemptsLeft] = useState<number>(3);
   const [showAttempts, setShowAttempts] = useState<boolean>(false);
@@ -29,22 +29,16 @@ const LoginPage = () => {
   >({ mutationFn: LoginMutationFn });
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/dashboard", { replace: true });
-    }
-  }, [isAuthenticated]);
-
-  useEffect(() => {
     if (isPending) {
       toastIdRef.current = toast.loading("Hold on while we log you in...");
     } else if (isSuccess) {
       toast.success("Login successful!", {
         id: toastIdRef.current,
-        description: "Taking you to you to your dashboard",
+        description: "Taking you to you in",
       });
       setTimeout(() => {
         cache(data);
-        navigate("/dashboard", { replace: true });
+        navigate("/home", { replace: true });
       }, 1200);
     } else if (isError) {
       let description: string,
@@ -66,7 +60,7 @@ const LoginPage = () => {
         case 24:
           description = "You're already logged in";
           setTimeout(() => {
-            navigate("/dashboard", { replace: true });
+            navigate("/home", { replace: true });
           }, 1000);
           break;
         case 21:

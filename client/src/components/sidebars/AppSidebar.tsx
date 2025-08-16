@@ -27,7 +27,6 @@ const AppSidebar = () => {
     <Sidebar offsetT={true} collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
-          {/*<SidebarGroupLabel>Application</SidebarGroupLabel>*/}
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

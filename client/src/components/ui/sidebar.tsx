@@ -182,7 +182,6 @@ function Sidebar({
 	offsetB: boolean;
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
-	console.log("offsetT:", offsetT);
   if (collapsible === "none") {
     return (
       <div
