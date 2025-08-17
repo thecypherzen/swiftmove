@@ -1,4 +1,4 @@
-//import { useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { Home, Package, Truck, Users, BarChart3 } from "lucide-react";
 import {
   Sidebar,
@@ -9,8 +9,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { NavLink } from "react-router-dom";
-
+import { cn } from "@/lib/utils";
 const items = [
   { name: "Dashboard", href: "/home/dashboard", icon: Home },
   { name: "Shipments", href: "/home/shipments", icon: Package },
@@ -20,9 +19,9 @@ const items = [
 ];
 
 const AppSidebar = () => {
-  //const location = useLocation().pathname;
+  const path = useLocation().pathname;
+  console.log(path);
   //const { user } = useAuth();
-
   return (
     <Sidebar offsetT={true} collapsible="icon">
       <SidebarContent>
@@ -30,14 +29,18 @@ const AppSidebar = () => {
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
-                <SidebarMenuItem key={item.name}>
-                  <SidebarMenuButton asChild>
-                    <NavLink
-                      to={item.href}
-                      className={({ isActive }) =>
-                        isActive ? "text-primary" : "text-foreground"
-                      }
-                    >
+                <SidebarMenuItem
+                  key={item.name}
+                  className="transition-[color] duration-200"
+                >
+                  <SidebarMenuButton
+                    asChild
+                    className={cn(
+                      "hover:text-primary-100 transition-[background] duration-300",
+                      path === item.href ? "hover:bg-primary-600" : ""
+                    )}
+                  >
+                    <NavLink to={item.href}>
                       <item.icon />
                       <span>{item.name}</span>
                     </NavLink>

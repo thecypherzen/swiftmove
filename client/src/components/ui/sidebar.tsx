@@ -59,17 +59,17 @@ function SidebarProvider({
   style,
   children,
   offsetT,
-	offsetL,
-	offsetR,
-	offsetB,
+  offsetL,
+  offsetR,
+  offsetB,
   ...props
 }: React.ComponentProps<"div"> & {
   defaultOpen?: boolean;
   open?: boolean;
   offsetT?: boolean;
-	offsetL?: boolean;
-	offsetR?: boolean;
-	offsetB: boolean;
+  offsetL?: boolean;
+  offsetR?: boolean;
+  offsetB?: boolean;
   onOpenChange?: (open: boolean) => void;
 }) {
   const isMobile = useIsMobile();
@@ -147,10 +147,10 @@ function SidebarProvider({
           className={cn(
             "group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full relative",
             offsetT && "mt-[var(--sidebar-offset-t)]",
-						offsetB && "mt-[var(--sidebar-offset-b)]",
-						offsetL && "mt-[var(--sidebar-offset-l)]",
-						offsetR && "mt-[var(--sidebar-offset-r)]",
-            className,
+            offsetB && "mt-[var(--sidebar-offset-b)]",
+            offsetL && "mt-[var(--sidebar-offset-l)]",
+            offsetR && "mt-[var(--sidebar-offset-r)]",
+            className
           )}
           {...props}
         >
@@ -167,19 +167,19 @@ function Sidebar({
   collapsible = "offcanvas",
   className,
   children,
-	offsetT,
-	offsetL,
-	offsetR,
-	offsetB,
+  offsetT,
+  offsetL,
+  offsetR,
+  offsetB,
   ...props
 }: React.ComponentProps<"div"> & {
   side?: "left" | "right";
   variant?: "sidebar" | "floating" | "inset";
   collapsible?: "offcanvas" | "icon" | "none";
-	offsetT?: boolean;
-	offsetL?: boolean;
-	offsetR?: boolean;
-	offsetB: boolean;
+  offsetT?: boolean;
+  offsetL?: boolean;
+  offsetR?: boolean;
+  offsetB?: boolean;
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
   if (collapsible === "none") {
@@ -188,6 +188,10 @@ function Sidebar({
         data-slot="sidebar"
         className={cn(
           "bg-sidebar text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col",
+          offsetT && "mt-[var(--sidebar-offset-t)]",
+          offsetB && "mt-[var(--sidebar-offset-b)]",
+          offsetL && "mt-[var(--sidebar-offset-l)]",
+          offsetR && "mt-[var(--sidebar-offset-r)]",
           className
         )}
         {...props}
@@ -224,12 +228,13 @@ function Sidebar({
 
   return (
     <div
-      className={cn("group peer text-sidebar-foreground hidden md:block",
-				 offsetT && "mt-[var(--sidebar-offset-t)]",
-				offsetB && "mt-[var(--sidebar-offset-b)]",
-				offsetL && "mt-[var(--sidebar-offset-l)]",
-				offsetR && "mt-[var(--sidebar-offset-r)]"
-			)}
+      className={cn(
+        "group peer text-sidebar-foreground hidden md:block",
+        offsetT && "mt-[var(--sidebar-offset-t)]",
+        offsetB && "mt-[var(--sidebar-offset-b)]",
+        offsetL && "mt-[var(--sidebar-offset-l)]",
+        offsetR && "mt-[var(--sidebar-offset-r)]"
+      )}
       data-state={state}
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
@@ -259,10 +264,10 @@ function Sidebar({
           variant === "floating" || variant === "inset"
             ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
             : "group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l",
-						 offsetT && "mt-[var(--sidebar-offset-t)]",
-				offsetB && "mt-[var(--sidebar-offset-b)]",
-				offsetL && "mt-[var(--sidebar-offset-l)]",
-				offsetR && "mt-[var(--sidebar-offset-r)]",
+          offsetT && "mt-[var(--sidebar-offset-t)]",
+          offsetB && "mt-[var(--sidebar-offset-b)]",
+          offsetL && "mt-[var(--sidebar-offset-l)]",
+          offsetR && "mt-[var(--sidebar-offset-r)]",
           className
         )}
         {...props}
@@ -400,7 +405,7 @@ function SidebarContent({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="sidebar-content"
       data-sidebar="content"
       className={cn(
-        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
+        "bg-sidebar flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
         className
       )}
       {...props}

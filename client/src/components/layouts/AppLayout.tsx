@@ -17,7 +17,7 @@ const AppLayout = () => {
       />
       <SidebarProvider offsetT={true}>
         <AppSidebar />
-        <main className="w-full border-2 border-blue-300">
+        <main className="w-full">
           <SidebarTrigger />
           <Outlet />
         </main>
