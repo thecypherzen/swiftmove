@@ -1,18 +1,12 @@
-import { Button } from "../ui/button";
-import { Menu } from "lucide-react";
+import { useTheme } from "@/hooks/useTheme";
+import AppLogo from "../utils/Logo";
 
 const AppHeader = ({ onToggleMobileSidebar }: HeaderProps) => {
+  const { theme } = useTheme();
   return (
-    <div className="h-20 bg-white w-full fixed top-0 z-20">
-      <Button
-        onClick={onToggleMobileSidebar}
-        className="relative text-black border-1 border-primary size-10 p-1 cursor-pointer"
-        variant="ghost"
-        asChild
-      >
-        <Menu />
-      </Button>
-    </div>
+    <header className="h-15 bg-white w-full fixed top-0 z-20 w-[95/10] max-w-[1050px] flex items-center justify-between">
+      <AppLogo variant={theme === "dark" ? "light" : "dark"} />
+    </header>
   );
 };
 
