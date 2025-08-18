@@ -389,7 +389,6 @@ class AuthController extends BaseController {
         iat +
         (type == "access" ? this.#ATokenExpTimeSecs : this.#RTokenExpTimeSecs),
     } as Record<string, any>;
-    console.log("payload times:::", times);
     return this.#GenerateToken({ ...times, ...payload }, type);
   };
   /**
@@ -463,7 +462,6 @@ class AuthController extends BaseController {
         });
         if (!isSet) return;
       }
-      console.log("PROFILE:", profile);
       this.sendJSON(res, { type: "success", data: [profile] });
     } catch (err: any) {
       return this.sendJSON(res, {
