@@ -4,9 +4,11 @@ import { cn } from "@/lib/utils";
 import { useTheme } from "@/hooks/UseTheme";
 import { Moon, Sun } from "lucide-react";
 
-const ThemeToggle: React.FC<ThemeTogglePropsType> = ({ className }) => {
+const ThemeToggle: React.FC<ThemeTogglePropsType> = ({
+  className,
+  size = 5,
+}) => {
   const { theme, toggleTheme } = useTheme();
-
   return (
     <Button
       variant="ghost"
@@ -19,12 +21,17 @@ const ThemeToggle: React.FC<ThemeTogglePropsType> = ({ className }) => {
       )}
       onClick={toggleTheme}
     >
-      {theme === "dark" ? <Moon /> : <Sun />}
+      {theme === "dark" ? (
+        <Moon className={`size-${size}`} />
+      ) : (
+        <Sun className={`size-${size}`} />
+      )}
     </Button>
   );
 };
 
 export type ThemeTogglePropsType = {
   className?: string;
+  size?: number;
 };
 export default ThemeToggle;
