@@ -44,10 +44,10 @@ const AppLogo: React.FC<LogoPropsType> = ({
       ) : type === "text" ? (
         <span>{LogoText}</span>
       ) : (
-        <>
-          <span>{Logo}</span>
-          <span>{LogoText}</span>
-        </>
+        <div className="flex items-center justify-start">
+          <span className="w-2/5 p-0.5">{Logo}</span>
+          <span className="w-3/5">{LogoText}</span>
+        </div>
       )}
     </div>
   );
