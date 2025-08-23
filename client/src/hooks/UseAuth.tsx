@@ -38,11 +38,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     console.log("logging user in");
     setUser(userData);
     cookies.set(cacheKey, JSON.stringify(userData), { expires: 7 });
+    setIsAuthenticated(true);
   };
 
   const logout = () => {
     setUser(null);
     cookies.remove(cacheKey);
+    setIsAuthenticated(false);
   };
   return (
     <AuthContext.Provider
