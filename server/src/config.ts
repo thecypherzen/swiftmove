@@ -26,9 +26,9 @@ export default {
   DB_URI: process.env.DB_URI as string,
   DB_NAME: process.env.DB_NAME as string,
   TOKEN_SECRET:
-    process.env.TOKEN_SECRET || crypto.randomBytes(24).toString("hex"),
+    process.env.TOKEN_SECRET || crypto.randomBytes(32).toString("hex"),
   REFRESH_SECRET:
-    process.env.REFRESH_SECRET || crypto.randomBytes(24).toString("hex"),
+    process.env.REFRESH_SECRET || crypto.randomBytes(32).toString("hex"),
   ACCESS_TOKEN_EXP_SECS: HourInSecs,
   REFRESH_TOKEN_EXP_SECS: HourInSecs * 24,
   ACCESS_COOKIE_NAME: process.env.ACCESS_COOKIE_NAME ?? "aCOOKIE",
