@@ -14,7 +14,9 @@ import { QueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}/${
+    import.meta.env.VITE_API_VERSION
+  }`,
   withCredentials: true,
   timeout: 5000,
 });
@@ -63,7 +65,15 @@ export const apiRequest = async ({
         break;
       default:
         name = "Error";
-        message = err.desc;
+        switch (err.name) {
+          case "AxiosError":
+            errno = -1;
+            message = "Failed to connect to the server. Try again later";
+            break;
+          default:
+            message = err.desc;
+            break;
+        }
         try {
           errno = parseInt(err.response.data.errno);
         } catch (_) {
