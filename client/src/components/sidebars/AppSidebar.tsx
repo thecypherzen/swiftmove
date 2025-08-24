@@ -1,5 +1,14 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { Home, Package, Truck, Users, BarChart3, Settings } from "lucide-react";
+import {
+  Home,
+  Package,
+  Truck,
+  Users,
+  BarChart3,
+  Settings,
+  Bell,
+  UserCircle,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -31,6 +40,8 @@ const navItems = [
 
 const settingsItems = [
   { name: "Settings", href: "/home/settings", icon: Settings },
+  { name: "Notifications", href: "/home/notifications", icon: Bell },
+  { name: "Profile", href: "/home/user/profile", icon: UserCircle },
 ];
 
 const AppSidebar = () => {

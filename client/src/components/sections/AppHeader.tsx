@@ -2,12 +2,13 @@ import { useTheme } from "@/hooks/UseTheme";
 import AppLogo from "../utils/Logo";
 import SearchInput from "../utils/SearchInput";
 import ThemeToggle from "../utils/ThemeToggle";
-import NotificationIcon from "../utils/NotificationIcon";
 import { UseIsMobile } from "@/hooks/UseIsMobile";
 import { cn } from "@/lib/utils";
 import { SidebarTrigger } from "../ui/sidebar";
 import { Menu } from "lucide-react";
 import UserAvatar from "../utils/UserAvatar";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import UserPopover from "../popovers/UserPopover";
 
 const Searchbar = SearchInput;
 
@@ -38,8 +39,14 @@ const AppHeader = () => {
             ) : (
               <>
                 <ThemeToggle size={5} />
-                <NotificationIcon />
-                <UserAvatar />
+                <Popover>
+                  <PopoverTrigger>
+                    <UserAvatar className="cursor-pointer" />
+                  </PopoverTrigger>
+                  <PopoverContent sideOffset={12} className="mr-2 w-50 p-1">
+                    <UserPopover className="w-full text-sm gap-2" />
+                  </PopoverContent>
+                </Popover>
               </>
             )}
           </div>
