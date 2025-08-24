@@ -105,6 +105,28 @@ const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter className="border-t border-t-muted">
+        <div
+          id="footer-content-wrapper"
+          className="py-4 px-2 text-sm flex gap-2 justify-between items-center cursor-pointer hover:bg-muted/40 hover:rounded-md"
+        >
+          <div id="footer-user-info" className="flex items-center gap-2">
+            <UserAvatar />
+            <div className="flex flex-col gap-1.5">
+              <p className="font-medium leading-none">
+                {user?.firstName && user.lastName
+                  ? `${user.firstName} ${user.lastName}`
+                  : user?.email}
+              </p>
+              <p className="text-xs text-muted-foreground leading-none">
+                {`${(user?.role ?? "User").charAt(0).toUpperCase()}${(
+                  user?.role ?? "User"
+                ).slice(1)}`}
+              </p>
+            </div>
+          </div>
+        </div>
+      </SidebarFooter>
     </Sidebar>
   );
 };
