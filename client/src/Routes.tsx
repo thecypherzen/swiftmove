@@ -17,6 +17,8 @@ import DriversPage from "./pages/DriversPage";
 import HomePageIndex from "./pages/HomePageIndex";
 import ShipmentsPage from "./pages/ShipmentsPage";
 import SettingsPage from "./pages/SettingsPage";
+import NotificationsPage from "./pages/NotificationsPage";
+import UserProfilePage from "./pages/UserProfilePage";
 
 const AppRoutes = () => {
   const { isAuthenticated } = useAuth();
@@ -52,6 +54,8 @@ const AppRoutes = () => {
           <Route path="drivers" element={<DriversPage />} />
           <Route path="deliveries" element={<DeliveriesPage />} />
           <Route path="settings" element={<SettingsPage />} />
+          <Route path="notifications" element={<NotificationsPage />} />
+          <Route path="user/profile" element={<UserProfilePage />} />
         </Route>
       </Routes>
     </Router>

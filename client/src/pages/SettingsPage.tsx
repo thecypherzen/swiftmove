@@ -13,13 +13,30 @@ const footer = [
 ];
 const SettingsPage = () => {
   return (
-    <Card>
-      <CardContent>
-        {
+    <div className="route-page">
+      <Card>
+        <CardContent>
+          {
+            <>
+              {content.map((item, index) => (
+                <div
+                  key={`card-item-${index + 1}`}
+                  className="w-full px-4 py-2 hover:bg-muted rounded-md cursor-pointer"
+                >
+                  <div className="flex items-center gap-4">
+                    <item.icon className="size-5" />
+                    <span>{item.name}</span>
+                  </div>
+                </div>
+              ))}
+            </>
+          }
+        </CardContent>
+        <CardFooter className="flex-col items-center justify-center gap-4 border-t border-t-muted">
           <>
-            {content.map((item, index) => (
+            {footer.map((item, index) => (
               <div
-                key={`card-item-${index + 1}`}
+                key={`card-footer-${index + 1}`}
                 className="w-full px-4 py-2 hover:bg-muted rounded-md cursor-pointer"
               >
                 <div className="flex items-center gap-4">
@@ -29,24 +46,9 @@ const SettingsPage = () => {
               </div>
             ))}
           </>
-        }
-      </CardContent>
-      <CardFooter className="flex-col items-center justify-center gap-4 border-t border-t-muted">
-        <>
-          {footer.map((item, index) => (
-            <div
-              key={`card-footer-${index + 1}`}
-              className="w-full px-4 py-2 hover:bg-muted rounded-md cursor-pointer"
-            >
-              <div className="flex items-center gap-4">
-                <item.icon className="size-5" />
-                <span>{item.name}</span>
-              </div>
-            </div>
-          ))}
-        </>
-      </CardFooter>
-    </Card>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
 
