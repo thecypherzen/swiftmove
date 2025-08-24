@@ -16,6 +16,7 @@ import DeliveriesPage from "./pages/DeliveriesPage";
 import DriversPage from "./pages/DriversPage";
 import HomePageIndex from "./pages/HomePageIndex";
 import ShipmentsPage from "./pages/ShipmentsPage";
+import SettingsPage from "./pages/SettingsPage";
 
 const AppRoutes = () => {
   const { isAuthenticated } = useAuth();
@@ -36,13 +37,21 @@ const AppRoutes = () => {
         <Route path="/auth/register" element={<SignUpPage />} />
         <Route path="/auth/login" element={<LoginPage />} />
         <Route path="/password-reset" element={<PasswordResetPage />} />
-        <Route path="/home" element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
-					<Route index element={<HomePageIndex />} />
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<HomePageIndex />} />
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="analytics" element={<AnalyticsPage />} />
           <Route path="shipments" element={<ShipmentsPage />} />
           <Route path="drivers" element={<DriversPage />} />
           <Route path="deliveries" element={<DeliveriesPage />} />
+          <Route path="settings" element={<SettingsPage />} />
         </Route>
       </Routes>
     </Router>
