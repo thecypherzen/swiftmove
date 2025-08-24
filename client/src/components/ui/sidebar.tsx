@@ -187,7 +187,7 @@ function Sidebar({
       <div
         data-slot="sidebar"
         className={cn(
-          "bg-sidebar text-sidebar-foreground flex w-(--sidebar-width) flex-col",
+          "bg-sidebar text-sidebar-foreground flex w-(--sidebar-width) flex-col backdrop-blur-md backdrop-filter-multiply",
           offsetT && "mt-[var(--sidebar-offset-t)]",
           offsetB && "mt-[var(--sidebar-offset-b)]",
           offsetL && "mt-[var(--sidebar-offset-l)]",

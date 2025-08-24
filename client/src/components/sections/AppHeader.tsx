@@ -16,7 +16,7 @@ const AppHeader = () => {
   const isMobile = UseIsMobile();
   console.log("isMobile:", isMobile);
   return (
-    <header className="h-20 bg-background w-full fixed top-0 z-20  flex items-center justify-between border-b border-b-muted">
+    <header className="h-20 bg-background dark:bg-dark w-full fixed top-0 z-20  flex items-center justify-between border-b border-b-muted">
       <div className="w-95/100 md:w-98/100 max-w-[1256px] h-4/5 m-auto flex gap-6 items-center justify-between">
         {/* Logo */}
         <AppLogo

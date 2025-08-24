@@ -1,6 +1,6 @@
 const SettingsPage = () => {
   return (
-    <div className="border-1 border-red-500 h-full">
+    <div className="route-page">
       <h1>Settings Page</h1>
     </div>
   );

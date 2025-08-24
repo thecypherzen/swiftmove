@@ -11,6 +11,7 @@
   --radius-xl: calc(var(--radius) + 4px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-dark: var(--dark);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -65,7 +66,8 @@
   --font-sans: "Inter", sans-serif;
   --radius: 0.625rem;
   --background: oklch(100% 0.00011 271.152);
-  --foreground: hsl(223, 84%, 5%);
+  --foreground: oklch(13.628% 0.03642 259.217);
+  --dark: #020712;
   --card: hsl(0 0% 100%);
   --card-foreground: hsl(222.2 84% 4.9%);
   --popover: hsl(0 0% 100%);
@@ -199,6 +201,9 @@
 
   .priority-low {
     @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+  }
+  .route-page {
+    @apply h-full w-full rounded-md bg-muted/50 dark:bg-muted/15 m-4 p-6;
   }
   .label {
     @apply text-muted-foreground font-normal text-sm;

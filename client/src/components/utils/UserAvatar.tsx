@@ -5,9 +5,13 @@ import { cn } from "@/lib/utils";
 const UserAvatar = ({ size = 10, className }: UserAvatarPropsType) => {
   const { user } = useAuth();
   return (
-    <Avatar className={cn(`size-${size}`, className)}>
-      <AvatarImage src={`${user?.avatar}`} alt={`${user?.firstName}`} />
-      <AvatarFallback>
+    <Avatar className={cn(`size-${size}`)}>
+      <AvatarImage
+        src={`${user?.avatar}`}
+        alt={`${user?.firstName}`}
+        className={className}
+      />
+      <AvatarFallback className={className}>
         {(user?.firstName ?? user?.email)?.charAt(0).toUpperCase()}
       </AvatarFallback>
     </Avatar>

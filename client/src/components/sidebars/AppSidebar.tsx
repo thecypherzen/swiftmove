@@ -11,7 +11,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
@@ -37,7 +36,6 @@ const AppSidebar = () => {
   const isMobile = UseIsMobile();
   const { theme } = useTheme();
 
-  console.log(path);
   const menuItemClassName = "transition-[color] duration-200";
   const menuButtonClassName =
     "hover:text-primary-100 transition-[background] duration-300";
@@ -45,9 +43,9 @@ const AppSidebar = () => {
   const inactiveMenuBtnStyles = "";
   const { user } = useAuth();
   const { open } = useSidebar();
-  console.log("sidebar open:", open, "ismobile:", isMobile);
+
   return (
-    <Sidebar offsetT={true} collapsible="icon">
+    <Sidebar offsetT={true} collapsible="icon" className="border-none">
       {/* Sidebar Header */}
       {isMobile && (
         <SidebarHeader className="py-6 px-2 border-b border-b-muted">
@@ -113,18 +111,23 @@ const AppSidebar = () => {
       </SidebarContent>
 
       {/* Sidebar Footer */}
-      <SidebarFooter className="border-t border-t-muted">
+      <SidebarFooter
+        className={theme === "dark" ? "bg-muted/30" : "bg-muted/50"}
+      >
         <div
           id="footer-content-wrapper"
           className={cn(
             "py-4 text-sm flex gap-2 justify-between items-center cursor-pointer transition-all duration-500",
-            open
-              ? "pr-4 pl-1 hover:bg-muted/40 hover:rounded-md"
+            open || isMobile
+              ? "pr-4 pl-1 hover:bg-muted-foreground/20 dark:hover:bg-muted/40 rounded-md"
               : "px-1.2 [&_[data-slot=avatar]:hover]:border-1 [&_[data-slot=avatar]:hover]:border-white/30"
           )}
         >
           <div id="footer-user-info" className="flex items-center gap-2">
-            <UserAvatar className={!open ? "" : ""} size={open ? 10 : 8} />
+            <UserAvatar
+              className="bg-muted-foreground dark:bg-muted text-foreground"
+              size={open ? 10 : 8}
+            />
             {(open || isMobile) && (
               <div className="flex flex-col gap-1.5">
                 <p className="font-medium leading-none">

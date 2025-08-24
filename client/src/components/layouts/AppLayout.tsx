@@ -8,13 +8,13 @@ const AppLayout = () => {
   const isMobile = UseIsMobile();
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background dark:bg-dark">
       <SidebarProvider offsetT={true}>
         {/* Header */}
         <AppHeader />
         <AppSidebar />
         <main className="w-full">
-          {!isMobile && <SidebarTrigger />}
+          {!isMobile && <SidebarTrigger className="mx-4" />}
           <Outlet />
         </main>
       </SidebarProvider>
