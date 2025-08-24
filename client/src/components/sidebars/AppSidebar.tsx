@@ -11,6 +11,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { UseIsMobile } from "@/hooks/UseIsMobile";
@@ -42,8 +44,11 @@ const AppSidebar = () => {
   const activeMenuBtnStyles = "hover:bg-primary-600";
   const inactiveMenuBtnStyles = "";
   const { user } = useAuth();
+  const { open } = useSidebar();
+  console.log("sidebar open:", open, "ismobile:", isMobile);
   return (
     <Sidebar offsetT={true} collapsible="icon">
+      {/* Sidebar Header */}
       {isMobile && (
         <SidebarHeader className="py-6 px-2 border-b border-b-muted">
           <div className="w-1/2">
@@ -51,6 +56,7 @@ const AppSidebar = () => {
           </div>
         </SidebarHeader>
       )}
+      {/* Sidebar Content */}
       <SidebarContent>
         {/* Navigation Group */}
         <SidebarGroup>
@@ -105,25 +111,34 @@ const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      {/* Sidebar Footer */}
       <SidebarFooter className="border-t border-t-muted">
         <div
           id="footer-content-wrapper"
-          className="py-4 px-2 text-sm flex gap-2 justify-between items-center cursor-pointer hover:bg-muted/40 hover:rounded-md"
+          className={cn(
+            "py-4 text-sm flex gap-2 justify-between items-center cursor-pointer transition-all duration-500",
+            open
+              ? "pr-4 pl-1 hover:bg-muted/40 hover:rounded-md"
+              : "px-1.2 [&_[data-slot=avatar]:hover]:border-1 [&_[data-slot=avatar]:hover]:border-white/30"
+          )}
         >
           <div id="footer-user-info" className="flex items-center gap-2">
-            <UserAvatar />
-            <div className="flex flex-col gap-1.5">
-              <p className="font-medium leading-none">
-                {user?.firstName && user.lastName
-                  ? `${user.firstName} ${user.lastName}`
-                  : user?.email}
-              </p>
-              <p className="text-xs text-muted-foreground leading-none">
-                {`${(user?.role ?? "User").charAt(0).toUpperCase()}${(
-                  user?.role ?? "User"
-                ).slice(1)}`}
-              </p>
-            </div>
+            <UserAvatar className={!open ? "" : ""} size={open ? 10 : 8} />
+            {(open || isMobile) && (
+              <div className="flex flex-col gap-1.5">
+                <p className="font-medium leading-none">
+                  {user?.firstName && user.lastName
+                    ? `${user.firstName} ${user.lastName}`
+                    : user?.email}
+                </p>
+                <p className="text-xs text-muted-foreground leading-none">
+                  {`${(user?.role ?? "User").charAt(0).toUpperCase()}${(
+                    user?.role ?? "User"
+                  ).slice(1)}`}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </SidebarFooter>

@@ -3,23 +3,21 @@ import AppLogo from "../utils/Logo";
 import SearchInput from "../utils/SearchInput";
 import ThemeToggle from "../utils/ThemeToggle";
 import NotificationIcon from "../utils/NotificationIcon";
-import { useAuth } from "@/hooks/UseAuth";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UseIsMobile } from "@/hooks/UseIsMobile";
 import { cn } from "@/lib/utils";
 import { SidebarTrigger } from "../ui/sidebar";
 import { Menu } from "lucide-react";
+import UserAvatar from "../utils/UserAvatar";
 
 const Searchbar = SearchInput;
 
-const AppHeader = ({ onToggleMobileSidebar }: HeaderProps) => {
+const AppHeader = () => {
   const { theme } = useTheme();
-  const { user } = useAuth();
   const isMobile = UseIsMobile();
   console.log("isMobile:", isMobile);
   return (
     <header className="h-20 bg-background w-full fixed top-0 z-20  flex items-center justify-between border-b border-b-muted">
-      <div className="w-95/100 md:w-98/100 max-w-[1256px] h-4/5 m-auto flex items-center justify-between">
+      <div className="w-95/100 md:w-98/100 max-w-[1256px] h-4/5 m-auto flex gap-6 items-center justify-between">
         {/* Logo */}
         <AppLogo
           variant={theme === "dark" ? "light" : "dark"}
@@ -41,15 +39,7 @@ const AppHeader = ({ onToggleMobileSidebar }: HeaderProps) => {
               <>
                 <ThemeToggle size={5} />
                 <NotificationIcon />
-                <Avatar className="size-10">
-                  <AvatarImage
-                    src={`${user?.avatar}`}
-                    alt={`${user?.firstName}`}
-                  />
-                  <AvatarFallback>
-                    {(user?.firstName ?? user?.email)?.charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <UserAvatar />
               </>
             )}
           </div>
@@ -57,10 +47,6 @@ const AppHeader = ({ onToggleMobileSidebar }: HeaderProps) => {
       </div>
     </header>
   );
-};
-
-type HeaderProps = {
-  onToggleMobileSidebar: () => void;
 };
 
 export default AppHeader;
