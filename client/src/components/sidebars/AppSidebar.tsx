@@ -30,6 +30,7 @@ import UserAvatar from "../utils/UserAvatar";
 import { useAuth } from "@/hooks/UseAuth";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import UserPopover from "../popovers/UserPopover";
+
 const navItems = [
   { name: "Dashboard", href: "/home/dashboard", icon: Home },
   { name: "Shipments", href: "/home/shipments", icon: Package },
@@ -41,7 +42,7 @@ const navItems = [
 const settingsItems = [
   { name: "Settings", href: "/home/settings", icon: Settings },
   { name: "Notifications", href: "/home/notifications", icon: Bell },
-  { name: "Profile", href: "/home/user/profile", icon: UserCircle },
+  { name: "Account", href: "/home/account", icon: UserCircle },
 ];
 
 const AppSidebar = () => {
