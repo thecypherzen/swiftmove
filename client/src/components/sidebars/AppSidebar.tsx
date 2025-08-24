@@ -19,6 +19,8 @@ import AppLogo from "../utils/Logo";
 import { useTheme } from "@/hooks/UseTheme";
 import UserAvatar from "../utils/UserAvatar";
 import { useAuth } from "@/hooks/UseAuth";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import UserPopover from "../popovers/UserPopover";
 const navItems = [
   { name: "Dashboard", href: "/home/dashboard", icon: Home },
   { name: "Shipments", href: "/home/shipments", icon: Package },
@@ -123,26 +125,33 @@ const AppSidebar = () => {
               : "px-1.2 [&_[data-slot=avatar]:hover]:border-1 [&_[data-slot=avatar]:hover]:border-white/30"
           )}
         >
-          <div id="footer-user-info" className="flex items-center gap-2">
-            <UserAvatar
-              className="bg-muted-foreground dark:bg-muted text-foreground"
-              size={open ? 10 : 8}
-            />
-            {(open || isMobile) && (
-              <div className="flex flex-col gap-1.5">
-                <p className="font-medium leading-none">
-                  {user?.firstName && user.lastName
-                    ? `${user.firstName} ${user.lastName}`
-                    : user?.email}
-                </p>
-                <p className="text-xs text-muted-foreground leading-none">
-                  {`${(user?.role ?? "User").charAt(0).toUpperCase()}${(
-                    user?.role ?? "User"
-                  ).slice(1)}`}
-                </p>
+          <Popover>
+            <PopoverTrigger asChild>
+              <div id="footer-user-info" className="flex items-center gap-2">
+                <UserAvatar
+                  className="bg-muted-foreground dark:bg-muted text-foreground"
+                  size={open ? 10 : 8}
+                />
+                {(open || isMobile) && (
+                  <div className="flex flex-col gap-1.5">
+                    <p className="font-medium leading-none">
+                      {user?.firstName && user.lastName
+                        ? `${user.firstName} ${user.lastName}`
+                        : user?.email}
+                    </p>
+                    <p className="text-xs text-muted-foreground leading-none">
+                      {`${(user?.role ?? "User").charAt(0).toUpperCase()}${(
+                        user?.role ?? "User"
+                      ).slice(1)}`}
+                    </p>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+            </PopoverTrigger>
+            <PopoverContent sideOffset={20} className="ml-2 w-64">
+              <UserPopover />
+            </PopoverContent>
+          </Popover>
         </div>
       </SidebarFooter>
     </Sidebar>
