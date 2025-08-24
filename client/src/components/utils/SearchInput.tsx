@@ -43,7 +43,7 @@ const SearchInput = ({
     );
     return (
       <div
-        className="flex items-center justify-center size-9 rounded-md bg-muted p-1.5"
+        className="flex items-center justify-center size-9 rounded-md bg-muted p-1.5 hover:bg-background hover:border-1 hover:border-muted transition-bg duration-200"
         onClick={() => (isOpen ? closeModal() : openModal(searchContent))}
       >
         <Search className={cn("text-muted-foreground", className)} />

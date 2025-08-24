@@ -7,6 +7,8 @@ import { useAuth } from "@/hooks/UseAuth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UseIsMobile } from "@/hooks/UseIsMobile";
 import { cn } from "@/lib/utils";
+import { SidebarTrigger } from "../ui/sidebar";
+import { Menu } from "lucide-react";
 
 const Searchbar = SearchInput;
 
@@ -32,15 +34,24 @@ const AppHeader = ({ onToggleMobileSidebar }: HeaderProps) => {
         />
         {/* Navigation */}
         <div className="flex items-center gap-2">
-          <ThemeToggle size={5} />
-          <NotificationIcon />
           <div className="flex items-center space-x-3 ml-2">
-            <Avatar className="size-10">
-              <AvatarImage src={`${user?.avatar}`} alt={`${user?.firstName}`} />
-              <AvatarFallback>
-                {(user?.firstName ?? user?.email)?.charAt(0).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
+            {isMobile ? (
+              <SidebarTrigger icon={<Menu className="size-7" />} />
+            ) : (
+              <>
+                <ThemeToggle size={5} />
+                <NotificationIcon />
+                <Avatar className="size-10">
+                  <AvatarImage
+                    src={`${user?.avatar}`}
+                    alt={`${user?.firstName}`}
+                  />
+                  <AvatarFallback>
+                    {(user?.firstName ?? user?.email)?.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              </>
+            )}
           </div>
         </div>
       </div>
