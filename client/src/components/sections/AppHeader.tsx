@@ -14,16 +14,16 @@ const Searchbar = SearchInput;
 
 const AppHeader = () => {
   const { theme } = useTheme();
-  const isMobile = UseIsMobile();
-  console.log("isMobile:", isMobile);
+  const isTablet = UseIsMobile();
+  const isMobile = UseIsMobile(500);
   return (
     <header className="h-20 bg-background dark:bg-dark w-full fixed top-0 z-20  flex items-center justify-between border-b border-b-muted">
       <div className="w-95/100 md:w-98/100 max-w-[1256px] h-4/5 m-auto flex gap-6 items-center justify-between">
         {/* Logo */}
         <AppLogo
           variant={theme === "dark" ? "light" : "dark"}
-          type={isMobile ? "logo" : "default"}
-          className={cn("cursor-pointer", isMobile ? "w-16" : "w-40")}
+          type={isTablet ? "logo" : "default"}
+          className={cn("cursor-pointer", isTablet ? "w-16" : "w-40")}
         />
         {/* Search bar */}
         <Searchbar
@@ -34,7 +34,7 @@ const AppHeader = () => {
         {/* Navigation */}
         <div className="flex items-center gap-2">
           <div className="flex items-center space-x-3 ml-2">
-            {isMobile ? (
+            {isTablet ? (
               <SidebarTrigger icon={<Menu className="size-7" />} />
             ) : (
               <>
