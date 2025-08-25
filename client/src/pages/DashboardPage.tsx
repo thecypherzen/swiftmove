@@ -1,8 +1,12 @@
+import PageRouteWrapper from "@/components/wrappers/PageRouteWrapper";
+
 const UserDashboard = () => {
   return (
-    <div className="route-page">
-      <h1>User Dashboard</h1>
-    </div>
+    <PageRouteWrapper>
+      <div className="route-page h-[100vh]">
+        <h1> Dashboard Page</h1>
+      </div>
+    </PageRouteWrapper>
   );
 };
 

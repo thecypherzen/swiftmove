@@ -203,7 +203,7 @@
     @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
   }
   .route-page {
-    @apply h-full w-full rounded-md bg-muted/50 dark:bg-muted/15 m-4 p-6;
+    @apply h-full w-full rounded-md bg-muted/40 dark:bg-muted/20 m-4 ml-0 p-6;
   }
   .label {
     @apply text-muted-foreground font-normal text-sm;
