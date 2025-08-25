@@ -17,9 +17,10 @@ import React, {
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
-export const BreadcrumbContext = createContext<BreadcrumbsType>({
-  breadcrumb: null,
+export const BreadcrumbContext = createContext<BcContextType>({
+  breadcrumb: () => <></>,
   setItems: () => {},
+  ref: React.createRef<HTMLElement>(),
 });
 
 export const BreadCrumbProvider = ({
@@ -27,7 +28,9 @@ export const BreadCrumbProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [crumbs, setCrumbs] = useState<React.ReactNode>(<></>);
+  const [crumbs, setCrumbs] = useState<() => React.JSX.Element>(() => () => (
+    <></>
+  ));
   const [items, setItems] = useState<Array<BreadcrumbItemType>>([
     { label: "Home", href: "/home", endpoint: "home" },
     { label: "Analytics", href: "/home/analytics", endpoint: "home" },
@@ -44,38 +47,43 @@ export const BreadCrumbProvider = ({
     },
   ]);
 
+  const ref = useRef<HTMLElement>(null);
   const createCrumbs = useCallback((list: Array<string>) => {
-    return (
-      <Breadcrumb>
-        <BreadcrumbList>
-          {list.length === 0 ? (
-            <></>
-          ) : (
-            list.map((item, index) => {
-              const matched = items.find((i) => i.endpoint === item);
-              const isLast = index + 1 === list.length;
-              if (matched) {
-                return (
-                  <BreadcrumbItem key={`crumb-item-${index}`}>
-                    {isLast ? (
-                      <BreadcrumbPage className="font-semibold">
-                        {matched.label}
-                      </BreadcrumbPage>
-                    ) : (
-                      <BreadcrumbLink asChild>
-                        <Link to={matched.href}>{matched.label}</Link>
-                      </BreadcrumbLink>
-                    )}
-                    {!isLast && <BreadcrumbSeparator />}
-                  </BreadcrumbItem>
-                );
-              }
-              return <></>;
-            })
-          )}
-        </BreadcrumbList>
-      </Breadcrumb>
-    );
+    return () => {
+      return (
+        <Breadcrumb ref={ref}>
+          <BreadcrumbList>
+            {list.length === 0 ? (
+              <></>
+            ) : (
+              list.map((item, index) => {
+                const matched = items.find((i) => i.endpoint === item);
+                const isLast = index + 1 === list.length;
+                if (matched) {
+                  return (
+                    <>
+                      <BreadcrumbItem key={`crumb-item-${index}`}>
+                        {isLast ? (
+                          <BreadcrumbPage className="font-semibold">
+                            {matched.label}
+                          </BreadcrumbPage>
+                        ) : (
+                          <BreadcrumbLink asChild>
+                            <Link to={matched.href}>{matched.label}</Link>
+                          </BreadcrumbLink>
+                        )}
+                      </BreadcrumbItem>
+                      {!isLast && <BreadcrumbSeparator />}
+                    </>
+                  );
+                }
+                return <></>;
+              })
+            )}
+          </BreadcrumbList>
+        </Breadcrumb>
+      );
+    };
   }, []);
 
   const path = useLocation().pathname;
@@ -86,12 +94,12 @@ export const BreadCrumbProvider = ({
     if (path !== pathRef.current) {
       pathRef.current = path;
       console.log("list:", list);
-      setCrumbs(createCrumbs(list));
+      setCrumbs(() => createCrumbs(list));
     }
   }, [path]);
 
   return (
-    <BreadcrumbContext.Provider value={{ breadcrumb: crumbs, setItems }}>
+    <BreadcrumbContext.Provider value={{ breadcrumb: crumbs, setItems, ref }}>
       {children}
     </BreadcrumbContext.Provider>
   );
@@ -121,7 +129,8 @@ type BreadcrumbItemType = {
   href: string;
   endpoint: Lowercase<BreadcrumbLabelType>;
 };
-export type BreadcrumbsType = {
-  breadcrumb: React.ReactNode;
+export type BcContextType = {
+  breadcrumb: () => React.JSX.Element;
   setItems: React.Dispatch<React.SetStateAction<Array<BreadcrumbItemType>>>;
+  ref: React.RefObject<HTMLElement | null>;
 };
