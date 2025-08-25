@@ -145,11 +145,12 @@ function SidebarProvider({
             } as React.CSSProperties
           }
           className={cn(
-            "group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full relative",
+            "group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex  w-full relative",
             offsetT && "mt-[var(--sidebar-offset-t)]",
             offsetB && "mt-[var(--sidebar-offset-b)]",
             offsetL && "mt-[var(--sidebar-offset-l)]",
             offsetR && "mt-[var(--sidebar-offset-r)]",
+            "min-h-[calc(99svh-var(--sidebar-offset-t,0px)-var(--sicebar-offset-b,0px))]",
             className
           )}
           {...props}
