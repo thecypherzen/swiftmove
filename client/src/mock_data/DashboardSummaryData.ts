@@ -10,7 +10,7 @@ export const summaryData = [
     },
     icon: {
       value: Package,
-      baseColor: "blue",
+      baseColor: "info",
     },
   },
   {
@@ -34,7 +34,7 @@ export const summaryData = [
     },
     icon: {
       value: Users,
-      baseColor: "green",
+      baseColor: "success",
     },
   },
   {
@@ -46,7 +46,7 @@ export const summaryData = [
     },
     icon: {
       value: Package,
-      baseColor: "yellow",
+      baseColor: "warning",
     },
   },
 ];

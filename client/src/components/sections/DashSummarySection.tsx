@@ -1,6 +1,7 @@
 import { summaryData } from "@/mock_data/DashboardSummaryData";
 import DashboardSummaryCard, {
   type SummaryDataType,
+  type SummaryIconType,
 } from "../cards/DashboardSummaryCard";
 
 const DashSummarySection = () => {
@@ -14,6 +15,7 @@ const DashSummarySection = () => {
             title={item.title}
             total={item.total}
             summary={item.summary as SummaryDataType}
+            icon={item.icon as SummaryIconType}
           />
         );
       })}

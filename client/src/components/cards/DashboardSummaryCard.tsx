@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "../ui/skeleton";
-import { Package } from "lucide-react";
+import { type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const DashboardSummaryCard = ({
@@ -18,6 +18,7 @@ const DashboardSummaryCard = ({
   action,
   title,
   summary,
+  icon,
 }: DashSCardType) => {
   return (
     <Card className="gap-1.5">
@@ -37,9 +38,41 @@ const DashboardSummaryCard = ({
               <p className="text-2xl font-bold">{total}</p>
             )}
           </div>
-          <div className="size-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-            <Package className="size-6 text-blue-600 dark:text-blue-300" />
-          </div>
+          {icon && (
+            <div
+              className={cn(
+                "size-12 rounded-lg flex items-center justify-center",
+                icon.baseColor === ("primary" as AppColorType)
+                  ? "bg-primary-100 dark:bg-primary-900"
+                  : icon.baseColor === ("success" as AppColorType)
+                  ? "bg-success-100 dark:bg-success-900"
+                  : icon.baseColor === ("info" as AppColorType)
+                  ? "bg-info-100 dark:bg-info-900"
+                  : icon.baseColor === ("warning" as AppColorType)
+                  ? "bg-warning-100 dark:bg-warning-900"
+                  : icon.baseColor === ("destructive" as AppColorType)
+                  ? "bg-destructive-100 dark:bg-destructive-900"
+                  : "bg-neutral-100 dark:bg-neutral-900"
+              )}
+            >
+              <icon.value
+                className={cn(
+                  "size-6",
+                  icon.baseColor === ("primary" as AppColorType)
+                    ? "text-primary-600 dark:text-primary-300"
+                    : icon.baseColor === ("success" as AppColorType)
+                    ? "text-success-600 dark:text-success-300"
+                    : icon.baseColor === ("info" as AppColorType)
+                    ? "text-info-600 dark:text-info-300"
+                    : icon.baseColor === ("warning" as AppColorType)
+                    ? "text-warning-600 dark:text-warning-300"
+                    : icon.baseColor === ("destructive" as AppColorType)
+                    ? "text-destructive-600 dark:text-destructive-300"
+                    : "text-neutral-600 dark:text-neutral-300"
+                )}
+              />
+            </div>
+          )}
         </div>
       </CardContent>
       {summary && (
@@ -47,9 +80,17 @@ const DashboardSummaryCard = ({
           <p
             className={cn(
               "text-xs mt-1",
-              `text-${summary.color}${
-                summary.color === "destructive" ? "-500" : "-600"
-              }`
+              summary.color === "primary"
+                ? "text-primary-600"
+                : summary.color === "success"
+                ? "text-success-600"
+                : summary.color === "warning"
+                ? "text-warning-500"
+                : summary.color === "destructive"
+                ? "text-destructive-500"
+                : summary.color === "info"
+                ? "text-info-600"
+                : "text-neutral-600"
             )}
           >
             {summary.text}
@@ -60,10 +101,23 @@ const DashboardSummaryCard = ({
   );
 };
 
+export type AppColorType =
+  | "success"
+  | "destructive"
+  | "warning"
+  | "neutral"
+  | "info"
+  | "primary";
 export type SummaryDataType = {
   text: string;
-  color: "success" | "destructive" | "warning" | "neutral";
+  color: AppColorType;
 };
+
+export type SummaryIconType = {
+  value: LucideIcon;
+  baseColor: AppColorType;
+};
+
 export type DashSCardType = {
   title: string;
   summary?: SummaryDataType;
@@ -71,5 +125,6 @@ export type DashSCardType = {
   total?: number;
   description?: string;
   action?: React.ReactNode | string;
+  icon?: SummaryIconType;
 };
 export default DashboardSummaryCard;

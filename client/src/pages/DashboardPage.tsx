@@ -4,7 +4,7 @@ import PageRouteWrapper from "@/components/wrappers/PageRouteWrapper";
 const UserDashboard = () => {
   return (
     <PageRouteWrapper>
-      <div className="route-page w-99/100 @container">
+      <div className="route-page">
         <DashSummarySection />
       </div>
     </PageRouteWrapper>

@@ -46,7 +46,34 @@
   --color-destructive-500: var(--destructive-500);
   --color-destructive-600: var(--destructive-600);
   --color-destructive-700: var(--destructive-700);
+  --color-destructive-800: var(--destructive-800);
+  --color-destructive-900: var(--destructive-900);
+  --color-info: var(--color-blue-500);
+  --color-info-50: var(--color-blue-50);
+  --color-info-100: var(--color-blue-100);
+  --color-info-200: var(--color-blue-200);
+  --color-info-300: var(--color-blue-300);
+  --color-info-400: var(--color-blue-400);
+  --color-info-500: var(--color-blue-500);
+  --color-info-600: var(--color-blue-600);
+  --color-info-700: var(--color-blue-700);
+  --color-info-800: var(--color-blue-800);
+  --color-info-900: var(--color-blue-900);
+  --color-info-950: var(--color-blue-950);
+  --color-neutral: var(--color-zinc-500);
+  --color-neutral-50: var(--color-zinc-50);
+  --color-neutral-100: var(--color-zinc-100);
+  --color-neutral-200: var(--color-zinc-200);
+  --color-neutral-300: var(--color-zinc-300);
+  --color-neutral-400: var(--color-zinc-400);
+  --color-neutral-500: var(--color-zinc-500);
+  --color-neutral-600: var(--color-zinc-600);
+  --color-neutral-700: var(--color-zinc-700);
+  --color-neutral-800: var(--color-zinc-800);
+  --color-neutral-900: var(--color-zinc-900);
+  --color-neutral-950: var(--color-zinc-950);
   --color-success: var(--color-green-500);
+  --color-success-50: var(--color-green-50);
   --color-success-100: var(--color-green-100);
   --color-success-200: var(--color-green-200);
   --color-success-300: var(--color-green-300);
@@ -54,7 +81,11 @@
   --color-success-500: var(--color-green-500);
   --color-success-600: var(--color-green-600);
   --color-success-700: var(--color-green-700);
+  --color-success-800: var(--color-green-800);
+  --color-success-900: var(--color-green-900);
+  --color-success-950: var(--color-green-950);
   --color-warning: var(--color-yellow-500);
+  --color-warning-50: var(--color-yellow-50);
   --color-warning-100: var(--color-yellow-100);
   --color-warning-200: var(--color-yellow-200);
   --color-warning-300: var(--color-yellow-300);
@@ -62,6 +93,9 @@
   --color-warning-500: var(--color-yellow-500);
   --color-warning-600: var(--color-yellow-600);
   --color-warning-700: var(--color-yellow-700);
+  --color-warning-800: var(--color-yellow-800);
+  --color-warning-900: var(--color-yellow-900);
+  --color-warning-950: var(--color-yellow-950);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -118,6 +152,9 @@
   --destructive-500: #ef4444;
   --destructive-600: #dc2626;
   --destructive-700: #b91c1c;
+  --destructive-800: #991b1b;
+  --destructive-900: #7f1d1d;
+  --destructive-950: #450a0a;
   --destructive-foreground: hsl(210 40% 98%);
   --border: hsl(214.3 31.8% 91.4%);
   --input: hsl(214.3 31.8% 91.4%);
@@ -222,7 +259,7 @@
     @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
   }
   .route-page {
-    @apply h-full w-full rounded-md bg-muted/50 dark:bg-muted/20 m-4 ml-0 p-6;
+    @apply @container h-full w-99/100 rounded-md bg-muted/50 dark:bg-muted/20 m-4 ml-0 p-6;
   }
   .label {
     @apply text-muted-foreground font-normal text-sm;
