@@ -21,7 +21,7 @@ const DashboardSummaryCard = ({
   icon,
 }: DashSCardType) => {
   return (
-    <Card className="gap-1.5">
+    <Card className="gap-1.5 shadow-none">
       <CardHeader>
         <CardTitle className="text-sm font-medium text-muted-foreground">
           {title}

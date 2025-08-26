@@ -12,6 +12,24 @@ export type UserType = {
   role?: "user" | "admin";
   [key: string]: any;
 };
+
+export type ShipmentType = {
+  id: string;
+  owner: {
+    name: string;
+    email: string;
+    avatar?: string;
+  };
+  pickupAddress: string;
+  destinationAddress: string;
+  priority: string;
+  weight: number;
+  status: string;
+  notes: string | null;
+  deliveryDate: Date;
+  createdAt?: Date;
+};
+
 export type APIRequestType = {
   method: "POST" | "GET" | "PUT" | "DELETE";
   url: string;

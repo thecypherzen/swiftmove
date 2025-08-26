@@ -1,4 +1,4 @@
-import { summaryData } from "@/mock_data/DashboardSummaryData";
+import { summaryData } from "@/mock_data/DashboardData";
 import DashboardSummaryCard, {
   type SummaryDataType,
   type SummaryIconType,
