@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
 export const BreadcrumbContext = createContext<BcContextType>({
-  breadcrumb: () => <></>,
+  breadcrumb: (_: BcPropsType) => <></>,
   setItems: () => {},
   ref: React.createRef<HTMLElement>(),
 });
@@ -28,9 +28,9 @@ export const BreadCrumbProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [crumbs, setCrumbs] = useState<() => React.JSX.Element>(() => () => (
-    <></>
-  ));
+  const [crumbs, setCrumbs] = useState<(p: BcPropsType) => React.JSX.Element>(
+    () => (_: BcPropsType) => <></>
+  );
   const [items, setItems] = useState<Array<BreadcrumbItemType>>([
     { label: "Home", href: "/home", endpoint: "home" },
     { label: "Analytics", href: "/home/analytics", endpoint: "home" },
@@ -49,9 +49,9 @@ export const BreadCrumbProvider = ({
 
   const ref = useRef<HTMLElement>(null);
   const createCrumbs = useCallback((list: Array<string>) => {
-    return () => {
+    return ({ className }: BcPropsType) => {
       return (
-        <Breadcrumb ref={ref}>
+        <Breadcrumb ref={ref} className={className}>
           <BreadcrumbList>
             {list.length === 0 ? (
               <></>
@@ -93,7 +93,6 @@ export const BreadCrumbProvider = ({
   useEffect(() => {
     if (path !== pathRef.current) {
       pathRef.current = path;
-      console.log("list:", list);
       setCrumbs(() => createCrumbs(list));
     }
   }, [path]);
@@ -129,8 +128,12 @@ type BreadcrumbItemType = {
   href: string;
   endpoint: Lowercase<BreadcrumbLabelType>;
 };
+type BcPropsType = {
+  className?: string;
+};
+
 export type BcContextType = {
-  breadcrumb: () => React.JSX.Element;
+  breadcrumb: ({ className }: BcPropsType) => React.JSX.Element;
   setItems: React.Dispatch<React.SetStateAction<Array<BreadcrumbItemType>>>;
   ref: React.RefObject<HTMLElement | null>;
 };
