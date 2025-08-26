@@ -12,6 +12,8 @@ import { cn, getRandomImageUrl } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import type { ShipmentType } from "@/shared/types";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 const RecentShipmentsCard = ({
   loading = false,
@@ -32,8 +34,9 @@ const RecentShipmentsCard = ({
           <Button
             className="cursor-pointer border-1 border-muted"
             variant="ghost"
+            asChild
           >
-            {action ?? "View All"}
+            <Link to="../shipments">{action ?? "View All"}</Link>
           </Button>
         </CardAction>
       </CardHeader>
