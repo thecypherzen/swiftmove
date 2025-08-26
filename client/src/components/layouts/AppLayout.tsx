@@ -18,7 +18,10 @@ const AppLayout = () => {
         <AppSidebar />
         <main className="w-full">
           <div
-            className={cn("flex items-center gap-1 py-2 w-full  fixed z-50")}
+            className={cn(
+              "flex items-center gap-1 py-2 w-full  fixed z-50",
+              isMobile && "ml-[1.2rem]"
+            )}
           >
             {!isMobile && <SidebarTrigger className="mx-4" />}
             {<Breadcrumbs />}
