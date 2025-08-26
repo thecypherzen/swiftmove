@@ -11,7 +11,7 @@ const PageRouteWrapper = ({
   return (
     <div
       className={cn(
-        "mt-10 ml-[1rem] rounded-lg dark:bg-dark bg-background h-[calc(100svh-120px)] w-[calc(100%-1rem)] overflow-y-scroll overflow-x-hidden  scrollbar scrollbar-w-[6px]  scrollbar-thumb-rounded-full hover:dark:scrollbar-thumb-muted hover:scrollbar-thumb-muted-foreground/70",
+        "ml-[1rem] dark:bg-dark bg-background h-[calc(100svh-80px)] w-[calc(100%-1rem)] overflow-y-scroll overflow-x-hidden  scrollbar scrollbar-w-[6px]  scrollbar-thumb-rounded-full hover:dark:scrollbar-thumb-primary/80 hover:scrollbar-thumb-primary-600/80",
         className
       )}
     >

@@ -16,10 +16,11 @@ const AppLayout = () => {
         {/* Header */}
         <AppHeader />
         <AppSidebar />
-        <main className="w-full">
+        <main className="w-full bg-background dark:bg-dark">
           <div
             className={cn(
-              "flex items-center gap-1 py-2 w-full  fixed z-50",
+              "flex items-center gap-1 py-2 w-full fixed z-50 backdrop-blur-lg bg-background/50 dark:bg-dark/80",
+              "translate-z-0",
               isMobile && "ml-[1.2rem]"
             )}
           >
