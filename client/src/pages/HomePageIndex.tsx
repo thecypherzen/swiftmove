@@ -1,9 +1,13 @@
+import PageRouteWrapper from "@/components/wrappers/PageRouteWrapper";
+
 const HomePageIndex = () => {
   return (
-    <div className="min-h-[95vh] flex flex-col items-center justify-center">
-      <h2>Welcome</h2>
-      <p>Get started with monitoring your company</p>
-    </div>
+    <PageRouteWrapper>
+      <div className="min-h-[300vh] w-full flex flex-col items-center justify-center">
+        <h2>Welcome</h2>
+        <p>Get started with monitoring your company</p>
+      </div>
+    </PageRouteWrapper>
   );
 };
 
