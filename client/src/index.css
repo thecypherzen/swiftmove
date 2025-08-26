@@ -46,6 +46,22 @@
   --color-destructive-500: var(--destructive-500);
   --color-destructive-600: var(--destructive-600);
   --color-destructive-700: var(--destructive-700);
+  --color-success: var(--color-green-500);
+  --color-success-100: var(--color-green-100);
+  --color-success-200: var(--color-green-200);
+  --color-success-300: var(--color-green-300);
+  --color-success-400: var(--color-green-400);
+  --color-success-500: var(--color-green-500);
+  --color-success-600: var(--color-green-600);
+  --color-success-700: var(--color-green-700);
+  --color-warning: var(--color-yellow-500);
+  --color-warning-100: var(--color-yellow-100);
+  --color-warning-200: var(--color-yellow-200);
+  --color-warning-300: var(--color-yellow-300);
+  --color-warning-400: var(--color-yellow-400);
+  --color-warning-500: var(--color-yellow-500);
+  --color-warning-600: var(--color-yellow-600);
+  --color-warning-700: var(--color-yellow-700);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -206,7 +222,7 @@
     @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
   }
   .route-page {
-    @apply h-full w-full rounded-md bg-muted/40 dark:bg-muted/20 m-4 ml-0 p-6;
+    @apply h-full w-full rounded-md bg-muted/50 dark:bg-muted/20 m-4 ml-0 p-6;
   }
   .label {
     @apply text-muted-foreground font-normal text-sm;
