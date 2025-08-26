@@ -52,8 +52,8 @@ const AppSidebar = () => {
 
   const menuItemClassName = "transition-[color] duration-200";
   const menuButtonClassName =
-    "hover:text-primary-100 transition-[background] duration-300";
-  const activeMenuBtnStyles = "hover:bg-primary-600";
+    "hover:dark:text-primary-200 hover:text-primary-600 transition-[background] transition-[color] duration-300";
+  const activeMenuBtnStyles = "hover:bg-primary-600 hover:text-neutral-50";
   const inactiveMenuBtnStyles = "";
   const { user } = useAuth();
   const { open } = useSidebar();
