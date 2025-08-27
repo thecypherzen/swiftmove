@@ -6,7 +6,7 @@ import DashboardSummaryCard, {
 
 const DashSummarySection = () => {
   return (
-    <div className="grid grid-cols-1 @lg:grid-cols-2 @4xl:grid-cols-3 @5xl:grid-cols-4 gap-5 ">
+    <div className="grid grid-cols-1 @md/page:grid-cols-2 @2xl/page:grid-cols-3 @4xl/page:grid-cols-4 gap-3 ">
       {summaryData.map((item, index) => {
         console.log(item);
         return (
