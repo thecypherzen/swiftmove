@@ -12,7 +12,6 @@ import { cn, getRandomImageUrl } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import type { ShipmentType } from "@/shared/types";
-import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 
 const RecentShipmentsCard = ({
@@ -24,9 +23,9 @@ const RecentShipmentsCard = ({
   footer,
 }: RShipmentsCardType) => {
   return (
-    <Card className="shadow-none">
-      <CardHeader>
-        <CardTitle className="text-3xl text-foreground">
+    <Card className="shadow-none px-2 @lg:px-6 @container/rscard">
+      <CardHeader className="px-2 @lg:px-6">
+        <CardTitle className="text-2xl sm:text-3xl text-foreground">
           {title ?? "Recent Shipments"}
         </CardTitle>
         {description && <CardDescription>{description}</CardDescription>}
@@ -40,7 +39,7 @@ const RecentShipmentsCard = ({
           </Button>
         </CardAction>
       </CardHeader>
-      <CardContent className="px-6">
+      <CardContent className="px-2 @lg:px-6">
         {loading ? (
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
@@ -62,19 +61,20 @@ const RecentShipmentsCard = ({
             {data.map((shipment) => (
               <div
                 key={shipment.id}
-                className="flex items-center space-x-4 p-4 bg-muted rounded-lg"
+                className="grid grid-cols-1 @xs/rscard:grid-cols-[1fr_3fr] @sm/rscard:grid-cols-[1fr_2fr] @md/rscard:grid-cols-10 items-center gap-3 p-4 bg-muted rounded-lg"
               >
-                {/*<div className="size-12 rounded-lg overflow-hidden">
-
-								</div>*/}
-                <img
-                  src={shipment.owner?.avatar ?? getRandomImageUrl()}
-                  alt="Delivery truck"
-                  className="size-12 rounded-lg object-cover bg-muted dark:bg-white/90"
-                />
-                <div className="flex-1">
-                  <h4 className="font-medium">{shipment.owner.name}</h4>
-                  <p className="text-sm text-muted-foreground">
+                <div className="hidden @xs/rscard:block @sm/rscard:row-span-2 @md/rscard:row-span-1 @md/rscard:col-span-2 overflow-hidden aspect-square rounded-lg object-cover object-center bg-muted dark:bg-white/90">
+                  <img
+                    src={shipment.owner?.avatar ?? getRandomImageUrl()}
+                    alt="image"
+                    className="object-top object-cover h-full"
+                  />
+                </div>
+                <div className="flex-1 text-center @xs/rscard:text-left space-y-1 @md/rscard:col-span-6">
+                  <h4 className="font-semibold line-clamp-2 @xs/rscard:line-clamp-1">
+                    {shipment.owner.name}
+                  </h4>
+                  <p className="text-sm text-muted-foreground line-lamp-2">
                     {shipment.pickupAddress.split(",")[0]} →{" "}
                     {shipment.destinationAddress.split(",")[0]}
                   </p>
@@ -98,7 +98,7 @@ const getStatusBadge = (status: string) => {
   return (
     <Badge
       className={cn(
-        "text-xs text-neutral-50 rounded-full ",
+        "text-xs  text-neutral-50 rounded-full w-full @xs/rscard:col-span-full @sm:col-span-1 @md/rscard:text-[10px] @md/rscard:col-span-2",
         status === "in_transit"
           ? `bg-info-600`
           : status === "delivered"

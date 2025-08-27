@@ -260,7 +260,7 @@
     @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
   }
   .route-page {
-    @apply @container mt-15 min-h-full w-99/100 rounded-lg bg-muted/50 dark:bg-muted/20 m-4 ml-0 p-6;
+    @apply @container/page mt-15 min-h-full w-99/100 rounded-lg bg-muted/50 dark:bg-muted/20 m-4 ml-0 py-6 px-3 sm:px-6;
   }
   .label {
     @apply text-muted-foreground font-normal text-sm;
