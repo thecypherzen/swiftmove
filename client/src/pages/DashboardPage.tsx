@@ -1,3 +1,4 @@
+import QuickActionsCard from "@/components/cards/QuickActionsCard";
 import RecentShipmentsCard from "@/components/cards/RecentShipmentsCard";
 import DashSummarySection from "@/components/sections/DashSummarySection";
 import PageRouteWrapper from "@/components/wrappers/PageRouteWrapper";
@@ -13,6 +14,7 @@ const UserDashboard = () => {
             title={"Recent Shipments"}
             data={recentShipments}
           />
+          <QuickActionsCard />
         </div>
       </div>
     </PageRouteWrapper>

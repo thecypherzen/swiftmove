@@ -25,7 +25,7 @@ const RecentShipmentsCard = ({
   return (
     <Card className="shadow-none px-2 @lg:px-6 @container/rscard">
       <CardHeader className="px-2 @lg:px-6">
-        <CardTitle className="text-2xl sm:text-3xl text-foreground">
+        <CardTitle className="text-xl sm:text-2xl text-foreground">
           {title ?? "Recent Shipments"}
         </CardTitle>
         {description && <CardDescription>{description}</CardDescription>}
