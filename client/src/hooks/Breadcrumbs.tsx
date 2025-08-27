@@ -16,6 +16,8 @@ import React, {
 } from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { UseIsMobile } from "./UseIsMobile";
+import { cn } from "@/lib/utils";
 
 export const BreadcrumbContext = createContext<BcContextType>({
   breadcrumb: (_: BcPropsType) => <></>,
@@ -50,6 +52,7 @@ export const BreadCrumbProvider = ({
   const ref = useRef<HTMLElement>(null);
   const createCrumbs = useCallback((list: Array<string>) => {
     return ({ className }: BcPropsType) => {
+      const isMobile = UseIsMobile();
       return (
         <Breadcrumb ref={ref} className={className}>
           <BreadcrumbList>
@@ -64,12 +67,19 @@ export const BreadCrumbProvider = ({
                     <>
                       <BreadcrumbItem key={`crumb-item-${index}`}>
                         {isLast ? (
-                          <BreadcrumbPage className="font-semibold">
+                          <BreadcrumbPage
+                            className={cn(isMobile && "text-xs font-medium")}
+                          >
                             {matched.label}
                           </BreadcrumbPage>
                         ) : (
                           <BreadcrumbLink asChild>
-                            <Link to={matched.href}>{matched.label}</Link>
+                            <Link
+                              to={matched.href}
+                              className={cn(isMobile && "text-xs font-medium")}
+                            >
+                              {matched.label}
+                            </Link>
                           </BreadcrumbLink>
                         )}
                       </BreadcrumbItem>

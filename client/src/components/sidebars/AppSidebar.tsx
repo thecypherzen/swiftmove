@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   Home,
   Package,
@@ -45,11 +45,11 @@ const settingsItems = [
   { name: "Account", href: "/home/account", icon: UserCircle },
 ];
 
-const AppSidebar = () => {
+const AppSidebar = ({ hasNavedRef, className }: AppSidebarPropsType) => {
   const path = useLocation().pathname;
   const isMobile = UseIsMobile();
   const { theme } = useTheme();
-
+  const navigate = useNavigate();
   const menuItemClassName = "transition-[color] duration-200";
   const menuButtonClassName =
     "hover:dark:text-primary-200 hover:text-primary-600 transition-[background] transition-[color] duration-300";
@@ -69,7 +69,7 @@ const AppSidebar = () => {
         </SidebarHeader>
       )}
       {/* Sidebar Content */}
-      <SidebarContent>
+      <SidebarContent className={className}>
         {/* Navigation Group */}
         <SidebarGroup>
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
@@ -86,7 +86,16 @@ const AppSidebar = () => {
                         : inactiveMenuBtnStyles
                     )}
                   >
-                    <NavLink to={item.href}>
+                    <NavLink
+                      to={item.href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (hasNavedRef && !hasNavedRef.current) {
+                          hasNavedRef.current = true;
+                        }
+                        navigate(item.href);
+                      }}
+                    >
                       <item.icon />
                       <span>{item.name}</span>
                     </NavLink>
@@ -112,7 +121,16 @@ const AppSidebar = () => {
                         : inactiveMenuBtnStyles
                     )}
                   >
-                    <NavLink to={item.href}>
+                    <NavLink
+                      to={item.href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (hasNavedRef && !hasNavedRef.current) {
+                          hasNavedRef.current = true;
+                        }
+                        navigate(item.href);
+                      }}
+                    >
                       <item.icon />
                       <span>{item.name}</span>
                     </NavLink>
@@ -170,9 +188,9 @@ const AppSidebar = () => {
   );
 };
 
-//type SidebarPropsType = {
-//  className?: string;
-//  onNavigate?: () => void;
-//};
+export type AppSidebarPropsType = {
+  className?: string;
+  hasNavedRef?: React.RefObject<boolean | undefined>;
+};
 
 export default AppSidebar;
