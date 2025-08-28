@@ -150,7 +150,7 @@ function SidebarProvider({
             } as React.CSSProperties
           }
           className={cn(
-            "group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex w-full relative border-1 border-red-500",
+            "group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex w-full relative",
             "h-[calc(99svh-var(--sidebar-offset-t,0px)-var(--sicdbar-offset-b,0px))]  transform-3d translate-z-0",
 
             className
@@ -281,7 +281,7 @@ function Sidebar({
         <div
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
-          className="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm border-1 border-muted"
+          className="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
         >
           {children}
         </div>
@@ -299,10 +299,6 @@ function SidebarTrigger({
   icon?: React.ReactNode;
 } & React.ComponentProps<typeof Button>) {
   const { toggleSidebar } = useSidebar();
-  console.log("toggleSidebar:", toggleSidebar);
-  console.log("icon:", icon);
-  console.log("props:", props);
-  console.log("PanelLeftIcon:", PanelLeftIcon);
   return (
     <Button
       data-sidebar="trigger"

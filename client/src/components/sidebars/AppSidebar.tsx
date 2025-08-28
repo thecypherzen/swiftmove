@@ -72,9 +72,11 @@ const AppSidebar = ({ hasNavedRef, className }: AppSidebarPropsType) => {
       <SidebarContent className={className}>
         {/* Navigation Group */}
         <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+          <SidebarGroupLabel className="sticky -top-[1px] bg-background z-20">
+            Navigation
+          </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="mt-2">
               {navItems.map((item) => (
                 <SidebarMenuItem key={item.name} className={menuItemClassName}>
                   <SidebarMenuButton

@@ -16,10 +16,13 @@ const AppLayout = () => {
   const { breadcrumb: Breadcrumbs } = UseBreadcrumbs();
 
   return (
-    <main className="bg-background dark:bg-dark h-[99.9svh] max-w-[var(--max-vw,1440px)] m-auto overflow-y-hidden overflow-x-auto border-1 border-blue-500">
+    <main className="bg-background dark:bg-dark h-[99.9svh] max-w-[var(--max-vw,1440px)] m-auto overflow-y-hidden overflow-x-auto">
       {/* Header */}
       <SidebarProvider offsetT={true} before={<AppHeader />}>
-        <AppSidebar hasNavedRef={hasNavedRef} />
+        <AppSidebar
+          hasNavedRef={hasNavedRef}
+          className="transform-3d translate-z-0"
+        />
         <section className="w-full bg-background dark:bg-dark">
           <div
             className={cn(
