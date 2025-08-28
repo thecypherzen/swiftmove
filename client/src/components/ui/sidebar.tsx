@@ -146,11 +146,7 @@ function SidebarProvider({
           }
           className={cn(
             "group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex  w-full relative",
-            offsetT && "mt-[var(--sidebar-offset-t)]",
-            offsetB && "mt-[var(--sidebar-offset-b)]",
-            offsetL && "mt-[var(--sidebar-offset-l)]",
-            offsetR && "mt-[var(--sidebar-offset-r)]",
-            "min-h-[calc(99svh-var(--sidebar-offset-t,0px)-var(--sicebar-offset-b,0px))]",
+            "h-[calc(99svh-var(--sidebar-offset-t,0px)-var(--sicdbar-offset-b,0px))]  transform-3d translate-z-0",
             className
           )}
           {...props}
@@ -188,7 +184,7 @@ function Sidebar({
       <div
         data-slot="sidebar"
         className={cn(
-          "bg-sidebar text-sidebar-foreground flex w-(--sidebar-width) flex-col backdrop-blur-md backdrop-filter-multiply",
+          "bg-sidebar text-sidebar-foreground flex w-(--sidebar-width) flex-col backdrop-blur-md backdrop-filter-multiply border-1 border-white",
           offsetT && "mt-[var(--sidebar-offset-t)]",
           offsetB && "mt-[var(--sidebar-offset-b)]",
           offsetL && "mt-[var(--sidebar-offset-l)]",
@@ -265,12 +261,10 @@ function Sidebar({
           variant === "floating" || variant === "inset"
             ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
             : "group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l",
-          offsetT && "mt-[var(--sidebar-offset-t)]",
           offsetB && "mt-[var(--sidebar-offset-b)]",
           offsetL && "mt-[var(--sidebar-offset-l)]",
           offsetR && "mt-[var(--sidebar-offset-r)]",
           offsetB && `h-[calc(100svh-var(--sidebar-offset-b))]`,
-          offsetT && `h-[calc(100svh-var(--sidebar-offset-t))]`,
           offsetL && `w-[calc(100svh-var(--sidebar-offset-l))]`,
           offsetR && `w-[calc(100svh-var(--sidebar-offset-r))]`,
           className
@@ -280,7 +274,7 @@ function Sidebar({
         <div
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
-          className="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
+          className="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm border-1 border-muted"
         >
           {children}
         </div>

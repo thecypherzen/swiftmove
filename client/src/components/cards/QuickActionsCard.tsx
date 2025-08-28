@@ -1,24 +1,19 @@
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Skeleton } from "../ui/skeleton";
-import { Plus, Truck, UserPlus, type LucideIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "../ui/button";
 import UseModal from "@/hooks/UseModal";
 import CreateShipmentForm from "../forms/CreateShipmentForm";
 import CreateDeliveryForm from "../forms/CreateDeliveryForm";
+import CreateDriverForm from "../forms/CreateDriverForm";
+import { useAuth } from "@/hooks/UseAuth";
+import { Plus, Truck, UserPlus } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-const QuickActionsCard = () => {
+const QuickActionsCard = ({ className }: QuickActionPropsType) => {
   const { set, open, isOpen } = UseModal();
+  const { user } = useAuth();
+
   return (
-    <Card className="gap-1.5 shadow-none border-1 h-1/2">
+    <Card className={cn("gap-1.5 shadow-none", className)}>
       <CardHeader className="mb-3">
         <CardTitle className="text-xl sm:text-2xl text-foreground">
           Quick&nbsp;Actions
@@ -46,13 +41,26 @@ const QuickActionsCard = () => {
           <Truck className="mr-2 h-4 w-4" />
           Schedule Delivery
         </Button>
-        <Button variant="outline" className="w-full">
-          <UserPlus className="mr-2 h-4 w-4" />
-          Add Driver
-        </Button>
+        {user?.role === "admin" && (
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => {
+              set(<CreateDriverForm />);
+              if (!isOpen) open();
+            }}
+          >
+            <UserPlus className="mr-2 h-4 w-4" />
+            Add Driver
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
+};
+
+type QuickActionPropsType = {
+  className?: string;
 };
 
 export default QuickActionsCard;

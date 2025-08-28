@@ -98,4 +98,18 @@ export const recentShipments = [
     notes: "Temperature-sensitive medical supplies",
     deliveryDate: new Date("2025-08-27T14:00:00Z"),
   },
+  {
+    id: "0198e842-3cda-775f-9ad4-610f67077btz",
+    owner: {
+      name: "Jackson Housenni",
+      email: "jachous@gmail.com",
+    },
+    pickupAddress: "19 Anang Cresc, Garki, Abuja 900130",
+    destinationAddress: "14 Bukola Saraki Av, Kubwa, Abuja 900210",
+    priority: "normal",
+    weight: 100,
+    status: "missing",
+    notes: "Textbooks and Journals",
+    deliveryDate: new Date("2025-08-29T16:21:14Z"),
+  },
 ];

@@ -15,15 +15,18 @@ import type { ShipmentType } from "@/shared/types";
 import { Link } from "react-router-dom";
 
 const RecentShipmentsCard = ({
-  loading = false,
+  loading,
   description,
   action,
   title,
   data,
   footer,
+  className,
 }: RShipmentsCardType) => {
   return (
-    <Card className="shadow-none px-2 @lg:px-6 @container/rscard">
+    <Card
+      className={cn("shadow-none px-2 @lg:px-6 @container/rscard", className)}
+    >
       <CardHeader className="px-2 @lg:px-6">
         <CardTitle className="text-xl sm:text-2xl text-foreground">
           {title ?? "Recent Shipments"}
@@ -63,14 +66,14 @@ const RecentShipmentsCard = ({
                 key={shipment.id}
                 className="grid grid-cols-1 @xs/rscard:grid-cols-[1fr_3fr] @sm/rscard:grid-cols-[1fr_2fr] @md/rscard:grid-cols-10 items-center gap-3 p-4 bg-muted rounded-lg"
               >
-                <div className="hidden @xs/rscard:block @sm/rscard:row-span-2 @md/rscard:row-span-1 @md/rscard:col-span-2 overflow-hidden aspect-square rounded-lg object-cover object-center bg-muted dark:bg-white/90">
+                <div className="hidden @xs/rscard:block @sm/rscard:row-span-2 @md/rscard:row-span-1 @md/rscard:col-span-2 @xl/rscard:col-span-1 overflow-hidden aspect-square rounded-lg object-cover object-center bg-muted dark:bg-white/90">
                   <img
                     src={shipment.owner?.avatar ?? getRandomImageUrl()}
                     alt="image"
                     className="object-top object-cover h-full"
                   />
                 </div>
-                <div className="flex-1 text-center @xs/rscard:text-left space-y-1 @md/rscard:col-span-6">
+                <div className="flex-1 text-center @xs/rscard:text-left space-y-1 @md/rscard:col-span-6 @xl/rscard:col-span-7">
                   <h4 className="font-semibold line-clamp-2 @xs/rscard:line-clamp-1">
                     {shipment.owner.name}
                   </h4>
@@ -117,10 +120,11 @@ const getStatusBadge = (status: string) => {
 
 export type RShipmentsCardType = {
   title?: string;
-  loading?: boolean;
+  loading: boolean;
   description?: string;
   action?: string;
   data: ShipmentType[];
   footer?: string;
+  className?: string;
 };
 export default RecentShipmentsCard;

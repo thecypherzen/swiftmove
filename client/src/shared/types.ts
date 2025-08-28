@@ -9,7 +9,7 @@ export type UserType = {
   email: string;
   firstName?: string;
   lastName?: string;
-  role?: "user" | "admin";
+  role?: "user" | "admin" | "driver";
   [key: string]: any;
 };
 
@@ -29,6 +29,15 @@ export type ShipmentType = {
   deliveryDate: Date;
   createdAt?: Date;
 };
+
+export type DriverType = {
+  profile: UserType;
+  licenseNumber: string;
+  status: DriverStatusType;
+  createdAt?: Date;
+};
+
+export type DriverStatusType = "available" | "busy" | "inactive";
 
 export type APIRequestType = {
   method: "POST" | "GET" | "PUT" | "DELETE";

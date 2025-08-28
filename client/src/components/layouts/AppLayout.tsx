@@ -16,18 +16,15 @@ const AppLayout = () => {
   const { breadcrumb: Breadcrumbs } = UseBreadcrumbs();
 
   return (
-    <main className="bg-background dark:bg-dark h-full">
+    <main className="bg-background dark:bg-dark h-[99.9svh] max-w-[var(--max-vw,1440px)] m-auto overflow-y-hidden">
+      {/* Header */}
+      <AppHeader />
       <SidebarProvider offsetT={true}>
-        {/* Header */}
-        <AppHeader />
         <AppSidebar hasNavedRef={hasNavedRef} />
-        <main className="w-full bg-background dark:bg-dark">
+        <section className="w-full bg-background dark:bg-dark">
           <div
             className={cn(
-              "flex items-center gap-3 py-2 pr-4 fixed z-50 backdrop-blur-lg bg-background/50 dark:bg-dark/80 transition-discrete duration-400",
-              isMobile
-                ? "w-full"
-                : "w-[calc(100vw-var(--sidebar-width,0px)-var(--scrollbar-width,10px))]",
+              "flex items-center gap-3 py-2 pr-4 sticky z-50 top-20 backdrop-blur-lg bg-background/50 dark:bg-dark/50 transition-discrete duration-400 w-full",
               isMobile && "px-3",
               hasNavedRef.current
                 ? "justify-between"
@@ -53,10 +50,10 @@ const AppLayout = () => {
                 </Button>
               )}
             </div>
-            {<Breadcrumbs />}
+            {<Breadcrumbs className="opacity-85" />}
           </div>
           <Outlet />
-        </main>
+        </section>
       </SidebarProvider>
     </main>
   );
