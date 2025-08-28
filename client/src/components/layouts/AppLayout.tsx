@@ -16,16 +16,15 @@ const AppLayout = () => {
   const { breadcrumb: Breadcrumbs } = UseBreadcrumbs();
 
   return (
-    <main className="bg-background dark:bg-dark h-[99.9svh] max-w-[var(--max-vw,1440px)] m-auto overflow-y-hidden">
+    <main className="bg-background dark:bg-dark h-[99.9svh] max-w-[var(--max-vw,1440px)] m-auto overflow-y-hidden overflow-x-auto border-1 border-blue-500">
       {/* Header */}
-      <AppHeader />
-      <SidebarProvider offsetT={true}>
+      <SidebarProvider offsetT={true} before={<AppHeader />}>
         <AppSidebar hasNavedRef={hasNavedRef} />
         <section className="w-full bg-background dark:bg-dark">
           <div
             className={cn(
               "flex items-center gap-3 py-2 pr-4 sticky z-50 top-20 backdrop-blur-lg bg-background/50 dark:bg-dark/50 transition-discrete duration-400 w-full",
-              isMobile && "px-3",
+              isMobile && "pr-4",
               hasNavedRef.current
                 ? "justify-between"
                 : isMobile
@@ -40,7 +39,7 @@ const AppLayout = () => {
                   variant="ghost"
                   className={cn(
                     "rounded-full p-2 bg-primary dark:bg-primary-600 hover:bg-primary-600 hover:dark:bg-primary-700 !text-neutral-50 transition-all duration-300",
-                    isMobile ? "size-6" : "size-8"
+                    isMobile ? "size-6 ml-2" : "size-8 ml-4"
                   )}
                   onClick={() => {
                     navigate(-1);

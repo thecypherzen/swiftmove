@@ -6,6 +6,10 @@ export function UseIsMobile(breakpoint: number = MOBILE_BREAKPOINT) {
   const [isMobile, setIsMobile] = React.useState<boolean>(false);
 
   React.useEffect(() => {
+    console.log(`isViewport >= ${breakpoint}: ${isMobile}`);
+  }, [isMobile]);
+
+  React.useEffect(() => {
     const mql = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
     const onChange = () => {
       setIsMobile(window.innerWidth < breakpoint);

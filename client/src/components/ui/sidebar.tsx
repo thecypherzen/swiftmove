@@ -58,6 +58,8 @@ function SidebarProvider({
   className,
   style,
   children,
+  before,
+  after,
   offsetT,
   offsetL,
   offsetR,
@@ -65,6 +67,8 @@ function SidebarProvider({
   ...props
 }: React.ComponentProps<"div"> & {
   defaultOpen?: boolean;
+  after?: React.ReactNode;
+  before?: React.ReactNode;
   open?: boolean;
   offsetT?: boolean;
   offsetL?: boolean;
@@ -134,6 +138,7 @@ function SidebarProvider({
 
   return (
     <SidebarContext.Provider value={contextValue}>
+      {before && before}
       <TooltipProvider delayDuration={0}>
         <div
           data-slot="sidebar-wrapper"
@@ -145,8 +150,9 @@ function SidebarProvider({
             } as React.CSSProperties
           }
           className={cn(
-            "group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex  w-full relative",
+            "group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex w-full relative border-1 border-red-500",
             "h-[calc(99svh-var(--sidebar-offset-t,0px)-var(--sicdbar-offset-b,0px))]  transform-3d translate-z-0",
+
             className
           )}
           {...props}
@@ -154,6 +160,7 @@ function SidebarProvider({
           {children}
         </div>
       </TooltipProvider>
+      {after && before}
     </SidebarContext.Provider>
   );
 }
@@ -288,11 +295,14 @@ function SidebarTrigger({
   className,
   onClick,
   ...props
-}: React.ComponentProps<typeof Button> & {
+}: {
   icon?: React.ReactNode;
-}) {
+} & React.ComponentProps<typeof Button>) {
   const { toggleSidebar } = useSidebar();
-
+  console.log("toggleSidebar:", toggleSidebar);
+  console.log("icon:", icon);
+  console.log("props:", props);
+  console.log("PanelLeftIcon:", PanelLeftIcon);
   return (
     <Button
       data-sidebar="trigger"
