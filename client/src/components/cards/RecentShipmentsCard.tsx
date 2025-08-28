@@ -25,7 +25,10 @@ const RecentShipmentsCard = ({
 }: RShipmentsCardType) => {
   return (
     <Card
-      className={cn("shadow-none px-2 @lg:px-6 @container/rscard", className)}
+      className={cn(
+        "shadow-none px-2 @lg:px-6 @container/rscard max-h-120 overflow-y-auto",
+        className
+      )}
     >
       <CardHeader className="px-2 @lg:px-6">
         <CardTitle className="text-xl sm:text-2xl text-foreground">
