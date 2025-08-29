@@ -63,29 +63,29 @@ export const BreadCrumbProvider = ({
                 const matched = items.find((i) => i.endpoint === item);
                 const isLast = index + 1 === list.length;
                 if (matched) {
-                  return (
-                    <>
-                      <BreadcrumbItem key={`crumb-item-${index}`}>
-                        {isLast ? (
-                          <BreadcrumbPage
+                  return [
+                    <BreadcrumbItem key={`crumb-item-${index}`}>
+                      {isLast ? (
+                        <BreadcrumbPage
+                          className={cn(isMobile && "text-xs font-medium")}
+                        >
+                          {matched.label}
+                        </BreadcrumbPage>
+                      ) : (
+                        <BreadcrumbLink asChild>
+                          <Link
+                            to={matched.href}
                             className={cn(isMobile && "text-xs font-medium")}
                           >
                             {matched.label}
-                          </BreadcrumbPage>
-                        ) : (
-                          <BreadcrumbLink asChild>
-                            <Link
-                              to={matched.href}
-                              className={cn(isMobile && "text-xs font-medium")}
-                            >
-                              {matched.label}
-                            </Link>
-                          </BreadcrumbLink>
-                        )}
-                      </BreadcrumbItem>
-                      {!isLast && <BreadcrumbSeparator />}
-                    </>
-                  );
+                          </Link>
+                        </BreadcrumbLink>
+                      )}
+                    </BreadcrumbItem>,
+                    !isLast && (
+                      <BreadcrumbSeparator key={`crumb-separator-${index}`} />
+                    ),
+                  ];
                 }
                 return <></>;
               })
