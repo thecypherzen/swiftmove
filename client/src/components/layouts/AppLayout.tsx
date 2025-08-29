@@ -41,8 +41,8 @@ const AppLayout = () => {
                 <Button
                   variant="ghost"
                   className={cn(
-                    "rounded-full p-2 bg-primary dark:bg-primary-600 hover:bg-primary-600 hover:dark:bg-primary-700 !text-neutral-50 transition-all duration-300",
-                    isMobile ? "size-6 ml-2" : "size-8 ml-4"
+                    "rounded-full size-6 p-2 bg-primary dark:bg-primary-600 hover:bg-primary-600 hover:dark:bg-primary-700 !text-neutral-50 transition-all duration-300",
+                    isMobile && "ml-2"
                   )}
                   onClick={() => {
                     navigate(-1);

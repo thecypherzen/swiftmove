@@ -13,6 +13,7 @@ import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import type { ShipmentType } from "@/shared/types";
 import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 
 const RecentShipmentsCard = ({
   loading,
@@ -23,14 +24,69 @@ const RecentShipmentsCard = ({
   footer,
   className,
 }: RShipmentsCardType) => {
+  const [isSticky, setIsSticky] = useState<boolean>(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  /**
+   * @hook
+   * Loads and unloads an observer unto the sentinel, tracking
+   * it's scroll position and sets/unsets card header pos
+   * accordingly
+   */
+  useEffect(() => {
+    const rsCard = document.getElementById("rs-card");
+    if (!rsCard || !sentinelRef.current) return;
+    //observer
+    observerRef.current = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.intersectionRatio <= 0.15) {
+          if (!isSticky) {
+            setIsSticky(true);
+            // unload if sticky
+            observerRef.current!.unobserve(sentinelRef.current!);
+          }
+        } else {
+          if (isSticky) {
+            setIsSticky(false);
+            // load if not sticky
+            observerRef.current!.observe(sentinelRef.current!);
+          }
+        }
+      },
+      {
+        root: rsCard,
+        rootMargin: "-50px",
+        threshold: 1,
+      }
+    );
+    //initial observer load
+    observerRef.current.observe(sentinelRef.current);
+    //cleanup
+    return () => {
+      if (sentinelRef.current) {
+        observerRef?.current?.unobserve(sentinelRef.current);
+        observerRef?.current?.disconnect();
+      }
+    };
+  }, [isSticky]);
+
   return (
     <Card
       className={cn(
-        "shadow-none px-2 @lg:px-6 @container/rscard max-h-120 overflow-y-auto",
+        "shadow-none px-2 @lg:px-6 @container/rscard max-h-120 overflow-y-auto transform-3d translate-z-0",
+        isSticky && "pt-0",
         className
       )}
+      id="rs-card"
     >
-      <CardHeader className="px-2 @lg:px-6">
+      <div ref={sentinelRef}></div>
+      <CardHeader
+        className={cn(
+          "px-2 @lg:px-6 transition-all duration-300",
+          isSticky && "sticky top-0 bg-background pt-6 pb-2"
+        )}
+      >
         <CardTitle className="text-xl sm:text-2xl text-foreground">
           {title ?? "Recent Shipments"}
         </CardTitle>
