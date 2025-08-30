@@ -89,7 +89,7 @@ const SignupForm: React.FC<SignupFormPropsType> = ({
           </>
         </div>
         {/* Account Type Select */}
-        <div className="space-y-1 space-y-3">
+        <div className="space-y-3">
           <Label htmlFor="role" className="label mb-2">
             Choose Account Type&nbsp;
           </Label>

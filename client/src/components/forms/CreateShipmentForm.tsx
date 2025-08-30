@@ -22,6 +22,7 @@ import {
 //import { toast } from "sonner";
 import { NewShipmentMutationFn } from "@/lib/RequestLibrary";
 import { NewShipmentFormSchema, type NewShipmentFormType } from "./schemas";
+import UseModal from "@/hooks/UseModal";
 
 const CreateShipmentForm = () => {
   const form = useForm<NewShipmentFormType>({
@@ -51,7 +52,7 @@ const CreateShipmentForm = () => {
       deliveryDate,
     });
   };
-
+  const { setOpenShipmentModal } = UseModal();
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -215,7 +216,14 @@ const CreateShipmentForm = () => {
         />
 
         <div className="flex justify-end space-x-4 pt-6 border-t border-border">
-          <Button type="button" variant="outline">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              form.reset();
+              setTimeout(() => setOpenShipmentModal(false), 200);
+            }}
+          >
             Cancel
           </Button>
           <Button type="submit" disabled={createShipmentMutation.isPending}>

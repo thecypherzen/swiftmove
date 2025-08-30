@@ -9,48 +9,26 @@ export const ModalContext = createContext<ModalContextType | undefined>(
 
 // the provider
 export const ModalProvider = ({ children }: ModalPropsType) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [content, setContent] = useState<React.ReactNode>(null);
-
-  const set = (modalContent: React.ReactNode) => {
-    setContent(modalContent);
-  };
-
-  const open = () => {
-    setIsOpen(true);
-  };
-
-  const close = () => {
-    setContent(null);
-    setIsOpen(false);
-  };
-
-  // the modal component
+  const [openShipmentModal, setOpenShipmentModal] = useState(false);
+  const [openDeliveryModal, setOpenDeliveryModal] = useState<boolean>(false);
+  const [openDriverModal, setOpenDriverModal] = useState<boolean>(false);
   return (
     <ModalContext.Provider
       value={{
-        isOpen,
-        open,
-        close,
-        set,
+        openShipmentModal,
+        setOpenShipmentModal,
+        openDeliveryModal,
+        setOpenDeliveryModal,
+        openDriverModal,
+        setOpenDriverModal,
       }}
     >
       {children}
-      {isOpen && (
-        <div
-          className="fixed w-screen h-screen inset-0 bg-neutral-900/94 dark:bg-background/94 z-[1000] flex flex-col items-center justify-center p-4 !transition-discrete duration-1000"
-          onClick={() => close()}
-        >
-          <div onClick={(e) => e.stopPropagation()} className="opacity-100">
-            {content}
-          </div>
-        </div>
-      )}
     </ModalContext.Provider>
   );
 };
 
-// custom hook for easy access throughout th appp
+// custom hook for easy access throughout the appp
 const UseModal = () => {
   const context = useContext(ModalContext);
   if (context === undefined) {
@@ -65,10 +43,12 @@ export type ModalPropsType = {
 };
 
 export type ModalContextType = {
-  isOpen: boolean;
-  set: (content: React.ReactNode) => void;
-  open: () => void;
-  close: () => void;
+  openShipmentModal: boolean;
+  setOpenShipmentModal: React.Dispatch<React.SetStateAction<boolean>>;
+  openDeliveryModal: boolean;
+  setOpenDeliveryModal: React.Dispatch<React.SetStateAction<boolean>>;
+  openDriverModal: boolean;
+  setOpenDriverModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default UseModal;
