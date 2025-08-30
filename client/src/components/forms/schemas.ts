@@ -1,8 +1,6 @@
 import { z } from "zod";
-import {
-  parsePhoneNumberFromString,
-  isValidPhoneNumber,
-} from "libphonenumber-js";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
+import { validate, version } from "uuid";
 export const LoginFormSchema = z.object({
   email: z.email(),
   password: z.string().min(8, "Password should be at least 8 characters"),
@@ -22,6 +20,13 @@ export const PhoneNumberSchema = z.string().refine((val) => {
 });
 
 export const AddressSchema = z.string().min(10, "Address too short");
+export const UUID7Schema = z.string().refine(
+  (val) => {
+    const v = version(val);
+    return validate(val) && (v === 7 || v === 4);
+  },
+  { message: "Invalid Id" }
+);
 
 export const NewShipmentFormSchema = z.object({
   senderName: z.string().min(1, "Required"),
@@ -38,6 +43,15 @@ export const NewShipmentFormSchema = z.object({
   notes: z.string().optional(),
 });
 
+export const NewDeliveryFormSchema = z.object({
+  shipmentId: UUID7Schema,
+  driverId: UUID7Schema,
+  departure: z.iso.datetime(),
+  estArrival: z.iso.datetime(),
+  notes: z.string().optional(),
+});
+
 export type LoginFormType = z.infer<typeof LoginFormSchema>;
 export type SignupFormType = z.infer<typeof SignupFormSchema>;
 export type NewShipmentFormType = z.infer<typeof NewShipmentFormSchema>;
+export type NewDeliveryFormType = z.infer<typeof NewDeliveryFormSchema>;

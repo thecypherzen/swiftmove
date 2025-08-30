@@ -8,7 +8,9 @@ const CreateShipmentModal = () => {
     <Dialog open={openShipmentModal} onOpenChange={setOpenShipmentModal}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>New Shipment</DialogTitle>
+          <DialogTitle className="dark:text-primary text-primary-600 mb-4 text-xl">
+            Create New Shipment
+          </DialogTitle>
         </DialogHeader>
         <CreateShipmentForm />
       </DialogContent>

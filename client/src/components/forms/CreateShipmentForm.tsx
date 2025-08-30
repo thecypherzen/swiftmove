@@ -221,7 +221,7 @@ const CreateShipmentForm = () => {
             variant="outline"
             onClick={() => {
               form.reset();
-              setTimeout(() => setOpenShipmentModal(false), 200);
+              setTimeout(() => setOpenShipmentModal(false), 100);
             }}
           >
             Cancel

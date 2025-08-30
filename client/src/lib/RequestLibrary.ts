@@ -153,7 +153,7 @@ export const SignupMutationFn = async (data: SignupFormSubmitType) => {
 };
 
 /**
- * @function SignupMutationFn - Signup handler using Tanstack Query
+ * @function NewShipmentMutationFn - Signup handler using Tanstack Query
  * @param { objet } data
  * @returns { object }
  */
@@ -161,6 +161,25 @@ export const NewShipmentMutationFn = async (data: Record<string, any>) => {
   const res = await apiRequest({
     method: "POST",
     url: "/shipments",
+    data,
+  });
+  if (!res.success) {
+    console.error(res.data);
+    throw res.data;
+  }
+  console.log(res.data);
+  return res.data;
+};
+
+/**
+ * @function ScheduleDeliveryMutationFn - Signup handler using Tanstack Query
+ * @param { objet } data
+ * @returns { object }
+ */
+export const ScheduleDeliveryMutationFn = async (data: Record<string, any>) => {
+  const res = await apiRequest({
+    method: "POST",
+    url: "/delivery",
     data,
   });
   if (!res.success) {

@@ -8,7 +8,9 @@ const CreateDeliveryModal = () => {
     <Dialog open={openDeliveryModal} onOpenChange={setOpenDeliveryModal}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Schedule New Delivery</DialogTitle>
+          <DialogTitle className="dark:text-primary text-primary-600 mb-4 text-xl">
+            Schedule New Delivery
+          </DialogTitle>
         </DialogHeader>
         <CreateDeliveryForm />
       </DialogContent>
