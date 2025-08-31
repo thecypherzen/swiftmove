@@ -22,14 +22,14 @@ const FormSection = ({
   return (
     <div
       className={cn(
-        "border-1 border-muted rounded-md p-3 pt-4 relative",
+        "border-1 border-muted rounded-md p-3 pt-5 relative flex flex-col gap-6",
         className
       )}
       id={id}
     >
       <Label
         htmlFor={labelFor ?? id}
-        className="absolute -top-2 left-1 text-xs text-muted-foreground/50"
+        className="absolute -top-2 left-1 text-xs text-muted-foreground/60"
       >
         <span className="bg-background px-2">{label}</span>
       </Label>
