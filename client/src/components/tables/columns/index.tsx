@@ -22,17 +22,17 @@ export const MultiFieldCell = ({
 }: MultiFieldCellType) => (
   <div className={cn("", className)}>
     {Object.entries(data).map(([key, value], index) => {
-      return keys?.includes(key) ? (
-        <div
-          className={
-            !index
-              ? "font-medium text-md"
-              : "font-normal text-sm text-muted-foreground"
-          }
-        >{`${value}`}</div>
-      ) : (
-        <></>
-      );
+      if (keys?.includes(key))
+        return (
+          <div
+            key={`${key}-${index}`}
+            className={
+              !index
+                ? "font-medium text-md"
+                : "font-normal text-sm text-muted-foreground"
+            }
+          >{`${value}`}</div>
+        );
     })}
   </div>
 );

@@ -31,7 +31,7 @@ export function DataTable<TData, TValue = NonNullable<any>>({
     getSortedRowModel: getSortedRowModel(),
   });
   return (
-    <div className="overflow-y-scroll rounded-md border">
+    <div className="h-9/10 overflow-y-scroll rounded-md">
       <Table>
         {/* Header */}
         <TableHeader>

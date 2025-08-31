@@ -11,7 +11,7 @@ export const ShipmentTableColumns: ColumnDef<ShipmentType>[] = [
         string,
         string | number
       >;
-      return <MultiFieldCell data={sender} keys={Object.keys(sender)} />;
+      return <MultiFieldCell data={sender} keys={["name", "phone", "email"]} />;
     },
   },
   {
@@ -22,7 +22,9 @@ export const ShipmentTableColumns: ColumnDef<ShipmentType>[] = [
         string,
         string | number
       >;
-      return <MultiFieldCell data={receiver} keys={Object.keys(receiver)} />;
+      return (
+        <MultiFieldCell data={receiver} keys={["name", "phone", "email"]} />
+      );
     },
   },
   {

@@ -1,8 +1,13 @@
+import ShipmentsTable from "@/components/tables/ShipmentsTable";
+import PageRouteWrapper from "@/components/wrappers/PageRouteWrapper";
+
 const UserDashboard = () => {
   return (
-    <div className="route-page">
-      <h1>Shipments page</h1>
-    </div>
+    <PageRouteWrapper>
+      <div className="route-page">
+        <ShipmentsTable />
+      </div>
+    </PageRouteWrapper>
   );
 };
 
