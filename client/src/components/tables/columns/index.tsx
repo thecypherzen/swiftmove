@@ -37,6 +37,27 @@ export const MultiFieldCell = ({
   </div>
 );
 
+export const RouteCell = ({ data, className }: RouteCellType) => {
+  return (
+    <div className={cn("flex flex-col gap-1", className)}>
+      <span>
+        <span className="font-semibold bg-muted-foreground/10 dark:bg-muted py-0.5 px-1 rounded-md">
+          From
+        </span>
+        &nbsp;
+        <span>{data.from}</span>
+      </span>
+      <span>
+        <span className="font-semibold bg-muted-foreground/10 dark:bg-muted py-0.5 px-1 rounded-md">
+          To
+        </span>
+        &nbsp;
+        <span>{data.to}</span>
+      </span>
+    </div>
+  );
+};
+
 export const WeightDataCell = ({ data, className }: WeightDataCellType) => (
   <DefaultDataCell value={`${data.value}${data.unit}`} className={className} />
 );
@@ -54,6 +75,10 @@ type MultiFieldCellType = {
   data: Record<string, string | number>;
   keys?: string[];
   className?: string;
+};
+
+type RouteCellType = Omit<BaseDataCellType, "value"> & {
+  data: { from: string; to: string };
 };
 
 type WeightDataCellType = Omit<BaseDataCellType, "value"> & {

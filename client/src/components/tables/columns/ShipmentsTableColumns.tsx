@@ -1,6 +1,6 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import { type ShipmentType } from "@/shared/types";
-import { BadgeDataCell, DefaultDataCell, MultiFieldCell } from ".";
+import { BadgeDataCell, DefaultDataCell, MultiFieldCell, RouteCell } from ".";
 
 export const ShipmentTableColumns: ColumnDef<ShipmentType>[] = [
   {
@@ -28,15 +28,15 @@ export const ShipmentTableColumns: ColumnDef<ShipmentType>[] = [
     },
   },
   {
-    accessorKey: "pickupAddress",
-    header: "Pickup Location",
-    cell: ({ row }) => <DefaultDataCell value={row.original.pickupAddress} />,
-  },
-  {
-    accessorKey: "destinationAddress",
-    header: "Deivery Location",
+    id: "route",
+    header: "Route",
     cell: ({ row }) => (
-      <DefaultDataCell value={row.original.destinationAddress} />
+      <RouteCell
+        data={{
+          from: row.original.pickupAddress,
+          to: row.original.destinationAddress,
+        }}
+      />
     ),
   },
   {
