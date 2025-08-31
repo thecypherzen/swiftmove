@@ -35,12 +35,14 @@ export type ShipmentType = {
     email?: string;
     phone: string;
     address?: string;
+    avatar?: string;
   };
   receiver: {
     name: string;
     email?: string;
     phone: string;
     address?: string;
+    avatar?: string;
   };
   pickupAddress: string;
   destinationAddress: string;

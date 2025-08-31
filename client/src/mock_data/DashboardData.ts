@@ -54,9 +54,10 @@ export const summaryData = [
 export const recentShipments = [
   {
     id: "0198e83c-7e66-74de-b864-3e2e4a75d4bf",
-    owner: {
+    sender: {
       name: "TechCorp Inc.",
       email: "tech@corp.com",
+      phone: "+2347232321233",
       avatar:
         "https://images.unsplash.com/photo-1748382018115-cdcecf7b4b43?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=96",
     },
@@ -70,9 +71,10 @@ export const recentShipments = [
   },
   {
     id: "0198e83c-8514-71fd-8d75-c7774e02306",
-    owner: {
+    sender: {
       name: "GlobalFurniture Corp.",
       email: "orders@globalfurn.com",
+      phone: "+2347232321233",
       avatar:
         "https://images.unsplash.com/photo-1756017353605-01901a3f86e8?ixlib=rb-4.0.3&auto=format&fit=crop&w=120&h=96",
     },
@@ -86,9 +88,10 @@ export const recentShipments = [
   },
   {
     id: "0198e842-3cda-775f-9ad4-610f67077bc9",
-    owner: {
+    sender: {
       name: "MedSupply Labs",
       email: "procurement@medsupply.com",
+      phone: "+2347232321233",
     },
     pickupAddress: "555 Medical Center Dr, Boston, MA 02101",
     destinationAddress: "777 Healthcare Way, Atlanta, GA 30301",
@@ -100,9 +103,10 @@ export const recentShipments = [
   },
   {
     id: "0198e842-3cda-775f-9ad4-610f67077btz",
-    owner: {
+    sender: {
       name: "Jackson Housenni",
       email: "jachous@gmail.com",
+      phone: "+2347232321233",
     },
     pickupAddress: "19 Anang Cresc, Garki, Abuja 900130",
     destinationAddress: "14 Bukola Saraki Av, Kubwa, Abuja 900210",

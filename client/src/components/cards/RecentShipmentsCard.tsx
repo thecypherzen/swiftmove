@@ -127,14 +127,14 @@ const RecentShipmentsCard = ({
               >
                 <div className="hidden @xs/rscard:block @sm/rscard:row-span-2 @md/rscard:row-span-1 @md/rscard:col-span-2 @xl/rscard:col-span-1 overflow-hidden aspect-square rounded-lg object-cover object-center bg-muted dark:bg-white/90">
                   <img
-                    src={shipment.owner?.avatar ?? getRandomImageUrl()}
+                    src={shipment.sender?.avatar ?? getRandomImageUrl()}
                     alt="image"
                     className="object-top object-cover h-full"
                   />
                 </div>
                 <div className="flex-1 text-center @xs/rscard:text-left space-y-1 @md/rscard:col-span-6 @xl/rscard:col-span-7">
                   <h4 className="font-semibold line-clamp-2 @xs/rscard:line-clamp-1">
-                    {shipment.owner.name}
+                    {shipment.sender.name}
                   </h4>
                   <p className="text-sm text-muted-foreground line-lamp-2">
                     {shipment.pickupAddress.split(",")[0]} →{" "}
