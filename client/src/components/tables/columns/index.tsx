@@ -1,11 +1,27 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { BadgeType, WeightUnitType } from "@/shared/types";
+import { CornerDownLeft } from "lucide-react";
 
 export const BadgeDataCell = ({ data, className }: BadgeDataCellType) => (
   <Badge
-    variant={data.type === "destructive" ? "destructive" : "default"}
-    className={cn("text-sm", className)}
+    className={cn(
+      "text-xs text-white/90",
+      data.type === "destructive"
+        ? "bg-destructive-700"
+        : data.type === "info"
+        ? "bg-info"
+        : data.type === "warning"
+        ? "bg-warning-600"
+        : data.type === "dark-destructive"
+        ? "bg-destructive-700"
+        : data.type === "success"
+        ? "bg-success-600 dark:bg-success-700"
+        : data.type === "neutral"
+        ? "bg-neutral-400 dark:bg-neutral-600"
+        : "bg-primary-700 dark:bg-primary-600",
+      className
+    )}
   >
     {data.value}
   </Badge>
@@ -41,18 +57,16 @@ export const RouteCell = ({ data, className }: RouteCellType) => {
   return (
     <div className={cn("flex flex-col gap-1", className)}>
       <span>
-        <span className="font-semibold bg-muted-foreground/10 dark:bg-muted py-0.5 px-1 rounded-md">
-          From
-        </span>
+        <span className="font-semibold inline-flex flex-col items-center justify-center bg-muted-foreground/20 dark:bg-muted rounded-full text-muted size-2"></span>
         &nbsp;
         <span>{data.from}</span>
       </span>
-      <span>
-        <span className="font-semibold bg-muted-foreground/10 dark:bg-muted py-0.5 px-1 rounded-md">
-          To
+      <span className="inline-flex gap-0.1 items-start">
+        <span className="font-semibold">
+          <CornerDownLeft className="size-6 transform -scale-x-100 text-muted-foreground/20 dark:text-muted" />
         </span>
         &nbsp;
-        <span>{data.to}</span>
+        <span className="text-wrap mt-[2px]">{data.to}</span>
       </span>
     </div>
   );

@@ -4,7 +4,8 @@ export type BadgeType =
   | "destructive"
   | "info"
   | "neutral"
-  | "default";
+  | "default"
+  | "dark-destructive";
 export type RegPgImgSecPropsType = {
   id?: string;
   className?: string;
@@ -26,6 +27,7 @@ export type ShipmentStatusType =
   | "delivered"
   | "rejected"
   | "missing"
+  | "pending"
   | "lost";
 
 export type ShipmentType = {

@@ -45,13 +45,9 @@ export const ShipmentTableColumns: ColumnDef<ShipmentType>[] = [
     cell: ({ row }) => {
       const value = row.original.priority;
       const type =
-        value === "high"
-          ? "destructive"
-          : value === "medium"
-          ? "info"
-          : "neutral";
+        value === "high" ? "warning" : value === "medium" ? "info" : "neutral";
 
-      <BadgeDataCell data={{ value, type }} />;
+      return <BadgeDataCell data={{ value, type }} />;
     },
   },
   {
@@ -66,12 +62,21 @@ export const ShipmentTableColumns: ColumnDef<ShipmentType>[] = [
       const value = row.original.status;
       const type =
         value === "processing"
-          ? "warning"
+          ? "neutral"
           : value === "in-transit"
           ? "info"
-          : "neutral";
-
-      <BadgeDataCell data={{ value, type }} />;
+          : value === "delivered"
+          ? "success"
+          : value === "rejected"
+          ? "destructive"
+          : value === "missing"
+          ? "dark-destructive"
+          : value === "pending"
+          ? "warning"
+          : value === "lost"
+          ? "dark-destructive"
+          : "default";
+      return <BadgeDataCell data={{ value, type }} />;
     },
   },
   {
