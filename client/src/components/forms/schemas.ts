@@ -31,9 +31,10 @@ export const UUID7Schema = z.string().refine(
 export const NewShipmentFormSchema = z.object({
   senderName: z.string().min(1, "Required"),
   senderEmail: z.email().optional(),
-  receierEmail: z.email().optional(),
-  senderPhone: PhoneNumberSchema,
   receiverName: z.string().min(1, "Required"),
+  receiverEmail: z.email().optional(),
+  senderPhone: PhoneNumberSchema,
+  receiverPhone: PhoneNumberSchema,
   pickupAddress: AddressSchema,
   deliveryAddress: AddressSchema,
   priority: z.enum(["high", "low", "normal"]),
