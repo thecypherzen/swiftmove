@@ -13,18 +13,34 @@ export type UserType = {
   [key: string]: any;
 };
 
+export type ShipmentStatusType =
+  | "processing"
+  | "in-transit"
+  | "delivered"
+  | "rejected"
+  | "missing"
+  | "lost";
+
 export type ShipmentType = {
   id: string;
-  owner: {
+  sender: {
     name: string;
-    email: string;
-    avatar?: string;
+    email?: string;
+    phone: string;
+    address?: string;
+  };
+  receiver: {
+    name: string;
+    email?: string;
+    phone: string;
+    address?: string;
   };
   pickupAddress: string;
   destinationAddress: string;
   priority: string;
   weight: number;
-  status: string;
+  status: ShipmentStatusType;
+  trackingId: string;
   notes: string | null;
   deliveryDate: Date;
   createdAt?: Date;
