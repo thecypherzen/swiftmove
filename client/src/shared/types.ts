@@ -1,3 +1,10 @@
+export type BadgeType =
+  | "warning"
+  | "success"
+  | "destructive"
+  | "info"
+  | "neutral"
+  | "default";
 export type RegPgImgSecPropsType = {
   id?: string;
   className?: string;
@@ -43,7 +50,7 @@ export type ShipmentType = {
   trackingId: string;
   notes: string | null;
   deliveryDate: Date;
-  createdAt?: Date;
+  createdAt: Date;
 };
 
 export type DriverType = {
@@ -84,3 +91,5 @@ export type APIResponseType = {
   success: boolean;
   data: APIErrorType | APISuccessType;
 };
+
+export type WeightUnitType = "Kg" | "Lbs" | "g" | "T";
