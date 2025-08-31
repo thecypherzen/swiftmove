@@ -22,7 +22,7 @@ const FormSection = ({
   return (
     <div
       className={cn(
-        "border-1 border-muted rounded-md p-3 pt-5 relative flex flex-col gap-6",
+        "border-1 border-muted dark:border-muted/70 rounded-md p-4 pt-5 relative flex flex-col gap-6",
         className
       )}
       id={id}
