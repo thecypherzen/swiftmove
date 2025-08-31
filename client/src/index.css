@@ -217,6 +217,32 @@
 }
 
 @layer components {
+  .active {
+    @apply text-primary;
+  }
+  .label {
+    @apply text-muted-foreground font-normal text-sm;
+  }
+  .pending {
+    @apply text-primary-100;
+  }
+  .priority-high {
+    @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200;
+  }
+
+  .priority-medium {
+    @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200;
+  }
+
+  .priority-low {
+    @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+  }
+  .route-page {
+    @apply @container/page mt-5 min-h-full w-99/100 rounded-lg bg-muted/50 dark:bg-muted/20 m-4 ml-0 py-6 px-3 sm:px-6;
+  }
+  .scrollbar-primary {
+    @apply scrollbar scrollbar-w-[6px] scrollbar-thumb-rounded-full hover:dark:scrollbar-thumb-primary/80 hover:scrollbar-thumb-primary-600/80;
+  }
   .status-badge {
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
   }
@@ -247,30 +273,6 @@
 
   .status-off_duty {
     @apply bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200;
-  }
-
-  .priority-high {
-    @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200;
-  }
-
-  .priority-medium {
-    @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200;
-  }
-
-  .priority-low {
-    @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
-  }
-  .route-page {
-    @apply @container/page mt-5 min-h-full w-99/100 rounded-lg bg-muted/50 dark:bg-muted/20 m-4 ml-0 py-6 px-3 sm:px-6;
-  }
-  .label {
-    @apply text-muted-foreground font-normal text-sm;
-  }
-  .active {
-    @apply text-primary;
-  }
-  .pending {
-    @apply text-primary-100;
   }
   .skeleton-bg {
     @apply !bg-muted-foreground/20 dark:!bg-muted;
