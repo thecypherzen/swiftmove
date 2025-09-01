@@ -1,29 +1,33 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import type { BadgeType, WeightUnitType } from "@/shared/types";
+import type {
+  PriorityType,
+  ShipmentStatusType,
+  WeightUnitType,
+} from "@/shared/types";
 import { CornerDownLeft } from "lucide-react";
 
-export const BadgeDataCell = ({ data, className }: BadgeDataCellType) => (
+export const StatusDataCell = ({ value, className }: StatusDataCellType) => (
   <Badge
     className={cn(
       "text-xs text-white/90",
-      data.type === "destructive"
-        ? "bg-destructive-700"
-        : data.type === "info"
-        ? "bg-info"
-        : data.type === "warning"
+      value === "processing"
         ? "bg-warning-600"
-        : data.type === "dark-destructive"
+        : value === "in-transit"
+        ? "bg-info"
+        : value === "delivered"
+        ? "bg-success"
+        : value === "rejected"
         ? "bg-destructive-700"
-        : data.type === "success"
-        ? "bg-success-600 dark:bg-success-700"
-        : data.type === "neutral"
+        : value === "missing"
+        ? "bg-orange-600"
+        : value === "pending"
         ? "bg-neutral-400 dark:bg-neutral-600"
         : "bg-primary-700 dark:bg-primary-600",
       className
     )}
   >
-    {data.value}
+    {value}
   </Badge>
 );
 
@@ -35,22 +39,46 @@ export const MultiFieldCell = ({
   data,
   keys,
   className,
-}: MultiFieldCellType) => (
-  <div className={cn("", className)}>
-    {Object.entries(data).map(([key, value], index) => {
-      if (keys?.includes(key))
-        return (
-          <div
-            key={`${key}-${index}`}
-            className={
-              !index
-                ? "font-medium text-md"
-                : "font-normal text-sm text-muted-foreground"
-            }
-          >{`${value}`}</div>
-        );
-    })}
-  </div>
+}: MultiFieldCellType) => {
+  const len = keys?.length;
+  return (
+    <div className={cn("", className)}>
+      {Object.entries(data).map(([key, value], index) => {
+        if (keys?.includes(key) || !len)
+          return (
+            <div
+              key={`${key}-${index}`}
+              className={
+                !index
+                  ? "font-medium text-md"
+                  : "font-normal text-sm text-muted-foreground"
+              }
+            >{`${value}`}</div>
+          );
+      })}
+    </div>
+  );
+};
+
+export const PriorityDataCell = ({
+  value,
+  className,
+}: PriorityDataCellType) => (
+  <Badge
+    className={cn(
+      "text-xs text-white/90",
+      value === "high"
+        ? "bg-purple-800"
+        : value === "medium"
+        ? "bg-purple-400"
+        : value === "low"
+        ? "bg-purple-100 dark:bg-purple-200 text-purple-950"
+        : "bg-primary-700 dark:bg-primary-600",
+      className
+    )}
+  >
+    {value}
+  </Badge>
 );
 
 export const RouteCell = ({ data, className }: RouteCellType) => {
@@ -76,19 +104,23 @@ export const WeightDataCell = ({ data, className }: WeightDataCellType) => (
   <DefaultDataCell value={`${data.value}${data.unit}`} className={className} />
 );
 
-type BadgeDataCellType = Omit<BaseDataCellType, "value"> & {
-  data: { value: string; type: BadgeType };
-};
-
 type BaseDataCellType = {
   className?: string;
   value?: string | number;
+};
+
+type StatusDataCellType = Omit<BaseDataCellType, "value"> & {
+  value: ShipmentStatusType;
 };
 
 type MultiFieldCellType = {
   data: Record<string, string | number>;
   keys?: string[];
   className?: string;
+};
+
+type PriorityDataCellType = Omit<BaseDataCellType, "value"> & {
+  value: PriorityType;
 };
 
 type RouteCellType = Omit<BaseDataCellType, "value"> & {

@@ -1,6 +1,13 @@
 import { type ColumnDef } from "@tanstack/react-table";
 import { type ShipmentType } from "@/shared/types";
-import { BadgeDataCell, DefaultDataCell, MultiFieldCell, RouteCell } from ".";
+import {
+  StatusDataCell,
+  DefaultDataCell,
+  MultiFieldCell,
+  PriorityDataCell,
+  RouteCell,
+} from ".";
+import { getDateString, getTimeStringFromDate } from "@/lib/utils";
 
 export const ShipmentTableColumns: ColumnDef<ShipmentType>[] = [
   {
@@ -43,11 +50,7 @@ export const ShipmentTableColumns: ColumnDef<ShipmentType>[] = [
     accessorKey: "priority",
     header: "Priority",
     cell: ({ row }) => {
-      const value = row.original.priority;
-      const type =
-        value === "high" ? "warning" : value === "medium" ? "info" : "neutral";
-
-      return <BadgeDataCell data={{ value, type }} />;
+      return <PriorityDataCell value={row.original.priority} />;
     },
   },
   {
@@ -59,24 +62,7 @@ export const ShipmentTableColumns: ColumnDef<ShipmentType>[] = [
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => {
-      const value = row.original.status;
-      const type =
-        value === "processing"
-          ? "neutral"
-          : value === "in-transit"
-          ? "info"
-          : value === "delivered"
-          ? "success"
-          : value === "rejected"
-          ? "destructive"
-          : value === "missing"
-          ? "dark-destructive"
-          : value === "pending"
-          ? "warning"
-          : value === "lost"
-          ? "dark-destructive"
-          : "default";
-      return <BadgeDataCell data={{ value, type }} />;
+      return <StatusDataCell value={row.original.status} />;
     },
   },
   {
@@ -84,14 +70,10 @@ export const ShipmentTableColumns: ColumnDef<ShipmentType>[] = [
     header: "Delivery Date",
     cell: ({ row }) => {
       const d = row.original.deliveryDate;
-      const dstr = d.toLocaleDateString("en-GB", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      });
-      const mstr = String(d.getMinutes()).padStart(2, "0");
-      const hstr = String(d.getHours()).padStart(2, "0");
-      return <DefaultDataCell value={`${dstr}(${hstr}:${mstr})`} />;
+      const dstr = getDateString(d);
+      const tstr = getTimeStringFromDate(d);
+      const data = { date: `${dstr}`, time: `${tstr}` };
+      return <MultiFieldCell data={data} />;
     },
   },
   {
@@ -99,14 +81,10 @@ export const ShipmentTableColumns: ColumnDef<ShipmentType>[] = [
     header: "Send Date",
     cell: ({ row }) => {
       const d = row.original.createdAt;
-      const dstr = d.toLocaleDateString("en-GB", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      });
-      const mstr = String(d.getMinutes()).padStart(2, "0");
-      const hstr = String(d.getHours()).padStart(2, "0");
-      return <DefaultDataCell value={`${dstr}(${hstr}:${mstr})`} />;
+      const dstr = getDateString(d);
+      const tstr = getTimeStringFromDate(d);
+      const data = { date: `${dstr}`, time: `${tstr}` };
+      return <MultiFieldCell data={data} />;
     },
   },
   {

@@ -21,6 +21,8 @@ export type UserType = {
   [key: string]: any;
 };
 
+export type PriorityType = "high" | "medium" | "low";
+
 export type ShipmentStatusType =
   | "processing"
   | "in-transit"
@@ -48,7 +50,7 @@ export type ShipmentType = {
   };
   pickupAddress: string;
   destinationAddress: string;
-  priority: string;
+  priority: PriorityType;
   weight: number;
   status: ShipmentStatusType;
   trackingId: string;
