@@ -56,6 +56,7 @@ export const ShipmentTableColumns: ColumnDef<ShipmentType>[] = [
   {
     accessorKey: "weight",
     header: "Weight",
+    enableSorting: true,
     cell: ({ row }) => <DefaultDataCell value={row.original.weight} />,
   },
   {
@@ -66,7 +67,20 @@ export const ShipmentTableColumns: ColumnDef<ShipmentType>[] = [
     },
   },
   {
+    accessorKey: "createdAt",
+    header: "Date Sent",
+    enableSorting: true,
+    cell: ({ row }) => {
+      const d = row.original.createdAt;
+      const dstr = getDateString(d);
+      const tstr = getTimeStringFromDate(d);
+      const data = { date: `${dstr}`, time: `${tstr}` };
+      return <MultiFieldCell data={data} />;
+    },
+  },
+  {
     accessorKey: "deliveryDate",
+    enableSorting: true,
     header: "Delivery Date",
     cell: ({ row }) => {
       const d = row.original.deliveryDate;
@@ -76,17 +90,7 @@ export const ShipmentTableColumns: ColumnDef<ShipmentType>[] = [
       return <MultiFieldCell data={data} />;
     },
   },
-  {
-    accessorKey: "createdAt",
-    header: "Send Date",
-    cell: ({ row }) => {
-      const d = row.original.createdAt;
-      const dstr = getDateString(d);
-      const tstr = getTimeStringFromDate(d);
-      const data = { date: `${dstr}`, time: `${tstr}` };
-      return <MultiFieldCell data={data} />;
-    },
-  },
+
   {
     accessorKey: "trackingId",
     header: "Tracking Number",

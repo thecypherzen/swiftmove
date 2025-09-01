@@ -20,7 +20,9 @@ export function DataTable<TData, TValue = NonNullable<any>>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "createdAt", desc: true },
+  ]);
 
   const table = useReactTable({
     columns,
@@ -37,16 +39,32 @@ export function DataTable<TData, TValue = NonNullable<any>>({
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
+              {headerGroup.headers.map((header) => {
+                const d: Record<string, any> = {
+                  asc: "↑",
+                  desc: "↓",
+                };
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder ? null : (
+                      <div>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {header.column.columnDef.enableSorting && (
+                          <span
+                            className="ml-1 p-1 bg-muted-foreground text-neutral-50 dark:bg-muted dark:text-foreground rounded-sm inline-flex size-5 font-bold flex-col items-center justify-center text-sm cursor-pointer"
+                            onClick={header.column.getToggleSortingHandler()}
+                          >
+                            {d[header.column.getIsSorted() as string] ?? "⇅"}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </TableHead>
+                );
+              })}
             </TableRow>
           ))}
         </TableHeader>
