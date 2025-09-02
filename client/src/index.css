@@ -277,6 +277,13 @@
   .skeleton-bg {
     @apply !bg-muted-foreground/20 dark:!bg-muted;
   }
+
+  .tooltip-content {
+    @apply !bg-neutral-300 dark:!bg-muted !fill-neutral-300 dark:!fill-muted !text-neutral-700 dark:!text-foreground;
+  }
+  .tooltip-trigger {
+    @apply !size-6 text-xs cursor-pointer bg-neutral-200 dark:bg-muted text-neutral-600 dark:text-foreground/90 hover:!bg-neutral-300 dark:hover:!bg-dark;
+  }
   .transitioning {
     @apply text-muted;
   }

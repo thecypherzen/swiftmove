@@ -15,7 +15,36 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
+import AppTooltip from "../utils/AppTooltip";
+import { ArrowDown, ArrowDownUp, ArrowUp } from "lucide-react";
 
+const sortBtns: Record<string, any> = {
+  asc: (
+    <AppTooltip
+      trigger={<ArrowUp />}
+      content={"asc"}
+      className="tooltip-trigger"
+      arrowStyle="tooltip-content"
+    />
+  ),
+  desc: (
+    <AppTooltip
+      trigger={<ArrowDown />}
+      className="tooltip-trigger"
+      arrowStyle="tooltip-content"
+      content={"desc"}
+    />
+  ),
+  default: (
+    <AppTooltip
+      trigger={<ArrowDownUp />}
+      content={"sort by column"}
+      className="tooltip-trigger"
+      arrowStyle="tooltip-content"
+    />
+  ),
+};
+//ml-1 p-1 bg-muted-foreground text-neutral-50 dark:bg-muted dark:text-foreground rounded-sm inline-flex size-5 font-bold flex-col items-center justify-center text-sm cursor-pointer
 export function DataTable<TData, TValue = NonNullable<any>>({
   columns,
   data,
@@ -40,24 +69,20 @@ export function DataTable<TData, TValue = NonNullable<any>>({
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
-                const d: Record<string, any> = {
-                  asc: "↑",
-                  desc: "↓",
-                };
                 return (
                   <TableHead key={header.id}>
                     {header.isPlaceholder ? null : (
-                      <div>
+                      <div className="flex items-center justify-center gap-2">
                         {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
                         {header.column.columnDef.enableSorting && (
                           <span
-                            className="ml-1 p-1 bg-muted-foreground text-neutral-50 dark:bg-muted dark:text-foreground rounded-sm inline-flex size-5 font-bold flex-col items-center justify-center text-sm cursor-pointer"
                             onClick={header.column.getToggleSortingHandler()}
                           >
-                            {d[header.column.getIsSorted() as string] ?? "⇅"}
+                            {sortBtns[header.column.getIsSorted() as string] ??
+                              sortBtns["default"]}
                           </span>
                         )}
                       </div>
