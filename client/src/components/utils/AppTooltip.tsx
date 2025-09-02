@@ -14,7 +14,7 @@ const AppTooltip = ({
 }: TooltipPropsType) => {
   return (
     <Tooltip>
-      <TooltipTrigger>
+      <TooltipTrigger asChild>
         <Button variant="ghost" className={cn(className)}>
           {trigger}
         </Button>
