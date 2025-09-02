@@ -120,7 +120,7 @@ const RecentShipmentsCard = ({
           </div>
         ) : (
           <div className="space-y-4">
-            {data.map((shipment) => (
+            {data.slice(0, 5).map((shipment) => (
               <div
                 key={shipment.id}
                 className="grid grid-cols-1 @xs/rscard:grid-cols-[1fr_3fr] @sm/rscard:grid-cols-[1fr_2fr] @md/rscard:grid-cols-10 items-center gap-3 p-4 bg-muted rounded-lg"

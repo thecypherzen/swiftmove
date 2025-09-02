@@ -59,6 +59,17 @@ export type ShipmentType = {
   createdAt: Date;
 };
 
+export type DeliveryType = {
+  id: string;
+  shipmentId: string;
+  driverId: string;
+  departureDate: Date;
+  estimatedArrival: Date;
+  actualArrival: Date | null;
+  status: ShipmentStatusType;
+  createdAt: Date;
+};
+
 export type DriverType = {
   profile: UserType;
   licenseNumber: string;
