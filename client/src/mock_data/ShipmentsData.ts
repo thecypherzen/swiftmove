@@ -1,4 +1,10 @@
-export const shipments = [
+import type {
+  PriorityType,
+  ShipmentStatusType,
+  ShipmentType,
+} from "@/shared/types";
+
+export const rawShipments = [
   {
     id: "0198e83c-7e66-74de-b864-3e2e4a75d4bf",
     trackingId: "TRK-2025-08-21-001",
@@ -1300,3 +1306,14 @@ export const shipments = [
     deliveryDate: "2025-12-31T12:30:00Z",
   },
 ];
+
+export const shipmentsData = rawShipments.map((shipment) => {
+  const { createdAt, deliveryDate, priority, status } = shipment;
+  return {
+    ...shipment,
+    createdAt: new Date(createdAt),
+    deliveryDate: new Date(deliveryDate),
+    status: status as ShipmentStatusType,
+    priority: priority as PriorityType,
+  } as ShipmentType;
+});
