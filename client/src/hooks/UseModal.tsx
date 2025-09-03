@@ -12,6 +12,8 @@ export const ModalProvider = ({ children }: ModalPropsType) => {
   const [openShipmentModal, setOpenShipmentModal] = useState(false);
   const [openDeliveryModal, setOpenDeliveryModal] = useState<boolean>(false);
   const [openDriverModal, setOpenDriverModal] = useState<boolean>(false);
+  const [openSearchInputModal, setOpenSearchInputModal] =
+    useState<boolean>(false);
   return (
     <ModalContext.Provider
       value={{
@@ -21,6 +23,8 @@ export const ModalProvider = ({ children }: ModalPropsType) => {
         setOpenDeliveryModal,
         openDriverModal,
         setOpenDriverModal,
+        openSearchInputModal,
+        setOpenSearchInputModal,
       }}
     >
       {children}
@@ -49,6 +53,8 @@ export type ModalContextType = {
   setOpenDeliveryModal: React.Dispatch<React.SetStateAction<boolean>>;
   openDriverModal: boolean;
   setOpenDriverModal: React.Dispatch<React.SetStateAction<boolean>>;
+  openSearchInputModal: boolean;
+  setOpenSearchInputModal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default UseModal;
