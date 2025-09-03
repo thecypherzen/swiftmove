@@ -2,6 +2,7 @@ import { Input } from "../ui/input";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import UseModal from "@/hooks/UseModal";
+import SearchInputModal from "../modals/SearchInputModal";
 
 const SearchInput = ({
   className,
@@ -31,23 +32,27 @@ const SearchInput = ({
       </div>
     );
   } else {
-    const { open: openModal, close: closeModal, isOpen } = UseModal();
+    const { openSearchInputModal: isOpen, setOpenSearchInputModal: setIsOpen } =
+      UseModal();
     const searchContent = (
-      <div className="rounded-md bg-background">
+      <div className="rounded-md bg-background [&_input]:placeholder:text-sm [&_input]:placeholder:text-center w-9/10">
         <Input
           type="text"
           placeholder={placeholder || "Search here..."}
-          className="pl-10"
+          className="px-5 w-full"
         />
       </div>
     );
     return (
-      <div
-        className="flex items-center justify-center size-9 rounded-md bg-muted p-1.5 hover:bg-background hover:border-1 hover:border-muted transition-bg duration-200"
-        onClick={() => (isOpen ? closeModal() : openModal(searchContent))}
-      >
-        <Search className={cn("text-muted-foreground", className)} />
-      </div>
+      <>
+        <div
+          className="flex items-center justify-center size-9 rounded-md bg-muted p-1.5 hover:bg-background hover:border-1 hover:border-muted transition-bg duration-200"
+          onClick={() => (isOpen ? setIsOpen(false) : setIsOpen(true))}
+        >
+          <Search className={cn("text-muted-foreground", className)} />
+        </div>
+        <SearchInputModal content={searchContent} />
+      </>
     );
   }
 };
