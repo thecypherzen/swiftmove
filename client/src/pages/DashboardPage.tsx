@@ -3,27 +3,12 @@ import QuickActionsCard from "@/components/cards/QuickActionsCard";
 import RecentShipmentsCard from "@/components/cards/RecentShipmentsCard";
 import DashSummarySection from "@/components/sections/DashSummarySection";
 import PageRouteWrapper from "@/components/wrappers/PageRouteWrapper";
-import {
-  type PriorityType,
-  type ShipmentStatusType,
-  type ShipmentType,
-} from "@/shared/types";
-import { shipments } from "@/mock_data/ShipmentsData";
+import { shipmentsData } from "@/mock_data/ShipmentsData";
 import { useState } from "react";
 
 const UserDashboard = () => {
   const [loadingShipments, _] = useState<boolean>(false);
   const [loadingDriverStats, __] = useState<boolean>(false);
-  const shipmentsData = shipments.map((shipment) => {
-    const { createdAt, deliveryDate, priority, status } = shipment;
-    return {
-      ...shipment,
-      createdAt: new Date(createdAt),
-      deliveryDate: new Date(deliveryDate),
-      status: status as ShipmentStatusType,
-      priority: priority as PriorityType,
-    } as ShipmentType;
-  });
 
   return (
     <PageRouteWrapper>
