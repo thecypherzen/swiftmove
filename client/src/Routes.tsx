@@ -14,6 +14,7 @@ import ShipmentsPage from "./pages/ShipmentsPage";
 import SettingsPage from "./pages/SettingsPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import UserProfilePage from "./pages/UserProfilePage";
+import NotFound from "./pages/NotFound";
 
 const AppRoutes = () => {
   const { isAuthenticated } = useAuth();
@@ -50,7 +51,9 @@ const AppRoutes = () => {
         <Route path="settings" element={<SettingsPage />} />
         <Route path="notifications" element={<NotificationsPage />} />
         <Route path="account" element={<UserProfilePage />} />
+        <Route element={<NotFound />} />
       </Route>
+      <Route element={<NotFound />} />
     </Routes>
   );
 };
