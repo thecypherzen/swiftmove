@@ -1,6 +1,12 @@
 import CreateShipmentForm from "../forms/CreateShipmentForm";
 import UseModal from "@/hooks/UseModal";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
 
 const CreateShipmentModal = () => {
   const { openShipmentModal, setOpenShipmentModal } = UseModal();
@@ -11,6 +17,9 @@ const CreateShipmentModal = () => {
           <DialogTitle className="dark:text-primary text-primary-600 mb-4 text-xl">
             Create New Shipment
           </DialogTitle>
+          <DialogDescription>
+            Use this form to create a new shipment
+          </DialogDescription>
         </DialogHeader>
         <CreateShipmentForm />
       </DialogContent>
