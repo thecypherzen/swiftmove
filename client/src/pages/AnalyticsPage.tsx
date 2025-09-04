@@ -1,8 +1,12 @@
+import EBWithLoaderComponent from "@/components/utils/EBWithLoaderComponent";
+
 const UserDashboard = () => {
   return (
-    <div className="route-page">
-      <h1>Analytics Page</h1>
-    </div>
+    <EBWithLoaderComponent>
+      <section className="route-page">
+        <h1>Analytics Page</h1>
+      </section>
+    </EBWithLoaderComponent>
   );
 };
 

@@ -1,8 +1,14 @@
+import EBWithLoaderComponent from "@/components/utils/EBWithLoaderComponent";
+import Spinner from "@/components/utils/Spinner";
+
 const UserDashboard = () => {
   return (
-    <div className="route-page">
-      <h1>Drivers Page</h1>
-    </div>
+    <EBWithLoaderComponent>
+      <section className="route-page">
+        <Spinner />
+        <h1>Drivers Page</h1>
+      </section>
+    </EBWithLoaderComponent>
   );
 };
 

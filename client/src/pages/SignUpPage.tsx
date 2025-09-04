@@ -58,7 +58,7 @@ const SignUpPage = () => {
   }, [credentials]);
 
   return (
-    <main className="flex h-screen relative">
+    <section className="flex h-screen relative">
       <ThemeToggle className="absolute top-5 right-5" />
       {/* Right side */}
       <AuthImageSection
@@ -77,7 +77,7 @@ const SignUpPage = () => {
           className="shadow-lg shadow-neutral-300 dark:shadow-neutral-950 p-4 md:p-6 xl:px-10 rounded-md border-[.1px] border-neutral-300 dark:border-secondary w-full max-w-[400px] md:w-3/5 md:max-w-[480px] lg:w-full min-h-[50vh] max-h-[90vh] flex flex-col gap-5 @container"
         >
           {/* heading */}
-          <div
+          <aside
             id="signup-form-heading"
             className="p-2 flex flex-col gap-2 justify-center items-center text-center"
           >
@@ -95,18 +95,18 @@ const SignUpPage = () => {
                 A Few Steps to Creating Your SwiftMove Account
               </p>
             </div>
-          </div>
-          <div className="overflow-y-auto px-4">
+          </aside>
+          <aside className="overflow-y-auto px-4">
             {/* Form */}
             <SignupForm
               disabled={isPending}
               setFormCredentials={setCredentials}
             />
-          </div>
+          </aside>
         </div>
         {/* Heading */}
       </section>
-    </main>
+    </section>
   );
 };
 

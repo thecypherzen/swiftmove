@@ -1,13 +1,16 @@
 import ShipmentsTable from "@/components/tables/ShipmentsTable";
+import EBWithLoaderComponent from "@/components/utils/EBWithLoaderComponent";
 import PageRouteWrapper from "@/components/wrappers/PageRouteWrapper";
 
 const UserDashboard = () => {
   return (
-    <PageRouteWrapper>
-      <div className="route-page">
-        <ShipmentsTable />
-      </div>
-    </PageRouteWrapper>
+    <EBWithLoaderComponent>
+      <PageRouteWrapper>
+        <div className="route-page">
+          <ShipmentsTable />
+        </div>
+      </PageRouteWrapper>
+    </EBWithLoaderComponent>
   );
 };
 

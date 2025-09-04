@@ -1,14 +1,17 @@
 import { cn } from "@/lib/utils";
 
-const Spinner = ({ size = 8 }: SpinnerPropsType) => {
+const Spinner = ({ size = 6 }: SpinnerPropsType) => {
   return (
     <div
       role="status"
-      className="text-neutral-300 dark:text-muted/90 fill-info-600 dark:fill-info-800"
+      className={cn(
+        "text-neutral-300 dark:text-muted/90 fill-info-600 dark:fill-info-800",
+        `size-${size}`
+      )}
     >
       <svg
         aria-hidden="true"
-        className={cn("animate-spin fill-inherit text-inherit", `size-${size}`)}
+        className={cn("animate-spin fill-inherit text-inherit size-full")}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
