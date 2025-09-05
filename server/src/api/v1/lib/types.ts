@@ -1,7 +1,7 @@
 import type { ServerErrorCodeType } from "./ErrorNumbers.js";
 import type { ServerErrorType } from "./ServerError.js";
 
-export type UserRoleType = "admin" | "user";
+export type UserRoleType = "admin" | "user" | "driver";
 
 export type UserType = {
   id: string;
