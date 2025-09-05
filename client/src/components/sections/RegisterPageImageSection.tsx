@@ -16,7 +16,7 @@ const AuthImageSection = ({ id, className, imgUrl }: RegPgImgSecPropsType) => {
     >
       <div className="absolute inset-0 bg-gradient-to-br from-primary-500 to-primary-700"></div>
       <img
-        src={imgUrl ? imgUrl : "/delivery-image.jpg"}
+        src={imgUrl ? imgUrl : "/delivery-image.png"}
         alt="Modern logistics Image"
         className="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-90"
       />

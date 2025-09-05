@@ -156,7 +156,7 @@ const LoginForm: React.FC<LoginFormPropsType> = ({
           <p className="text-muted-600 text-sm text-center @md:text-right">
             Don't have an account?&nbsp;&nbsp;
             <span className="font-semibold text-primary hover:underline hover:underline-offset-4 hover:decoration-2 hover:cursor-pointer">
-              <Link to="/register">Sign up</Link>
+              <Link to="/auth/register">Sign up</Link>
             </span>
           </p>
         </div>
