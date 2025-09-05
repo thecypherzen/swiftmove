@@ -9,7 +9,7 @@ const port = parseInt(config.SERVER_PORT as string);
 
 app.use(
   cors({
-    origin: ["http://localhost:8085", "http://0.0.0.0:8085"],
+    origin: ["http://localhost:8085", "http://0.0.0.0:8085", config.PROD_HOST],
     credentials: true,
   })
 );

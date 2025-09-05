@@ -33,4 +33,5 @@ export default {
   REFRESH_TOKEN_EXP_SECS: HourInSecs * 24,
   ACCESS_COOKIE_NAME: process.env.ACCESS_COOKIE_NAME ?? "aCOOKIE",
   REFRESH_COOKIE_NAME: process.env.REFRESH_COOKIE_NAME ?? "rCOOKIE",
+  PROD_HOST: process.env.PROD_FE_URL || "",
 };
