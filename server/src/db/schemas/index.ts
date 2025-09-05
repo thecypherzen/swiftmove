@@ -1,3 +1,5 @@
+import { CountrySchema } from "./CountrySchema.js";
+import { StateSchema } from "./StateSchema.js";
 import { UserSchema } from "./UserSchema.js";
 
-export { UserSchema };
+export { CountrySchema, StateSchema, UserSchema };
