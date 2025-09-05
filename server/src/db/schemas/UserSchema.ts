@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 import * as uuid from "uuid";
 import { UserRoleType } from "../../api/v1/lib/types.js";
 
-const { v4: uuidv4 } = uuid;
+const { v7: uuidv7 } = uuid;
 
 const UserSchema = new mongoose.Schema({
   _id: {
     type: String,
-    default: uuidv4,
+    default: uuidv7,
     required: true,
   },
   firstName: {
