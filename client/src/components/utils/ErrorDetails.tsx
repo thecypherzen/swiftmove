@@ -16,7 +16,7 @@ const ErrorDetails = ({ error, errorInfo }: ErrorDetailsPropsType) => {
         <AccordionTrigger>{`${
           value ? "Hide" : "Show"
         } Details`}</AccordionTrigger>
-        <AccordionContent className="min-h-[100px] max-h-[calc(100vh-460px)] overflow-y-auto bg-muted rounded-lg">
+        <AccordionContent className="min-h-[100px] overflow-y-auto bg-muted rounded-lg">
           <div className="p-3 wrap-anywhere text-wrap flex flex-col gap-3">
             {<h4 className="font-bold text-md">{error?.name ?? "Error"}</h4>}
             {errorInfo && <p>{errorInfo.componentStack}</p>}

@@ -26,9 +26,9 @@ export class ErrorBoundary extends React.Component<
     if (this.state.errorOccured) {
       return (
         <PageRouteWrapper>
-          <div className="h-full w-full bg-background border-neutral-60 flex flex-col">
-            <div className="min-h-4/5 w-full flex items-center justify-center bg-background">
-              <Card className="w-full max-w-md mx-4 min-h-3/5">
+          <div className="h-full w-full bg-background border-neutral-60 flex flex-col p-5">
+            <div className="min-h-4/5 max-h-95/10 w-full bg-background overflow-y-scroll p-5 flex flex-col items-center">
+              <Card className="w-full max-w-md mx-4">
                 <CardContent className="pt-6 flex flex-col justify-center gap-5">
                   <div className="flex flex-col justify-center items-center gap-3">
                     <AlertTriangle className="size-10 text-red-600" />
