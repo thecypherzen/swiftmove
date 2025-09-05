@@ -11,8 +11,6 @@ const UserDashboard = () => {
   const [loadingShipments, _] = useState<boolean>(false);
   const [loadingDriverStats, __] = useState<boolean>(false);
 
-  throw new Error("Testing things...");
-
   return (
     <EBWithLoaderComponent>
       <PageRouteWrapper>
