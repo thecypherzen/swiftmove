@@ -69,7 +69,7 @@ const RecentShipmentsCard = ({
         observerRef?.current?.disconnect();
       }
     };
-  }, [isSticky]);
+  }, []);
 
   return (
     <Card
