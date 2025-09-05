@@ -57,6 +57,6 @@ export type StateSchemaType = {
   countryId: string;
 };
 
-export type StateObjectObjectType = Omit<StateSchemaType, "_id"> & {
+export type StateSchemaObjectType = Omit<StateSchemaType, "_id"> & {
   id: string;
 };
