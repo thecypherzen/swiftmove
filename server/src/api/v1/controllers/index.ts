@@ -26,6 +26,12 @@ class CrudController<T> extends BaseController {
     return this.#model;
   }
 
+  /**
+   * Create request handler
+   * @param {Express.Request} req - request object
+   * @param {Express.Response} res - response object
+   * @returns {Promise<void>} - Promise resolving to void
+   */
   create = async (req: Request, res: Response): Promise<void> => {
     const data = this.getValidatedData(req, res);
     if (!data) return;
@@ -48,8 +54,50 @@ class CrudController<T> extends BaseController {
       return;
     }
   };
-  read = async (req: Request, res: Response): Promise<void> => {};
+
+  /**
+   * Delete request handler
+   * @param req
+   * @param res
+   */
   delete = async (req: Request, res: Response): Promise<void> => {};
+
+  /**
+   * Read request handler
+   * @param req
+   * @param res
+   */
+  read = async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params;
+    try {
+      if (id) {
+        const instance = await db.getOne(this.model, { id });
+        this.sendJSON(res, {
+          type: "success",
+          data: instance ? [instance] : [],
+        });
+        return;
+      }
+      const instances = await db.getMany(this.model, {});
+      this.sendJSON(res, {
+        type: "success",
+        data: instances,
+      });
+      return;
+    } catch (err) {
+      this.sendJSON(res, {
+        type: "server",
+        data: [{ error: JSON.stringify(err, ServerError.SerialiseFn, 2) }],
+      });
+    }
+    return;
+  };
+
+  /**
+   * Update request handler
+   * @param req
+   * @param res
+   */
   update = async (req: Request, res: Response): Promise<void> => {};
 }
 

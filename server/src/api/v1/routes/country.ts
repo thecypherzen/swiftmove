@@ -13,6 +13,14 @@ const {
 } = authController.Middlewares;
 const countryRouter = express.Router();
 
+countryRouter.get(
+  ["/countries", "/countries/:id"],
+  validateSession,
+  validateLoginStatus,
+  validateIsLoggedIn,
+  countryController.read
+);
+
 countryRouter.post(
   ["/countries"],
   validateSession,
@@ -28,31 +36,9 @@ countryRouter.post(
   ],
   countryController.create
 );
-countryRouter.post(
-  ["/", "/signup", "/register"],
-  [
-    body().notEmpty().withMessage("data required"),
-    body("email")
-      .notEmpty()
-      .withMessage("required")
-      .isEmail()
-      .withMessage("invalid email"),
-    body("role")
-      .notEmpty()
-      .withMessage("required")
-      .isIn(["admin", "user"])
-      .withMessage("invalid user role"),
-    body("termsAccepted")
-      .notEmpty()
-      .withMessage("required")
-      .isBoolean({ strict: true })
-      .withMessage("invalid boolean"),
-    body(["password"])
-      .notEmpty()
-      .withMessage("required")
-      .isString()
-      .withMessage("invalid string"),
-  ],
+countryRouter.put(
+  ["/countries/:id"],
+  [body().notEmpty().withMessage("data required")],
 
   authController.createUser
 );
