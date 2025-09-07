@@ -12,7 +12,7 @@ export const State = mongoose.model("State", StateSchema);
 export const User = mongoose.model("User", UserSchema);
 
 // types
-export type CityModelType = mongoose.Model<typeof City>;
-export type CountryModelType = mongoose.Model<typeof Country>;
-export type StateModelType = mongoose.Model<typeof State>;
-export type UserModelType = mongoose.Model<typeof User>;
+export type CityModelType = typeof City;
+export type CountryModelType = typeof Country;
+export type StateModelType = typeof State;
+export type UserModelType = typeof User;
