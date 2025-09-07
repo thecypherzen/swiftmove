@@ -158,8 +158,9 @@ class Database {
 
   /**
    * Retrives a record from the database based on given filters.
-   * @public @method get
-   * @param {DBModelNameType} model - the name of db model to search
+   * @public
+   * @function getOne
+   * @param {DBModelNameType} Model - the name of db model to search
    * @param {Object} filters - fields to filter against.
    * For now, it expects the filters to match Mongodb search object, which
    * can include conditions, projections and options.
@@ -176,6 +177,38 @@ class Database {
     }
     try {
       const data = Model.findOne(filters);
+      return data;
+    } catch (err: any) {
+      console.error(err);
+      throw new DBError({
+        message: `Query on ${Model.name} failed`,
+        errno: "53",
+        cause: DBError.constructErrorCause(err),
+      });
+    }
+  }
+
+  /**
+   * Retrives a record from the database based on given filters.
+   * @public
+   * @function getMany
+   * @param {DBModelNameType} Model - the name of db model to search
+   * @param {Object} filters - fields to filter against.
+   * For now, it expects the filters to match Mongodb search object, which
+   * can include conditions, projections and options.
+   * @returns {Promise<Model | null>} Promise that resolves to the document
+   * if found or null otherwise.
+   * @throws {DBError} - Error thrown if an error occured during db access
+   */
+  async getMany<T>(Model: mongoose.Model<T>, filters: Record<string, any>) {
+    if (!Model) {
+      throw new DBError({ message: "Unknown Model Reference", errno: "53" });
+    }
+    if (!this.#client) {
+      this.init();
+    }
+    try {
+      const data = Model.find(filters);
       return data;
     } catch (err: any) {
       console.error(err);
