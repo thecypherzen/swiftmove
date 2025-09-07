@@ -98,7 +98,7 @@ class Database {
 
   /**
    * @function create - Creates a new instance of a model
-   * @param {DBModelName} - Model name: basically a string
+   * @param {DBModelName} Model - Model name: basically a string
    * @param { Record<string, any>} data - An object representing the
    * data with which to populate the item in db
    * @returns {Promise<Object | DBError>} - A promise that resolves to
@@ -128,7 +128,7 @@ class Database {
   /**
    * Checks if a record exists in the database based on given filters.
    * @public @method exists
-   * @param {DBModelNameType} model - the name of db model to search
+   * @param {DBModelNameType} Model - the name of db model to search
    * @param {Object} filters - fields to filter against.
    * For now, it expects the filters to match Mongodb search object, which
    * can include conditions, projections and options.

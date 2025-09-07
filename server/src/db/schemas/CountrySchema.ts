@@ -25,6 +25,7 @@ export const CountrySchema = new mongoose.Schema(
     phoneCode: {
       // e.g., "+1", "+234"
       type: String,
+      required: true,
       trim: true,
     },
   },
