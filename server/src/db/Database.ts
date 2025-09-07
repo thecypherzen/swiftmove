@@ -1,16 +1,26 @@
 import mongoose, { Document, Model } from "mongoose";
-import { MongoClient, ServerApiVersion } from "mongodb";
 import config from "../config.js";
 const { DB_URI, DB_NAME } = config;
-import { User, type UserModelType } from "./models/index.js";
+import {
+  City,
+  Country,
+  State,
+  User,
+  type CityModelType,
+  type CountryModelType,
+  type StateModelType,
+  type UserModelType,
+} from "./models/index.js";
 import {
   ServerError,
-  ServerErrorCauseType,
   ServerErrorPropsType,
 } from "../api/v1/lib/ServerError.js";
 
-const Models = {
-  User: User,
+const Models: ModelsTypeMap = {
+  City,
+  Country,
+  State,
+  User,
 };
 
 /**
@@ -95,8 +105,7 @@ class Database {
    *   created instance's data on success
    *   or DBError on failure
    */
-  async create(model: DBModelNameType, data: Record<string, any>) {
-    const Model = Models[model];
+  async create<T>(Model: mongoose.Model<T>, data: Record<string, any>) {
     if (!Model) {
       throw new DBError({ message: "Unknown Model Reference", errno: "53" });
     }
@@ -109,7 +118,7 @@ class Database {
     } catch (err: any) {
       console.error(err);
       throw new DBError({
-        message: `${model} creation failed`,
+        message: `${Model.name} creation failed`,
         errno: "53",
         cause: DBError.constructErrorCause(err),
       });
@@ -127,8 +136,7 @@ class Database {
    *    if record exists or not.
    * @throws {DBError} - Error thrown if an error occured during db access
    */
-  async exists(model: DBModelNameType, filters: Record<string, any>) {
-    const Model = Models[model];
+  async exists<T>(Model: mongoose.Model<T>, filters: Record<string, any>) {
     if (!Model) {
       throw new DBError({ message: "Unknown Model Reference", errno: "53" });
     }
@@ -141,12 +149,13 @@ class Database {
     } catch (err: any) {
       console.error(err);
       throw new DBError({
-        message: `Query on ${model} failed`,
+        message: `Query on ${Model.name} failed`,
         errno: "53",
         cause: DBError.constructErrorCause(err),
       });
     }
   }
+
   /**
    * Retrives a record from the database based on given filters.
    * @public @method get
@@ -158,8 +167,7 @@ class Database {
    * if found or null otherwise.
    * @throws {DBError} - Error thrown if an error occured during db access
    */
-  async getOne(model: DBModelNameType, filters: Record<string, any>) {
-    const Model = Models[model];
+  async getOne<T>(Model: mongoose.Model<T>, filters: Record<string, any>) {
     if (!Model) {
       throw new DBError({ message: "Unknown Model Reference", errno: "53" });
     }
@@ -167,12 +175,12 @@ class Database {
       this.init();
     }
     try {
-      const data = await Model.findOne(filters);
+      const data = Model.findOne(filters);
       return data;
     } catch (err: any) {
       console.error(err);
       throw new DBError({
-        message: `Query on ${model} failed`,
+        message: `Query on ${Model.name} failed`,
         errno: "53",
         cause: DBError.constructErrorCause(err),
       });
@@ -210,6 +218,9 @@ export type UserDocumentType = Document & {
 };
 
 export type ModelsTypeMap = {
+  City: CityModelType;
+  Country: CountryModelType;
+  State: StateModelType;
   User: UserModelType;
 };
 
