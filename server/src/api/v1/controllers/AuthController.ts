@@ -12,9 +12,11 @@ import {
 import type { UserType } from "../lib/types.js";
 import config from "../../../config.js";
 import { UserSchemaObjectType } from "../../../db/schemas/UserSchema.js";
+import { User, type UserModelType } from "../../../db/models/index.js";
 
 class AuthController extends BaseController {
-  #Model: DBModelNameType = "User";
+  #name: string;
+  #model: UserModelType;
   #ATokenExpTimeSecs: number = config.ACCESS_TOKEN_EXP_SECS;
   #RTokenExpTimeSecs: number = config.REFRESH_TOKEN_EXP_SECS;
   #ACookieName: string = config.ACCESS_COOKIE_NAME;
@@ -23,8 +25,16 @@ class AuthController extends BaseController {
   #DecomposeToken = decomposeToken;
   constructor() {
     super();
+    this.#name = "AuthController";
+    this.#model = User;
   }
 
+  get name() {
+    return this.#name;
+  }
+  get model() {
+    return this.#model;
+  }
   #Middlewares = {
     /**
      * Middleware that sets login requirement to true. Used to protect routes
@@ -285,7 +295,7 @@ class AuthController extends BaseController {
     if (!data) return; // response already sent by getValidatedData
     try {
       // verify user doesn't exist
-      const alreadyExists = await db.exists(this.#Model, { email: data.email });
+      const alreadyExists = await db.exists(this.model, { email: data.email });
       if (alreadyExists) {
         this.sendJSON(res, { errno: "33", type: "validation" });
         return;
@@ -300,7 +310,7 @@ class AuthController extends BaseController {
         });
       }
       // proceed to create user
-      const _ = await db.create(this.#Model, {
+      const _ = await db.create(this.model, {
         ...data,
         password: result,
       });
@@ -420,7 +430,7 @@ class AuthController extends BaseController {
       let user;
       const data = this.getValidatedData(req, res);
       if (d) {
-        user = await db.getOne(this.#Model, { email: d.email, _id: d.id });
+        user = await db.getOne(this.model, { email: d.email, _id: d.id });
       } else {
         if (!this.credentialsAllowed(req)) {
           return this.sendJSON(res, { errno: "26", type: "auth" });
@@ -428,7 +438,7 @@ class AuthController extends BaseController {
         // validate sent data
         if (!data) return;
         // get user by email
-        user = await db.getOne(this.#Model, { email: data.email });
+        user = await db.getOne(this.model, { email: data.email });
       }
       if (!user) {
         return this.sendJSON(res, { errno: "34", type: "validation" });

@@ -11,6 +11,9 @@ export class BaseController {
       throw new Error(`Cannot instantiate ${this.#name} directly`);
     }
   }
+  get name() {
+    return this.#name;
+  }
   /**
    * @private @function getPayload - Constructs the payload from a res object
    * Ensures consistency in server response body for all requests
