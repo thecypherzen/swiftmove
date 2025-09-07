@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 import * as uuid from "uuid";
 const { v7: uuidv7 } = uuid;
 
@@ -54,12 +54,7 @@ CitySchema.set("toObject", {
 });
 
 // types
-export type CitySchemaType = {
-  _id: string;
-  name: string;
-  country: string;
-  state: string;
-};
+export type CitySchemaType = InferSchemaType<typeof CitySchema>;
 
 export type CitySchemaObjectType = Omit<CitySchemaType, "_id"> & {
   id: string;

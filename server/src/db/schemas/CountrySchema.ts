@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { InferSchemaType } from "mongoose";
 import * as uuid from "uuid";
 
 const { v7: uuidv7 } = uuid;
@@ -53,12 +53,7 @@ CountrySchema.set("toObject", {
   },
 });
 
-export type CountrySchemaType = {
-  _id: string;
-  name: string;
-  nameCode: string;
-  phoneCode: string;
-};
+export type CountrySchemaType = InferSchemaType<typeof CountrySchema>;
 
 export type CountrySchemaObjectType = Omit<CountrySchemaType, "_id"> & {
   id: string;
