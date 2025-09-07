@@ -33,15 +33,36 @@ countryRouter.post(
       .notEmpty()
       .isString()
       .withMessage("expects string"),
+    body().custom((value) => {
+      const allowed = ["name", "nameCode", "phoneCode"];
+      if (!allowed.includes(value)) {
+        throw new Error(`Unknown value ${value}`);
+      }
+      return true;
+    }),
   ],
   countryController.create
 );
+
 countryRouter.put(
   ["/countries/:id"],
-  [body().notEmpty().withMessage("data required")],
-
-  authController.createUser
+  validateSession,
+  validateLoginStatus,
+  validateIsLoggedIn,
+  restrictAccess(["admin"]),
+  [
+    body().notEmpty().withMessage("data required"),
+    body().custom((value) => {
+      const allowed = ["name", "nameCode", "phoneCode"];
+      if (!allowed.includes(value)) {
+        throw new Error(`Unknown value ${value}`);
+      }
+      return true;
+    }),
+  ],
+  countryController.update
 );
+
 // handle 404
 countryRouter.use("/*", (_: Request, res: Response): void => {
   res.status(404).json({

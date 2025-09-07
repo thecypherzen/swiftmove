@@ -98,7 +98,26 @@ class CrudController<T> extends BaseController {
    * @param req
    * @param res
    */
-  update = async (req: Request, res: Response): Promise<void> => {};
+  update = async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params;
+    try {
+      const updated = await db.updateOne(this.model, { id }, req.body);
+      if (!updated) {
+        this.sendJSON(res, { errno: "34", type: "validation" });
+        return;
+      }
+      this.sendJSON(res, {
+        type: "success",
+        data: [updated],
+      });
+    } catch (err) {
+      this.sendJSON(res, {
+        type: "server",
+        data: [{ error: JSON.stringify(err, ServerError.SerialiseFn, 2) }],
+      });
+    }
+    return;
+  };
 }
 
 /**
