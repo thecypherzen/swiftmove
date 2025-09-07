@@ -9,7 +9,7 @@ import {
   type TokenPayloadType,
   TokenType,
 } from "../lib/TokensLibrary.js";
-import type { UserType } from "../lib/types.js";
+import type { UserRoleType, UserType } from "../lib/types.js";
 import config from "../../../config.js";
 import { UserSchemaObjectType } from "../../../db/schemas/UserSchema.js";
 import { User, type UserModelType } from "../../../db/models/index.js";
@@ -35,7 +35,10 @@ class AuthController extends BaseController {
   get model() {
     return this.#model;
   }
-  #Middlewares = {
+  get Middlewares() {
+    return this.#middlewares;
+  }
+  #middlewares = {
     /**
      * Middleware that sets login requirement to true. Used to protect routes
      * that require authentication
@@ -83,6 +86,7 @@ class AuthController extends BaseController {
       this.#setAllowCredentials(req, false);
       next();
     },
+
     /**
      * Middleware that validates requesting user's login status
      * - Ensures that login status is known and assured through the
@@ -90,15 +94,15 @@ class AuthController extends BaseController {
      * - Disallows use of credentials if user session is still active
      * - Passes control to next middleware afterwards
      * @param {Express.Request} req - the request object
-     * @param {Express.Response} res - the response object
+     * @param {Express.Response} _ - the response object
      * @param {Express.NextFunction} next - the next middleware caller
      * @returns {Promise<void>} - A promise that resolves to void.
      */
     validateLoginStatus: async (
       req: Request,
-      res: Response,
+      _: Response,
       next: NextFunction
-    ) => {
+    ): Promise<void> => {
       const aToken: string | undefined = req.cookies[this.#ACookieName];
       // handle expired auth token
       if (!aToken) {
@@ -112,6 +116,19 @@ class AuthController extends BaseController {
         this.#setLoginStatus(req, true);
       }
       next();
+    },
+
+    validateIsLoggedIn: async (
+      req: Request,
+      res: Response,
+      next: NextFunction
+    ): Promise<void> => {
+      if (this.#isLoggedIn(req)) {
+        next();
+      } else {
+        this.sendJSON(res, { type: "auth", errno: "23" });
+      }
+      return;
     },
     /**
      * Middleware that validates requresting user's tokens
@@ -184,61 +201,6 @@ class AuthController extends BaseController {
   };
 
   /**
-   * Refreshes an expired access token
-   * @typedef TokenRefreshRes - Token refresh result type
-   * @property {boolean} success
-   * @optional @property {ServerError} error - error object on error
-   * @property {string | null} data - the refreshed token on success
-   * or null on error or expiration.
-   *
-   * @method refreshAccessToken
-   * @param {Express.Request} res - the response object
-   * @param {string} rToken - the refresh token to use
-   * @return {void} - passes control to the next middleware instead
-   */
-  refreshAccessToken = async (
-    res: Response,
-    rToken: string
-  ): Promise<{
-    success: boolean;
-    error?: ServerError;
-    data: string | null;
-  }> => {
-    const { success, data, error } = await this.decomposeToken(
-      rToken,
-      "refresh"
-    );
-    if (!success) return { success, error, data: null };
-    if (!data) {
-      this.#clearSession(res);
-      return { success: false, data: null };
-    }
-    // clear session if exp time is < token validity
-    if ((data.exp as number) <= this.#ATokenExpTimeSecs) {
-      this.#clearSession(res);
-      return { success: false, data: null };
-    }
-    // refresh access token
-    const { iat, exp, ...rest } = data;
-    const newAToken = await this.getNewToken(rest);
-    res.cookie(this.#ACookieName, newAToken, {
-      httpOnly: true,
-      maxAge: this.#ATokenExpTimeSecs * 1000,
-    });
-    return { success: true, data: newAToken };
-  };
-
-  /**
-   * Checks if credentials are allowed on request
-   * @method credentialsAllowed
-   * @param {Express.Request} req - the request object
-   * @returns {boolean}
-   */
-  credentialsAllowed = (req: Request): boolean => {
-    return req.body?.auth?.allowCredentials === true;
-  };
-
-  /**
    * Clears user's session
    * @private @method #clearSession
    * @param {Express.Response} res - the response object to clear.
@@ -249,15 +211,8 @@ class AuthController extends BaseController {
     res.clearCookie(this.#RCookieName);
   };
 
-  /**
-   * Sets Login requirement to given boolean value
-   * @private @method #setLoginRequired
-   * @param {Express.Request} req - the request object
-   * @param {boolean} value - the value to set
-   * @returns {void}
-   */
-  #setLoginRequired = (req: Request, value: boolean = true) => {
-    req.body.auth.requireLogin = value;
+  #isLoggedIn = (req: Request): boolean => {
+    return req.body.auth.isLoggedIn;
   };
 
   /**
@@ -269,6 +224,17 @@ class AuthController extends BaseController {
    */
   #setAllowCredentials = (req: Request, status: boolean = false) => {
     req.body.auth.allowCredentials = status;
+  };
+
+  /**
+   * Sets Login requirement to given boolean value
+   * @private @method #setLoginRequired
+   * @param {Express.Request} req - the request object
+   * @param {boolean} value - the value to set
+   * @returns {void}
+   */
+  #setLoginRequired = (req: Request, value: boolean = true) => {
+    req.body.auth.requireLogin = value;
   };
 
   /**
@@ -360,6 +326,15 @@ class AuthController extends BaseController {
       });
       return false;
     }
+  };
+  /**
+   * Checks if credentials are allowed on request
+   * @method credentialsAllowed
+   * @param {Express.Request} req - the request object
+   * @returns {boolean}
+   */
+  credentialsAllowed = (req: Request): boolean => {
+    return req.body?.auth?.allowCredentials === true;
   };
 
   /**
@@ -480,9 +455,50 @@ class AuthController extends BaseController {
       });
     }
   };
-  get Middlewares() {
-    return this.#Middlewares;
-  }
+  /**
+   * Refreshes an expired access token
+   * @typedef TokenRefreshRes - Token refresh result type
+   * @property {boolean} success
+   * @optional @property {ServerError} error - error object on error
+   * @property {string | null} data - the refreshed token on success
+   * or null on error or expiration.
+   *
+   * @method refreshAccessToken
+   * @param {Express.Request} res - the response object
+   * @param {string} rToken - the refresh token to use
+   * @return {void} - passes control to the next middleware instead
+   */
+  refreshAccessToken = async (
+    res: Response,
+    rToken: string
+  ): Promise<{
+    success: boolean;
+    error?: ServerError;
+    data: string | null;
+  }> => {
+    const { success, data, error } = await this.decomposeToken(
+      rToken,
+      "refresh"
+    );
+    if (!success) return { success, error, data: null };
+    if (!data) {
+      this.#clearSession(res);
+      return { success: false, data: null };
+    }
+    // clear session if exp time is < token validity
+    if ((data.exp as number) <= this.#ATokenExpTimeSecs) {
+      this.#clearSession(res);
+      return { success: false, data: null };
+    }
+    // refresh access token
+    const { iat, exp, ...rest } = data;
+    const newAToken = await this.getNewToken(rest);
+    res.cookie(this.#ACookieName, newAToken, {
+      httpOnly: true,
+      maxAge: this.#ATokenExpTimeSecs * 1000,
+    });
+    return { success: true, data: newAToken };
+  };
 }
 
 // types
