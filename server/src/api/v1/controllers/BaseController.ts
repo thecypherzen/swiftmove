@@ -19,14 +19,13 @@ export class BaseController {
    * Ensures consistency in server response body for all requests
    * @typedef {Object} ServerPayloadType
    * @typedef {Object} ServerResOptionsType - Standard options sent
-   * @param {Express.Response} res - Response object
    * @param {ServerResOptionsType} options - Options received
    * @returns {ServerPayloadType}
    */
-  protected getPayload(
-    res: Response,
-    options: ServerResOptionsType
-  ): { status: number; payload: ServerResPayloadType } {
+  protected getPayload(options: ServerResOptionsType): {
+    status: number;
+    payload: ServerResPayloadType;
+  } {
     const type = options.type;
     const key = options?.errno ?? "default";
     const errno = Errors[type][key].errno;
@@ -65,7 +64,7 @@ export class BaseController {
     const validation = validationResult(req);
     if (!validation.isEmpty()) {
       const validationErrors = validation.array();
-      const { status, payload } = this.getPayload(res, {
+      const { status, payload } = this.getPayload({
         type: "validation",
         data: validationErrors,
       });
@@ -91,7 +90,7 @@ export class BaseController {
    * @returns {void}
    */
   public sendJSON(res: Response, options: ServerResOptionsType): void {
-    const { status, payload } = this.getPayload(res, options);
+    const { status, payload } = this.getPayload(options);
     res.status(status).json(payload);
     return;
   }

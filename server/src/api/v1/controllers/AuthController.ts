@@ -1,6 +1,6 @@
 import { BaseController } from "./BaseController.js";
 import { NextFunction, type Request, type Response } from "express";
-import db, { DBModelNameType } from "../../../db/Database.js";
+import db from "../../../db/Database.js";
 import { ServerError } from "../lib/ServerError.js";
 import passwords from "../lib/PasswordLibrary.js";
 import {
@@ -87,6 +87,29 @@ class AuthController extends BaseController {
       next();
     },
 
+    restrictAccess: (allowed: UserRoleType[]) => {
+      return async (req: Request, res: Response, next: NextFunction) => {
+        if (!req.body?.auth?.payload) {
+          this.sendJSON(res, { type: "auth", errno: "23" });
+          return;
+        }
+        const { email, role, id } = req.body.auth.payload;
+        const user = await db.getOne(this.model, {
+          _id: id,
+          role,
+          email,
+        });
+        if (!user) {
+          this.sendJSON(res, { type: "auth", errno: "23" });
+          return;
+        }
+        if (!allowed.includes(user.role)) {
+          this.sendJSON(res, { type: "auth", errno: "21" });
+          return;
+        }
+        next();
+      };
+    },
     /**
      * Middleware that validates requesting user's login status
      * - Ensures that login status is known and assured through the
