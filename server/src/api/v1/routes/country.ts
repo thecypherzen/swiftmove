@@ -13,6 +13,15 @@ const {
 } = authController.Middlewares;
 const countryRouter = express.Router();
 
+countryRouter.delete(
+  ["/countries/:id"],
+  validateSession,
+  validateLoginStatus,
+  validateIsLoggedIn,
+  restrictAccess(["admin"]),
+  countryController.delete
+);
+
 countryRouter.get(
   ["/countries", "/countries/:id"],
   validateSession,

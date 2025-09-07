@@ -141,6 +141,12 @@ export const errors: ServerErrorsType = {
       statusCode: 201,
       meaning: "New resource creation was successful",
     },
+    "02": {
+      errno: "02",
+      desc: "Successful",
+      statusCode: 203,
+      meaning: "No content response",
+    },
   },
 };
 

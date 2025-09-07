@@ -60,7 +60,26 @@ class CrudController<T> extends BaseController {
    * @param req
    * @param res
    */
-  delete = async (req: Request, res: Response): Promise<void> => {};
+  delete = async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params;
+    try {
+      const deleted = await db.updateOne(this.model, { _id: id }, req.body);
+      if (!deleted) {
+        this.sendJSON(res, { errno: "34", type: "validation" });
+        return;
+      }
+      this.sendJSON(res, {
+        type: "success",
+        errno: "02",
+      });
+    } catch (err) {
+      this.sendJSON(res, {
+        type: "server",
+        data: [{ error: JSON.stringify(err, ServerError.SerialiseFn, 2) }],
+      });
+    }
+    return;
+  };
 
   /**
    * Read request handler
@@ -71,7 +90,7 @@ class CrudController<T> extends BaseController {
     const { id } = req.params;
     try {
       if (id) {
-        const instance = await db.getOne(this.model, { id });
+        const instance = await db.getOne(this.model, { _id: id });
         this.sendJSON(res, {
           type: "success",
           data: instance ? [instance] : [],
@@ -101,7 +120,7 @@ class CrudController<T> extends BaseController {
   update = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.params;
     try {
-      const updated = await db.updateOne(this.model, { id }, req.body);
+      const updated = await db.updateOne(this.model, { _id: id }, req.body);
       if (!updated) {
         this.sendJSON(res, { errno: "34", type: "validation" });
         return;
