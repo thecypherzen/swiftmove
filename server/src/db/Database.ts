@@ -126,6 +126,38 @@ class Database {
   }
 
   /**
+   * Updates a record in db if it exists.
+   * @public
+   * @function deleteOne
+   * @param {DBModelNameType} Model - the name of db model to search
+   * @param {Object} filters - fields to filter by.
+   * For now, it expects the filters to match Mongodb search object, which
+   * can include conditions, projections and options.
+   * @returns {Promise<Model | null>} Promise that resolves to the deleted
+   * document if it was found or null otherwise.
+   * @throws {DBError} - Error thrown if an error occured during db op
+   */
+  async deleteOne<T>(Model: mongoose.Model<T>, filters: Record<string, any>) {
+    if (!Model) {
+      throw new DBError({ message: "Unknown Model Reference", errno: "53" });
+    }
+    if (!this.#client) {
+      this.init();
+    }
+    try {
+      const data = Model.findOneAndDelete(filters);
+      return data;
+    } catch (err: any) {
+      console.error(err);
+      throw new DBError({
+        message: `Query on ${Model.name} failed`,
+        errno: "53",
+        cause: DBError.constructErrorCause(err),
+      });
+    }
+  }
+
+  /**
    * Checks if a record exists in the database based on given filters.
    * @public @method exists
    * @param {DBModelNameType} Model - the name of db model to search
