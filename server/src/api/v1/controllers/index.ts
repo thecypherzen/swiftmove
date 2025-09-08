@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { type Request, type Response } from "express";
+import { type Request, type Response, type NextFunction } from "express";
 import { BaseController } from "./BaseController.js";
 import { City, Country, State } from "../../../db/models/index.js";
 import { CountrySchemaType } from "../../../db/schemas/CountrySchema.js";
@@ -165,4 +165,20 @@ export class StateController extends CrudController<StateSchemaType> {
   constructor() {
     super("StateController", State);
   }
+  countryExists = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    const { countryId } = req.params;
+    const exists = await db.exists(this.model, { _id: countryId });
+    if (!exists) {
+      this.sendJSON(res, {
+        type: "validation",
+        errno: "34",
+      });
+      return;
+    }
+    next();
+  };
 }
