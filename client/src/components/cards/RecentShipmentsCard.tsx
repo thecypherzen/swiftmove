@@ -15,6 +15,26 @@ import type { ShipmentType } from "@/shared/types";
 import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
+/**
+ * @component RecentShipmentsCard
+ * @description Displays a list of recent shipments with status badges and actions.
+ *
+ * @prop {boolean} loading - Whether to show loading skeletons.
+ * @prop {ShipmentType[]} data - Array of shipment data to display.
+ * @prop {string} [title] - Optional card title.
+ * @prop {string} [description] - Optional subtitle or context text.
+ * @prop {string} [action] - Text for the call-to-action link (defaults to "View All").
+ * @prop {string} [footer] - Optional footer note.
+ * @prop {string} [className] - Additional Tailwind classes.
+ *
+ * @example
+ * <RecentShipmentsCard
+ *   loading={false}
+ *   data={shipments}
+ *   title="Recent Shipments"
+ *   footer="Updated 10 mins ago"
+ * />
+ */
 const RecentShipmentsCard = ({
   loading,
   description,
@@ -80,7 +100,10 @@ const RecentShipmentsCard = ({
       )}
       id="rs-card"
     >
+      {/* Sentilen - to track current scroll position */}
       <div ref={sentinelRef}></div>
+
+      {/* Heading */}
       <CardHeader
         className={cn(
           "px-2 @lg:px-6 transition-all duration-300",
@@ -101,8 +124,10 @@ const RecentShipmentsCard = ({
           </Button>
         </CardAction>
       </CardHeader>
+      {/* Content */}
       <CardContent className="px-2 @lg:px-6">
         {loading ? (
+          // when loading - render skeleton
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
               <div
@@ -119,6 +144,7 @@ const RecentShipmentsCard = ({
             ))}
           </div>
         ) : (
+          // when ready - render content
           <div className="space-y-4">
             {data.slice(0, 5).map((shipment) => (
               <div
@@ -141,12 +167,13 @@ const RecentShipmentsCard = ({
                     {shipment.destinationAddress.split(",")[0]}
                   </p>
                 </div>
-                {getStatusBadge(shipment.status)}
+                {StatusBadge(shipment.status)}
               </div>
             ))}
           </div>
         )}
       </CardContent>
+      {/* Show footer if any */}
       {footer && (
         <CardFooter>
           <p className={cn("text-xs mt-1")}>{footer}</p>
@@ -156,7 +183,15 @@ const RecentShipmentsCard = ({
   );
 };
 
-const getStatusBadge = (status: string) => {
+/**
+ * @component StatusBadge - A shipment's status badge based on 'status' value
+ * Designed strictly for its parent - @RecentShipmentsCard and not
+ * for external use. Open for modifications though.
+ *
+ * @prop {string} status - the shipment status
+ * @returns {React.ReactNode} - a badge
+ */
+const StatusBadge = (status: string) => {
   return (
     <Badge
       className={cn(

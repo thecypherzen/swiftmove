@@ -1,0 +1,31 @@
+#V2
+(define-data-var myvar uint 8)
+(define-data-var myvar uint 8);
+(define-data-var myvar uint u8);
+(define-data-var myvar uint u8)
+(var-get myvar)
+(print (var-get myvar)  )
+(define-data-var myvar uint 8)
+(define-data-var myvar uint u8)
+(define-data-var var2 uint u10)
+(print (var-get var2))
+(define-public (example) let ((vaa 2) ok(vaa)) )
+(define-public (ex2) let ((var 2) ok(var)))
+(define-public (example)\n  (let ((var2 u10))\n    (ok var2)\n  )\n)
+(example)
+(contract-call .ST000000000000000000002AMW42H.contract-0 example)
+(contract-call? .ST000000000000000000002AMW42H.contract-0 example)
+(let ((var2 u10)) (ok var2))
+(let ((var2 u10) (ok var2)) )
+(let (var2 u10) (ok var2))
+(let ((var2 u20)) (ok var2))
+(let ( (x 10) (y 20) (+ y - x) ) )
+(let ((x 10) (y 20)) (- y x))
+(let ((x 10) (y 20)) (% y x))
+(let ((x 10) (y 21)) (% y x))
+(let ((x 10) (y 21)) (/ y x))
+(let ((x 10) (y 21)) (// y x))
+exit()
+exit
+quit
+(exit)
